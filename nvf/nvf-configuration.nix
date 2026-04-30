@@ -84,7 +84,7 @@
         lua.enable = true;
         python.enable = true;
         java.enable = true;
-        javascript.enable = true;
+        ts.enable = true;
         html.enable = true;
         css.enable = true;
         sql.enable = true;
