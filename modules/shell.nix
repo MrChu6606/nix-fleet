@@ -27,4 +27,11 @@
   environment.systemPackages = with pkgs; [
     pure-prompt
   ];
+
+  programs.nh = {
+    enable = true;
+    clean.enable = true;
+
+    flake = "$HOME/nixOS-desktop/";
+  }
 }
