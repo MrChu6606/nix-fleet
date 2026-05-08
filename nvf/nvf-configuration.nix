@@ -69,7 +69,7 @@
       lightbulb.enable = true;
       trouble.enable = true;
       nvim-docs-view.enable = true;
-      harper-ls.enable = true; # actual lsp
+      presets.harper.enable = true; # actual lsp
       otter-nvim.enable = true; # actual lsp
     };
 

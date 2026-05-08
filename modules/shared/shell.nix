@@ -6,7 +6,7 @@
     enable = true;
 
     interactiveShellInit = ''
-      source $HOME/nixOS-desktop/shell/aliases.sh
+      source $HOME/nix-fleet/shell/aliases.sh
     '';
 
     promptInit = ''
@@ -33,6 +33,6 @@
     clean.enable = true;
 
     # This doesnt seem to work right now
-    flake = "/home/nic/nixOS-desktop/";
+    flake = "/home/nic/nix-fleet/";
   };
 }

@@ -677,7 +677,7 @@
     },
     "wallpaper": {
         "automationEnabled": false,
-        "directory": "/home/nic/nixOS-desktop/Wallpapers",
+        "directory": "/home/nic/nix-fleet/Wallpapers",
         "enableMultiMonitorDirectories": false,
         "enabled": true,
         "favorites": [

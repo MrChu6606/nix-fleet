@@ -70,6 +70,7 @@
 
   in {
     # I think this line adds the packages to my system
+    # does this pass them as packages to both my profiles even tho i only want zen in one?
     packages.${system} = {
       nvf = nvfPkg;
       zen = zenPkg;
