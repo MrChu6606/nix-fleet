@@ -4,10 +4,13 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-25.11";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
-    nvf.url = "github:notashelf/nvf";
+    nvf = {
+      url = "github:notashelf/nvf";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
     silentSDDM = {
-            url="github:uiriansan/SilentSDDM";
-            inputs.nixpkgs.follows = "nixpkgs";
+      url="github:uiriansan/SilentSDDM";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
     nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=latest";
     zen-browser = {
@@ -62,7 +65,7 @@
     # Search modules directory and add .nix files to a list called mods
     lib = nixpkgs.lib;
     loadModules = import ./.lib/load-modules.nix { inherit lib; };
-    mods = loadModules ./modules;
+    sharedMods = loadModules ./modules/shared;
 
 
   in {
@@ -72,17 +75,33 @@
       zen = zenPkg;
     };
 
-    nixosConfigurations.lotus = nixpkgs.lib.nixosSystem {
-      inherit system pkgs;
+    # both profiles have sharedMods concatinated to modules list
+    nixosConfigurations = {
+      #laptop profile loads zen and calls loadModules on laptop directory
+      lotus = nixpkgs.lib.nixosSystem {
+        inherit system pkgs;
 
-      specialArgs = { inherit inputs; };
+        specialArgs = { inherit inputs; };
 
-      modules = mods ++ [
-        nix-flatpak.nixosModules.nix-flatpak
-        {
-          _module.args = {inherit unstablePkgs nvfPkg zenPkg;};
-        }
-      ];
+        modules = sharedMods ++ loadModules ./modules/laptop ++
+          [
+          nix-flatpak.nixosModules.nix-flatpak
+          {
+            _module.args = {inherit unstablePkgs nvfPkg zenPkg;};
+          }
+        ];
+      };
+
+      sequoia = nixpkgs.lib.nixosSystem {
+        inherit system pkgs;
+
+        modules = sharedMods ++ loadModules ./modules/server ++
+          [
+          {
+            _module.args = {inherit unstablePkgs nvfPkg;};
+          }
+        ];
+      };
     };
   };
 }

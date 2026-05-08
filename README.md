@@ -103,7 +103,6 @@ This keeps the flake clean while making it easy to add or remove modules.
 This system is built around:
 
 * **Niri** as the compositor/window manager
-* **Kanshi** for automatic monitor configuration
 * **Alacritty** as the terminal
 * **Qutebrowser** and **Zen Browser**
 * A Wayland-native workflow
@@ -114,12 +113,12 @@ The setup is keyboard-focused and optimized for tiling workflows.
 
 # Noctalia
 
-`noctalia/` is a custom theming ecosystem containing:
+`noctalia/` is a theming ecosystem containing:
 
 * Color palettes
 * Templates
 * QML plugins/widgets
-* Desktop UI experiments
+* Desktop UI bar
 
 It acts as a centralized styling layer for the desktop.
 
