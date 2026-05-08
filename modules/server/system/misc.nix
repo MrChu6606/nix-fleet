@@ -9,8 +9,9 @@
   time.timeZone = "America/New_York";
 
   # Set automatic garbage collection
+  # disabled for potential conflict with nh
   nix.gc = {
-    automatic = true;
+    automatic = false;
     dates = "weekly";
     options = "--delete-generations +5";
   };

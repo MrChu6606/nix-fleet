@@ -1,3 +1,4 @@
 ./nixos/hardware-configuration.nix
 ./mpv/yt-cookies.txt
 *~
+result

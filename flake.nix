@@ -95,8 +95,8 @@
       sequoia = nixpkgs.lib.nixosSystem {
         inherit system pkgs;
 
-        modules = sharedMods ++ loadModules ./modules/server ++
-          [
+        modules = sharedMods ++ [
+          ./modules/server
           {
             _module.args = {inherit unstablePkgs nvfPkg;};
           }
