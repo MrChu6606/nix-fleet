@@ -16,8 +16,6 @@
             content = {
               type = "filesystem";
               format = "ext4";
-              mountpoint = "/appdata";
-              mountOptions = [ "noatime" ];
             };
           };
         };
@@ -39,8 +37,6 @@
             content = {
               type = "filesystem";
               format = "ext4";
-              mountpoint = "/media";
-              mountOptions = [ "noatime" ];
             };
           };
         };
