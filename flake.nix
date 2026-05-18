@@ -43,6 +43,7 @@
     silentSDDM,
     nixflix,
     sops-nix,
+    disko,
     ...
   }: let
 
@@ -87,6 +88,7 @@
           ./modules/server
           nixflix.nixosModules.default
           sops-nix.nixosModules.default
+          disko.nixosModules.default
         ];
         overlays = [
           (import ./overlays/unstable.nix { inherit nixpkgs-unstable; } )

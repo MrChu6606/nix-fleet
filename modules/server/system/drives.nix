@@ -11,7 +11,6 @@
 
         partitions = {
           boot = {
-            name = "boot";
             size = "512M";
             type = "EF00";
 
@@ -23,7 +22,6 @@
           };
 
           root = {
-            name = "root";
             size = "100%";
             content = {
               type = "filesystem";
@@ -44,7 +42,6 @@
         type = "gpt";
 
         partitions = {
-          name = "data";
           data = {
             size = "100%";
 
@@ -68,7 +65,6 @@
         type = "gpt";
 
         partitions = {
-          name = "data";
           data = {
             size = "100%";
 
