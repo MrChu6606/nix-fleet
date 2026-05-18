@@ -1,38 +1,6 @@
 { ... }: {
   disko.devices.disk = {
 
-    # OS DISK (500GB)
-    os = {
-      type = "disk";
-      device = "/dev/disk/by-id/nvme-Samsung_SSD_950_PRO_512GB_S2GMNCAGB24013A";
-
-      content = {
-        type = "gpt";
-
-        partitions = {
-          boot = {
-            size = "512M";
-            type = "EF00";
-
-            content = {
-              type = "filesystem";
-              format = "vfat";
-              mountpoint = "/boot";
-            };
-          };
-
-          root = {
-            size = "100%";
-            content = {
-              type = "filesystem";
-              format = "ext4";
-              mountpoint = "/";
-            };
-          };
-        };
-      };
-    };
-
     # APPDATA + VMS (1TB)
     appdata = {
       type = "disk";
