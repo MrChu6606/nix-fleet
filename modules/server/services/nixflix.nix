@@ -1,4 +1,4 @@
-{ ... }:
+{ config, ... }:
 {
   # This is just the default template
   sops.secrets = {
@@ -18,9 +18,9 @@
 
   nixflix = {
     enable = true;
-    mediaDir = "/data/media";
-    stateDir = "/data/.state";
-    mediaUsers = ["myuser"];
+    mediaDir = "/media";
+    stateDir = "/appdata/nixflix";
+    mediaUsers = ["nic"];
 
     theme = {
       enable = true;
@@ -28,14 +28,14 @@
     };
 
     # Reverse proxy (choose nginx or caddy, not both)
-    nginx = {
+        # nginx = {
+        #   enable = true;
+        #   addHostsEntries = true; # Disable this if you have your own DNS configuration
+        # };
+    caddy = {
       enable = true;
-      addHostsEntries = true; # Disable this if you have your own DNS configuration
+      addHostsEntries = true;
     };
-    # caddy = {
-    #   enable = true;
-    #   addHostsEntries = true;
-    # };
 
     postgres.enable = true;
 
@@ -102,7 +102,7 @@
     vpn = {
       enable = true;
       wgConfFile = config.sops.secrets."wireguard/conf".path;
-      accessibleFrom = [ "192.168.1.0/24" ];
+      accessibleFrom = [ "192.168.4.0/24" ];
     };
   };
 
