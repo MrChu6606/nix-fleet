@@ -1,7 +1,4 @@
-{ ... }:
-
+{ loadModules, ... }:
 {
-    imports = [
-        ./shell.nix
-    ];
+    imports = loadModules ./.;
 }
