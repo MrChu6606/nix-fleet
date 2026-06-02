@@ -1,11 +1,27 @@
 { pkgs, ... }: 
+# This is a nightmare of a list of mods, im not certain the best way to clean it up
 let
-  mods = [
+  mods20-1 = [
+    # When adding new mods, use fake hash before getting real hash 
+    # sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=
+
     # Sever only
     (pkgs.fetchurl {
       name = "ferritecore-6.0.1";
       url = "https://cdn.modrinth.com/data/uXXizFIs/versions/unerR5MN/ferritecore-6.0.1-fabric.jar";
       sha256 = "sha256-x7oRGKBbLakA0cNp++EBej4+w8r+XlE5i4USebm+zyQ=";
+    })
+
+    (pkgs.fetchurl {
+      name = "chunky-1.3.146";
+      url = "https://cdn.modrinth.com/data/fALzjamp/versions/NHWYq9at/Chunky-1.3.146.jar";
+      sha256 = "sha256-rn+501o6nZ1PIQSurnsxqQHF5YQokeLt2d3MQsJkajg=";
+    })
+
+    (pkgs.fetchurl {
+      name = "servercore-1.5.2";
+      url = "https://cdn.modrinth.com/data/4WWQxlQP/versions/m978FuzE/servercore-fabric-1.5.2%2B1.20.1.jar";
+      sha256 = "sha256-0CJTq3Vm8qZjLMeMlwjddoz3esgSM1HtY74l5PjLMX8=";
     })
 
     # Server and client
@@ -75,10 +91,40 @@ let
       sha256 = "sha256-XM4iaux53VtwAGvfN0bmOfU9T2dLl/7DwGMFFeBw88c=";
     })
   ];
-  modpack = pkgs.runCommand "mc-mods" {} ''
+
+  mods26-1 = [
+    # Sever only
+    (pkgs.fetchurl {
+      name = "ferritecore-9.0";
+      url = "https://cdn.modrinth.com/data/uXXizFIs/versions/d5ddUdiB/ferritecore-9.0.0-fabric.jar?mr_download_reason=standalone";
+      sha256 = "sha256-ITlmxy7ZZ6zHOSvrKKhm+6MB/1a5l2wueAHC233mvyI=";
+    })
+
+    (pkgs.fetchurl {
+      name = "chunky-1.5.3";
+      url = "https://cdn.modrinth.com/data/fALzjamp/versions/4Eotm6ov/Chunky-Fabric-1.5.3.jar";
+      sha256 = "sha256-7N/FWg9n8+xvQIUGh2FclBriJr2I9OBhiKeyaP09qUI=";
+    })
+
+    (pkgs.fetchurl {
+      name = "servercore-1.5.17";
+      url = "https://cdn.modrinth.com/data/4WWQxlQP/versions/2siue87F/servercore-fabric-1.5.17%2B26.1.2.jar";
+      sha256 = "sha256-TIMlZiFdj/3NsWv3utkIoduZZo2YpDaWQ2apxNhL3cA=";
+    })
+
+
+  ];
+
+  makeModpack = name: modlist: pkgs.runCommand name {} ''
     mkdir -p $out
-    ${pkgs.lib.concatMapStringsSep "\n" (mod: "ln -s ${mod} $out/${mod.name}") mods}
+    ${pkgs.lib.concatMapStringsSep "\n" (mod: "ln -s ${mod} $out/${mod.name}") modlist}
   '';
+
+  modpack20-1 = makeModpack "mc-mods-1-20-1" mods20-1;
+  modpack26-1 = makeModpack "mc-mods-26-1" mods26-1;
+
+  aikarFlags = "-XX:+UseG1GC -XX:+ParallelRefProcEnabled -XX:MaxGCPauseMillis=200 -XX:+UnlockExperimentalVMOptions -XX:+AlwaysPreTouch -XX:G1NewSizePercent=30 -XX:G1MaxNewSizePercent=40 -XX:G1HeapRegionSize=8m -XX:G1ReservePercent=20 -XX:G1HeapWastePercent=5 -XX:G1MixedGCCountTarget=4 -XX:InitiatingHeapOccupancyPercent=15 -XX:G1MixedGCLiveThresholdPercent=90 -XX:G1RSetUpdatingPauseTimePercent=5 -XX:SurvivorRatio=32 -XX:+PerfDisableSharedMem -XX:MaxTenuringThreshold=1";
+ 
 in
 {
   virtualisation.arion = {
@@ -100,6 +146,7 @@ in
         ];
       };
 
+      # Main survival world
       services.minecraft = {
         service = {
           image = "itzg/minecraft-server:latest";
@@ -113,21 +160,68 @@ in
             "/appdata/minecraft/data:/data"
 
             # inject mods from Nix
-            "${modpack}:/data/mods"
+            "${modpack20-1}:/data/mods"
           ];
 
           environment = {
             EULA = "TRUE";
             TYPE = "FABRIC";
             VERSION = "1.20.1";
-            MEMORY = "8G";
+            MEMORY = "12G";
             # Aikars flags for jvm tuning
-            JVM_OPTS = "-XX:+UseG1GC -XX:+ParallelRefProcEnabled -XX:MaxGCPauseMillis=200 -XX:+UnlockExperimentalVMOptions -XX:+AlwaysPreTouch -XX:G1NewSizePercent=30 -XX:G1MaxNewSizePercent=40 -XX:G1HeapRegionSize=8m -XX:G1ReservePercent=20 -XX:G1HeapWastePercent=5 -XX:G1MixedGCCountTarget=4 -XX:InitiatingHeapOccupancyPercent=15 -XX:G1MixedGCLiveThresholdPercent=90 -XX:G1RSetUpdatingPauseTimePercent=5 -XX:SurvivorRatio=32 -XX:+PerfDisableSharedMem -XX:MaxTenuringThreshold=1";
+            JVM_OPTS = aikarFlags;
+
+            ENABLE_AUTOPAUSE = "TRUE";
+            # Disabled watchdog crash triggers for safe sleeping
+            MAX_TICK_TIME = "-1"; 
+            # Wait 5 min after last person leaves
+            AUTPAUS_TIMEOUT_EST = "300";
+
+            # View and simulation distance
+            VIEW_DISTANCE = "16";
+            SIMULATION_DISTANCE = "8";
           };
 
           restart = "unless-stopped";
         };
       };
+
+      # Main survival world
+      services.minecraft-latest = {
+        service = {
+          image = "itzg/minecraft-server:latest";
+          
+          networks.mc-bridge = {
+            # gives the server its own ip on the bridge
+            ipv4_address = "192.168.4.30"; 
+          };
+
+          volumes = [
+            "/appdata/minecraft-latest/data:/data"
+
+            # inject mods from Nix
+            "${modpack26-1}:/data/mods"
+          ];
+
+          environment = {
+            EULA = "TRUE";
+            TYPE = "FABRIC";
+            VERSION = "26.1.2";
+            MEMORY = "10G";
+            # Aikars flags for jvm tuning
+            JVM_OPTS = aikarFlags;
+
+            ENABLE_AUTOPAUSE = "TRUE";
+            # Disabled watchdog crash triggers for safe sleeping
+            MAX_TICK_TIME = "-1"; 
+            # Wait 5 min after last person leaves
+            AUTPAUS_TIMEOUT_EST = "300";
+          };
+
+          restart = "unless-stopped";
+        };
+      };
+
     };
   };
 }
