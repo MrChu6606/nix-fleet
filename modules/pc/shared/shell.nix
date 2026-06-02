@@ -7,6 +7,6 @@ _: {
     enable = true;
     clean.enable = true;
 
-    flake = "/home/nix-fleet/";
+    flake = "/home/nic/nix-fleet/";
   };
 }
