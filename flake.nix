@@ -35,6 +35,11 @@
 
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
 
+    arion = {
+      url = "github:hercules-ci/arion";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
   };
 
   outputs = {
@@ -47,6 +52,7 @@
     nixflix,
     sops-nix,
     disko,
+    arion,
     ...
   }: let
 
@@ -93,6 +99,7 @@
           nixflix.nixosModules.default
           sops-nix.nixosModules.default
           disko.nixosModules.default
+          arion.nixosModules.arion
         ];
         overlays = [
           (import ./overlays/unstable.nix { inherit nixpkgs-unstable; } )
