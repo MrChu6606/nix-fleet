@@ -31,7 +31,6 @@
     tailspin # log highlighter
     tree # filesystem viewer thing
     wireshark # network traffic monitor
-    btop # system monitor
     zathura # pdf viewer
     dig
     prismlauncher # minecraft

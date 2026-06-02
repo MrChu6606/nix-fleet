@@ -180,6 +180,10 @@ in
             # View and simulation distance
             VIEW_DISTANCE = "16";
             SIMULATION_DISTANCE = "8";
+
+            OPS =  "MrChuwu";
+            WHITELIST = "MrChuwu";
+            ENFORCE_WHITELIST ="TRUE";
           };
 
           restart = "unless-stopped";
@@ -216,6 +220,8 @@ in
             MAX_TICK_TIME = "-1"; 
             # Wait 5 min after last person leaves
             AUTPAUS_TIMEOUT_EST = "300";
+
+            OPS = "MrChuwu";
           };
 
           restart = "unless-stopped";
