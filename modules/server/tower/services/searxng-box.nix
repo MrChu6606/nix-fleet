@@ -10,6 +10,14 @@ _: {
     config = { lib, ... }: {
       system.stateVersion = "25.05"; 
 
+      services.tor = {
+        enable = true;
+        client.enable = true;
+        settings = {
+          SOCKSPort = [{ addr = "127.0.0.1"; port = 9050; }];
+        };
+      };
+
       services.searx = {
         enable = true;
         domain = "192.168.4.28";
@@ -35,10 +43,16 @@ _: {
             reques_timeout = 4.0;
             max_request_timeout = 10.0;
             useragent_reg = true;
+
+            proxies = {
+              http = "socks5h://127.0.0.1:9050";
+              https = "socks5h://127.0.0.1:9050";
+            };
           };
 
           engines = [
             { name = "duckduckgo"; engine = "duckduckgo"; shortcut = "ddg"; }
+            { name = "google"; engine = "google"; shortcut = "g"; }
             { name = "brave"; engine = "brave"; shortcut = "b"; }
             { name = "wikipedia"; engine = "wikipedia"; shortcut = "w"; }
 

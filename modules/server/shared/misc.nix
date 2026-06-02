@@ -15,7 +15,7 @@ _: {
   virtualisation.docker = {
     enable = true;
     daemon.settings = {
-      data-root = "/mnt/appdata/docker";
+      data-root = "/appdata/docker";
     };
   };
 

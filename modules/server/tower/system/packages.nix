@@ -9,6 +9,7 @@
     wl-clipboard
     sops
     age
+    arion
   ];
 in {
   environment.systemPackages = stable;
