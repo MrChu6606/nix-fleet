@@ -7,7 +7,7 @@ _: {
     firewall = {
       enable = true;
 
-      allowedTCPPorts = [ 22 53 80 3001 3002 ];
+      allowedTCPPorts = [ 22 53 80 3001 3002 19999 ];
       allowedUDPPorts = [ 53 ];
     };
 

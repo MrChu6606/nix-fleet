@@ -5,5 +5,6 @@
     ./searxng-box.nix
     ./minecraft.nix
     ./hypermind.nix
+    ./netdata.nix
   ];
 }
