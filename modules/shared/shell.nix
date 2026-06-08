@@ -14,5 +14,6 @@
   environment.systemPackages = with pkgs; [
     pure-prompt
     btop
+    usbutils
   ];
 }

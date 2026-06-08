@@ -15,7 +15,6 @@
     mpv # terminal video player
     yt-dlp # yt vid downloader
     streamlink # way to watch twitch ad free sorta
-    usbutils
     fastfetch
     alacritty # terminal emulator
     cmatrix # flash ware

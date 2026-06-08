@@ -32,3 +32,6 @@ portfolio-helphub-temp https://helphub.hq.globaltech.org/en/articles/9783902-por
 nix options https://search.nixos.org/options
 sheets https://docs.google.com/spreadsheets/u/0/
 nixsearch https://nixsearch.thekoppe.com/
+hypermind http://192.168.4.27:3002/
+hyperswarm http://192.168.4.27:3001/
+glances http://192.168.4.27:61208/
