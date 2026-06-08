@@ -21,7 +21,7 @@ _:
 
       "adguard-pi.home" = {
         locations."/" = {
-          proxyPass = "https://192.168.4.23";
+          proxyPass = "http://192.168.4.23";
         };
       };
     };
