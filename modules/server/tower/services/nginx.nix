@@ -1,22 +1,29 @@
-{ ... }:
+_:
 {
-  virtualization.oci-containers.containers."npm" = {
-    image = "jc21/nginx-proxy-manager:latest";
+  services.nginx = {
+    enable = true;
+    recommendedProxySettings = true;
+    recommendedTlsSettings = true;
 
-    # Make sure these ports are open in the firewall
-    ports = [
-      "80:80" #dashboard
-      "81:81" #admin? i forget
-      "443:443" #https
-    ];
+    virtualHosts = {
+      "searxng.home" = {
+        locations."/" = {
+          proxyPass = "http://192.168.4.28:8080";
+          proxyWebsockets = true;
+        };
+      };
 
-    volumes = [
-      "/var/lib/npm/data:/data"
-      "/var/lib/npm/letsencrypt:/etc/letsencrypt"
-    ];
+      "adguard.home" = {
+        locations."/" = {
+          proxyPass = "http://127.0.0.1:8080";
+        };
+      };
 
-    environment = {
-      DB_SQLITE_FILE = "/data/database.sqlite";
+      "adguard-pi.home" = {
+        locations."/" = {
+          proxyPass = "https://192.168.4.23";
+        };
+      };
     };
   };
 }

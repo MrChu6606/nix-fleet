@@ -3,9 +3,21 @@ _:
   services.adguardhome = {
     enable = true;
 
-    # ts just opens the required ports??
-    # lowk dont like that cause i specified ports in networking
-    # and now that file is a liar cause more ports are open
-    openFirewall = false;
+    host = "0.0.0.0";
+    port = 8080;
+
+    settings = {
+      dns.upstream_dns = [
+          "https://dns.cloudflare.com/dns-query"
+          "https://dns.quad9.net/dns-query"
+      ];
+
+      rewrites = [
+        {
+          domain = "*.home";
+          answer = "100.78.76.107";
+        }
+      ];
+    };
   };
 }
