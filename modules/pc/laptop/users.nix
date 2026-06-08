@@ -1,7 +1,5 @@
-_: {
-  users.users.nic = {
-    isNormalUser = true;
-    description = "nic";
-    extraGroups = [ "networkmanager"  "wireshark" ];
-  };
+{ lib, ... }: {
+  users.users.nic.extraGroups = lib.mkMerge [
+    [ "networkmanager"  "wireshark" ]
+  ];
 }
