@@ -1,5 +1,6 @@
-{ pkgs, ... }: 
+{ config, pkgs, fleetSettings, ... }: 
 # This is a nightmare of a list of mods, im not certain the best way to clean it up
+# Ill probably create a separate file for the mods list for my own sanity
 let
   mods20-1 = [
     # When adding new mods, use fake hash before getting real hash 
@@ -132,18 +133,22 @@ in
     projects.minecraft.settings = {
       project.name = "minecraft";
 
-      # Defines custom bridge network to bind to nixOS bridge
-      networks.mc-bridge = {
-        driver = "macvlan";
-        driver_opts = {
-          parent = "br0"; # Binds container to bridge
+      # tailscale sidecar
+      services.mc-ts = {
+        service = {
+          image = "tailscale/tailscale:latest";
+          volumes = [
+            "/var/lib/tailscale-mc:/var/lib/tailscale" # Persist Tailscale state
+            "/dev/net/tun:/dev/net/tun"               # Required for VPN routing
+          ];
+          environment = {
+            TS_AUTHKEY = config.sops.secrets.tailscale_key.path;
+            TS_STATEFUL_CONFIG = "true";
+            TS_HOSTNAME = "mc-1-20-1";              # The exact name it will have on your Tailnet
+          };
+          capabilities = { NET_ADMIN = true; };       # Gives container network modification rights
+          restart = "unless-stopped";
         };
-        ipam.config = [
-          {
-            subnet = "192.168.4.0/22";
-            gateway = "192.168.4.1";
-          }
-        ];
       };
 
       # Main survival world
@@ -153,7 +158,7 @@ in
           
           networks.mc-bridge = {
             # gives the server its own ip on the bridge
-            ipv4_address = "192.168.4.29"; 
+            ipv4_address = fleetSettings.containers.mc-20; 
           };
 
           volumes = [
@@ -197,7 +202,7 @@ in
           
           networks.mc-bridge = {
             # gives the server its own ip on the bridge
-            ipv4_address = "192.168.4.30"; 
+            ipv4_address = fleetSettings.containers.mc-26; 
           };
 
           volumes = [

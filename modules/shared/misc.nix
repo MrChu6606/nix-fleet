@@ -6,8 +6,6 @@
 
     time.timeZone = "America/New_York";
 
-    services.tailscale.enable = true;
-
     # Sets default editor
     environment.variables = {
         EDITOR = "nvim";

@@ -15,5 +15,7 @@
     pure-prompt
     btop
     usbutils
+    iftop
+    btop
   ];
 }

@@ -1,15 +1,18 @@
-_: {
+{ fleetSettings, ... }: {
   containers.searxng = {
     autoStart = true;
 
     privateNetwork = true;
     hostBridge = "br0";
-    localAddress = "192.168.4.28/22";
+    localAddress = "${fleetSettings.containers.searxng}/${fleetSettings.network.subnetPrefix}";
+
+    extraArgs = { inherit fleetSettings; };
 
     # Everything inside 'config' runs inside the container
-    config = { lib, ... }: {
+    config = { lib, fleetSettings, ... }: {
       system.stateVersion = "25.05"; 
 
+      # setup tor to fight anti scrape
       services.tor = {
         enable = true;
         client.enable = true;
@@ -20,7 +23,7 @@ _: {
 
       services.searx = {
         enable = true;
-        domain = "192.168.4.28";
+        domain = fleetSettings.containers.searxng;
 
         redisCreateLocally = true;
         
@@ -71,9 +74,9 @@ _: {
         useHostResolvConf = lib.mkForce false;
 
         # Tell the container how to reach the internet
-        defaultGateway = "192.168.4.1";
+        defaultGateway = fleetSettings.network.gateway;
         
-        nameservers = [ "192.168.4.1" "1.1.1.1" "8.8.8.8" ];
+        nameservers = fleetSettings.network.dns;
       };
 
       services.resolved.enable = true;

@@ -63,8 +63,9 @@
         modules = [./nvf/nvf-configuration.nix];
       }).neovim;
 
-
     mkHost = import ./lib/mkHost.nix { inherit nixpkgs; };
+
+    fleetSettings = import ./fleet-seetings.nix;
 
   in {
     nixosConfigurations = {
@@ -83,6 +84,8 @@
           ./modules/shared
           nix-flatpak.nixosModules.nix-flatpak
           silentSDDM.nixosModules.default
+          sops-nix.nixosModules.default
+
         ];
         extraSpecialArgs = { 
           inherit nvfFN;
@@ -104,6 +107,7 @@
         overlays = [
           (import ./overlays/unstable.nix { inherit nixpkgs-unstable; } )
         ];
+        extraSpecialArgs = { inherit fleetSettings; };
       };
 
       juniper = mkHost {
@@ -113,9 +117,9 @@
           ./modules/server/pi
           ./modules/server/shared
           disko.nixosModules.default
-          #nixos-hardware.nixosModules.raspberry-pi-4
-
+          sops-nix.nixosModules.default
         ];
+        extraSpecialArgs = { inherit fleetSettings; };
       };
     };
   };

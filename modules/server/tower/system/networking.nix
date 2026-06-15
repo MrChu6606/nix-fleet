@@ -1,4 +1,4 @@
-_: {
+{ fleetSettings, ... }: {
   
   # Configure hostname
   networking.hostName = "sequoia";
@@ -12,18 +12,18 @@ _: {
     };
 
     #Setup switch for managing containers
-    bridges.br0.interfaces = [ "eno1" ]; # Adjust interface accordingly
+    bridges.br0.interfaces = [ "eno1" ];
     
     # Get bridge-ip with DHCP
     useDHCP = false;
-    interfaces."br0".useDHCP = true;
+    interfaces."br0".useDHCP = false;
 
     # Set bridge-ip static
     interfaces."br0".ipv4.addresses = [{
-      address = "192.168.4.27";
+      address = fleetSettings.hosts.sequoia;
       prefixLength = 22;
     }];
-    defaultGateway = "192.168.4.1";
-    nameservers = [ "192.168.4.1" "1.1.1.1" ];
+    defaultGateway = fleetSettings.network.gateway;
+    nameservers = fleetSettings.network.dns;
   };
 }
