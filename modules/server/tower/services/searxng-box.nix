@@ -6,7 +6,7 @@
     hostBridge = "br0";
     localAddress = "${fleetSettings.containers.searxng}/${toString fleetSettings.network.subnetPrefix}";
 
-    extraArgs = { inherit fleetSettings; };
+    specialArgs = { inherit fleetSettings; };
 
     # Everything inside 'config' runs inside the container
     config = { lib, fleetSettings, ... }: {
