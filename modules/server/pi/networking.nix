@@ -20,6 +20,6 @@
     defaultGateway = fleetSettings.network.gateway;
     nameservers = fleetSettings.network.dns;
 
-    hostname = "juniper";
+    hostName = "juniper";
   };
 }

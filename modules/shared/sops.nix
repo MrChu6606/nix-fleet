@@ -14,7 +14,7 @@
                   else "/var/lib/sops-nix/key.txt";
 
     # Only look for SSH keys if we are on a headless server node
-    sshKeyPaths = lib.optionals (config.networking.hostName != "lotus") [ 
+    gnupg.sshKeyPaths = lib.optionals (config.networking.hostName != "lotus") [ 
       "/etc/ssh/ssh_host_ed25519_key" 
     ];
   };

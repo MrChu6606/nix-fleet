@@ -4,7 +4,7 @@
 
     privateNetwork = true;
     hostBridge = "br0";
-    localAddress = "${fleetSettings.containers.searxng}/${fleetSettings.network.subnetPrefix}";
+    localAddress = "${fleetSettings.containers.searxng}/${toString fleetSettings.network.subnetPrefix}";
 
     extraArgs = { inherit fleetSettings; };
 

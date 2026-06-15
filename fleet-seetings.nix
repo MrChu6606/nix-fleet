@@ -1,7 +1,7 @@
 # This file creates network variables
 {
   network = {
-    subnetPrefix = "22";
+    subnetPrefix = 22;
     gateway = "192.168.4.1";
     dns = [ "192.168.4.1" "1.1.1.1" ];
   };
