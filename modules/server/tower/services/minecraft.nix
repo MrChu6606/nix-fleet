@@ -111,8 +111,8 @@ in
       # Link Arion directly to physical NixOS br0 bridge
       networks.lan-bridge = {
         name = "lan-bridge";
-        driver = "maclvan";
-        dirver_opts.parent = "br0";
+        driver = "macvlan";
+        driver_opts.parent = "br0";
         ipam.config = [{
           subnet = fleetSettings.network.subnet + "/${toString fleetSettings.network.subnetPrefix}";
           gateway = fleetSettings.network.gateway;

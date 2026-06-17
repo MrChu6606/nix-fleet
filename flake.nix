@@ -118,6 +118,13 @@
           ./modules/server/shared
           disko.nixosModules.default
           sops-nix.nixosModules.default
+
+          # makes it so can build sd images
+          ({ modulesPath, ... }: {
+            imports = [
+              "${modulesPath}/installer/sd-card/sd-image-aarch64.nix"
+            ];
+          })
         ];
         extraSpecialArgs = { inherit fleetSettings; };
       };
