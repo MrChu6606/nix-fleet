@@ -110,8 +110,13 @@ in
 
       # Link Arion directly to physical NixOS br0 bridge
       networks.lan-bridge = {
-        external = true;
-        name = "br0"; 
+        name = "lan-bridge";
+        driver = "maclvan";
+        dirver_opts.parent = "br0";
+        ipam.config = [{
+          subnet = fleetSettings.network.subnet + "/${toString fleetSettings.network.subnetPrefix}";
+          gateway = fleetSettings.network.gateway;
+        }];
       };
 
       # Tailscale Gateway attached directly to br0
