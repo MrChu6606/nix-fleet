@@ -1,12 +1,11 @@
 { config, lib, ... }: {
   sops = {
-    # Point to your global secrets file relative to this module
-    defaultSopsFile = ../../secrets/global.yaml;
-    defaultSopsFormat = "yaml";
 
     # Extract the tailscale key
     secrets = {
-      tailscale_key = { };
+      tailscale_key = {
+        sopsFile = ../../secrets/global.yaml;
+      };
     };
 
     age = {

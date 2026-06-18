@@ -31,7 +31,6 @@
     tree # filesystem viewer thing
     wireshark # network traffic monitor
     zathura # pdf viewer
-    thunderbird # mail client
     dig
     prismlauncher # minecraft
     unzip

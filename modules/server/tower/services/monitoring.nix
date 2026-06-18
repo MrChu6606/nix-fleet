@@ -51,7 +51,6 @@
 
     grafana = {
       enable = true;
-      environmentFile = config.sops.secrets.grafana_env.path;
       settings = {
         server = {
           http_addr = "0.0.0.0";
@@ -60,6 +59,8 @@
       };
     };
   };
+  # injects env file into grafana for secrets
+  systemd.services.grafana.serviceConfig.EnvironmentFile = config.sops.secrets.grafana_env.path;
                               # glances grafana
   networking.firewall.allowedTCPPorts = [ 61208 3000 ];
 }
