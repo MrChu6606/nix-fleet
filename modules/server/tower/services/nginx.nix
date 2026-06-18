@@ -43,6 +43,12 @@
           proxyPass = "http://127.0.0.1:61208/";
         };
       };
+
+      "grafana.home" = {
+        locations."/" = {
+          proxyPass = "http://127.0.0.1:3000";
+        };
+      };
     };
   };
   # open 443 when https is setup

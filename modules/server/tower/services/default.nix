@@ -5,7 +5,7 @@
     ./searxng-box.nix
     ./minecraft.nix
     ./hypermind.nix
-    ./glances.nix
+    ./monitoring.nix
     ./nginx.nix
   ];
 }

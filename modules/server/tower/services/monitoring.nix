@@ -1,4 +1,4 @@
-{ fleetSettings, ... }: {
+{ fleetSettings, config, ... }: {
   # glances for system metrics
   services.glances.enable = true;
 
@@ -44,13 +44,14 @@
       ];
     };
 
-    virtualisation.cadvisor = {
+    cadvisor = {
       enable = true;
       port = 8081;
     };
 
     grafana = {
       enable = true;
+      environmentFile = config.sops.secrets.grafana_env.path;
       settings = {
         server = {
           http_addr = "0.0.0.0";
