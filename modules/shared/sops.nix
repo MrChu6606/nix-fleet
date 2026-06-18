@@ -9,13 +9,17 @@
       tailscale_key = { };
     };
 
-    age.keyFile = if config.networking.hostName == "lotus"
+    age = {
+      keyFile = if config.networking.hostName == "lotus"
                   then "/home/nic/.config/sops/age/keys.txt"
                   else "/var/lib/sops-nix/key.txt";
+      sshKeyPaths = lib.optionals (config.networking.hostName != "lotus") [ 
+        "/etc/ssh/ssh_host_ed25519_key" 
+      ];
 
-    # Only look for SSH keys if we are on a headless server node
-    gnupg.sshKeyPaths = lib.optionals (config.networking.hostName != "lotus") [ 
-      "/etc/ssh/ssh_host_ed25519_key" 
-    ];
+      generateKey = if config.networking.hostName == "lotus" then false else true;
+    };
+
+    
   };
 }

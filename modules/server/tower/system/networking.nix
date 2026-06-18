@@ -4,12 +4,7 @@
   networking.hostName = "sequoia";
 
   networking = {
-    firewall = {
-      enable = true;
-
-      allowedTCPPorts = [ 22 53 80 3001 3002 61208 ];
-      allowedUDPPorts = [ 53 ];
-    };
+    firewall.enable = true;
 
     #Setup switch for managing containers
     bridges.br0.interfaces = [ "eno1" ];

@@ -1,7 +1,7 @@
 keys:
   - &admin_laptop age120msgn9wr2d78cmngdkgl3wsg0ftfxauw3slantwh0554h9ayprsdznwxy
   - &server_tower age1pplwtucfg94fpsaxq488qvztqekuzs7y8wzc7nrh3tag0g640a4sph8ny8
-  - &server_pi   age1pgq5tdc8c2d4v55dawwucnml6zkv6t9excqx3p5msg9m52998d3qjzrd3m 
+  - &server_pi age127kdzfp3jyenv32fk0hc7ruyrpc5luw7c3v306f6xs39xj87ppdqrfla4h
 creation_rules:
   # Global secrets: Decryptable by your laptop admin key, the tower, AND the pi
   - path_regex: secrets/global\.yaml$

@@ -20,4 +20,9 @@ _:
       ];
     };
   };
+
+  networking.firewall = {
+    allowedTCPPorts = [ 8080 ];
+    allowedUDPPorts = [ 53 ];
+  };
 }

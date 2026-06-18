@@ -9,7 +9,7 @@
 
   hosts = {
     sequoia = "192.168.4.27";
-    pi = "192.168.4.25";
+    juniper = "192.168.4.25";
   };
 
   containers = {

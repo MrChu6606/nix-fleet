@@ -21,7 +21,7 @@
 
       "adguard-pi.home" = {
         locations."/" = {
-          proxyPass = "http://${fleetSettings.hosts.pi}:8080";
+          proxyPass = "http://${fleetSettings.hosts.juniper}:8080";
           proxyWebsockets = true;
         };
       };
@@ -45,4 +45,6 @@
       };
     };
   };
+  # open 443 when https is setup
+  networking.firewall.allowedTCPPorts = [ 80 ]; 
 }

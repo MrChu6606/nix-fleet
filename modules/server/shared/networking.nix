@@ -18,4 +18,9 @@ _: {
       workstation = true;
     };
   };
+
+  networking.firewall = {
+    allowedTCPPorts = [ 22 ];
+    allowedUDPPorts = [ 5353 ];
+  };
 }

@@ -25,4 +25,6 @@ _: {
       }; 
     };
   };
+
+  #networking.firewall.allowedTCPPorts = [ 3001 3002 ];
 }
