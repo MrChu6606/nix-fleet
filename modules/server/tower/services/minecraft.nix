@@ -125,7 +125,7 @@ in
           image = "tailscale/tailscale:latest";
           
           networks.lan-bridge = {
-            ipv4_address = fleetSettings.containers.mc-ts;
+            ipv4_address = fleetSettings.containers.mc-ts.lan;
           };
 
           volumes = [
@@ -142,6 +142,11 @@ in
             TS_ROUTES = "${fleetSettings.containers.mc-20}/32,${fleetSettings.containers.mc-26}/32";
           };
           capabilities = { NET_ADMIN = true; };
+
+          sysctls = {
+            "net.ipv4.ip_forward" = "1";
+          };
+
           restart = "unless-stopped";
         };
       };

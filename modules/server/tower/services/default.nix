@@ -1,11 +1,10 @@
-{ ... }:
-
+{ loadModules, ... }:
 {
-  imports = [
-    ./searxng-box.nix
-    ./minecraft.nix
-    ./hypermind.nix
-    ./monitoring.nix
-    ./nginx.nix
-  ];
+    imports = [
+      ./hypermind.nix
+      ./minecraft.nix
+      ./monitoring.nix
+      ./nginx.nix
+      ./searxng-box.nix
+    ];
 }

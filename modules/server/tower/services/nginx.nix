@@ -21,7 +21,7 @@
 
       "adguard-pi.home" = {
         locations."/" = {
-          proxyPass = "http://${fleetSettings.hosts.juniper}:8080";
+          proxyPass = "http://${fleetSettings.hosts.juniper.lan}:8080";
           proxyWebsockets = true;
         };
       };
@@ -49,8 +49,16 @@
           proxyPass = "http://127.0.0.1:3000";
         };
       };
+
+      #"navidrome.home" = {
+      #  loactions."/" = {
+      #    proxyPass = "http://127.0.0.1:4533";
+      #  };
+      #};
     };
   };
   # open 443 when https is setup
+  # for some reason going to the browser at this port will
+  # point to a blank adguard home web page
   networking.firewall.allowedTCPPorts = [ 80 ]; 
 }

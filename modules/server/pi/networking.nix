@@ -7,7 +7,7 @@
     interfaces.eth0 = {
       useDHCP = false;
       ipv4.addresses = [{
-        address = fleetSettings.hosts.juniper;
+        address = fleetSettings.hosts.juniper.lan;
         prefixLength = fleetSettings.network.subnetPrefix;
       }];
     };

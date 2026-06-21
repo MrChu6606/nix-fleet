@@ -10,6 +10,20 @@ _: {
         owner = "grafana";
         group = "grafana";
       };
+
+      # lidarr_env = {
+      #   owner = "lidarr";
+      #   group = "media";
+      # };
+
+      # prowlarr_env = {
+      #   owner = "prowlarr";
+      # };
+
+      # sabnzbd_secrets = {
+      #   owner = "sbnzbd";
+      #   group = "media";
+      # };
     };
   };
 }

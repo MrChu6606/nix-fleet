@@ -15,10 +15,15 @@
 
     # Set bridge-ip static
     interfaces."br0".ipv4.addresses = [{
-      address = fleetSettings.hosts.sequoia;
+      address = fleetSettings.hosts.sequoia.lan;
       prefixLength = 22;
     }];
-    defaultGateway = fleetSettings.network.gateway;
+
+    defaultGateway = {
+      address = fleetSettings.network.gateway;
+      interface = "br0";
+    };
+
     nameservers = fleetSettings.network.dns;
   };
 }
