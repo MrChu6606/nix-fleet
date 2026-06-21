@@ -5,7 +5,7 @@
     description = "Safely backup Docker/Arion volumes to external drive";
     
     # Path dependencies required by the script
-    path = [ pkgs.util-linux pkgs.tar pkgs.gzip pkgs.systemd ];
+    path = [ pkgs.util-linux pkgs.gnutar pkgs.gzip pkgs.systemd ];
 
     script = ''
       DRIVE_UUID="2867abdf-830d-465c-9104-c14a77a7056d"
