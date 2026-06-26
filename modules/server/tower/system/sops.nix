@@ -11,6 +11,8 @@ _: {
         group = "grafana";
       };
 
+      grafana_key = {};
+
       # lidarr_env = {
       #   owner = "lidarr";
       #   group = "media";

@@ -16,7 +16,7 @@ let
       owner = "programmersd21";
       repo = "kairo";
       rev = "main";
-      hash = "sha256-KSSE2ASii5sF01K5Mx5iB/xHbKbEBEnLSNISsfPgEFk=";
+      hash = "sha256-sciSMgaz+XHO2b+PN+cC5Z43ugdZO1fv+/mzH/3HBGM=";
     };
 
     # Force Nix to ignore repos vendor folder
