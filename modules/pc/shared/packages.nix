@@ -11,7 +11,6 @@
     ripgrep
     curl 
     fastfetch # system fetcher
-    alacritty # terminal emulator
     numix-cursor-theme # cursor
     tealdeer # tldr tool
     zathura # terminal pdf viewer
