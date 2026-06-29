@@ -92,7 +92,6 @@
           silentSDDM.nixosModules.default
           sops-nix.nixosModules.default
           monique.nixosModules.default
-          home-manager.nixosModules.default
         ];
         extraSpecialArgs = { 
           inherit nvfFN;
@@ -152,6 +151,21 @@
           })
         ];
         extraSpecialArgs = { inherit fleetSettings; };
+      };
+
+      homeConfigurations = {
+        "nic@lotus" = home-manager.lib.homeManagerConfiguration {
+          pkgs = nixpkgs.legacyPackages."x86_64-linux";
+          modules = [
+            # Point this directly to your user's home manager profile
+            ./modules/home/lotus/home.nix 
+          ];
+
+          extraSpecialArgs = {
+            inherit nvfFN;
+            zenPkg = zen-browser.packages."x86_64-linux".default;
+          };
+        };
       };
     };
   };
