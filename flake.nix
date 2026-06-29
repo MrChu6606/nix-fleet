@@ -8,6 +8,12 @@
       url = "github:notashelf/nvf";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
+
+    home-manager = {
+      url = "github:nix-community/home-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     silentSDDM = {
       url="github:uiriansan/SilentSDDM";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -18,22 +24,20 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    nixflix = {
-            url = "github:kiriwalawren/nixflix";
-            inputs.nixpkgs.follows = "nixpkgs";
+    monique = {
+      url = "github:ToRvaLDz/monique";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
 
     sops-nix = {
-        url = "github:Mic92/sops-nix";
-        inputs.nixpkgs.follows = "nixpkgs";
+      url = "github:Mic92/sops-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
 
     disko = {
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
-    nixos-hardware.url = "github:NixOS/nixos-hardware/master";
 
     arion = {
       url = "github:hercules-ci/arion";
@@ -46,10 +50,11 @@
     nixpkgs,
     nixpkgs-unstable,
     nvf,
+    home-manager,
     zen-browser,
     nix-flatpak,
     silentSDDM,
-    nixflix,
+    monique,
     sops-nix,
     disko,
     arion,
@@ -82,10 +87,31 @@
           ./modules/pc/laptop
           ./modules/pc/shared
           ./modules/shared
+          ./modules/home/lotus
           nix-flatpak.nixosModules.nix-flatpak
           silentSDDM.nixosModules.default
           sops-nix.nixosModules.default
+          monique.nixosModules.default
+          home-manager.nixosModules.default
+        ];
+        extraSpecialArgs = { 
+          inherit nvfFN;
+          zenPkg = zen-browser.packages."x86_64-linux".default;
+        };
+      };
 
+      cedar = mkHost {
+        system = "x86_64-linux";
+        overlays = [
+          (import ./overlays/steam.nix)
+          (import ./overlays/unstable.nix { inherit nixpkgs-unstable; } )
+        ];
+        modules = [
+          ./modules/shared
+          ./modules/shared
+          ./modules/pc/desktop
+          nix-flatpak.nixosModules.nix-flatpak
+          sops-nix.nixosModules.default
         ];
         extraSpecialArgs = { 
           inherit nvfFN;
@@ -99,7 +125,6 @@
           ./modules/shared
           ./modules/server/tower
           ./modules/server/shared
-          nixflix.nixosModules.default
           sops-nix.nixosModules.default
           disko.nixosModules.default
           arion.nixosModules.arion

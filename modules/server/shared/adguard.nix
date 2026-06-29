@@ -4,7 +4,7 @@
     enable = true;
 
     host = "0.0.0.0";
-    port = 8080;
+    port = fleetSettings.ports.adguard;
 
     # makes this file the config file and ignores web dashboard configs
     mutableSettings = false;

@@ -1,13 +1,7 @@
-{
-  pkgs,
-  ...
-}: {
+_: {
   # Enables direnv
   programs.direnv.enable = true;
   programs.direnv.nix-direnv.enable = true;
-
-  # Sets kernel to zen kernel
-  boot.kernelPackages = pkgs.linuxPackages_zen;
 
   # Configure boot menu
   boot.loader.systemd-boot.enable = true;
@@ -15,10 +9,6 @@
 
   # enable binfmt with qemu for building aarch64 images
   boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
-
-  programs.steam.enable = true;
-
-  xdg.portal.enable = true;
 
   swapDevices = [
   {

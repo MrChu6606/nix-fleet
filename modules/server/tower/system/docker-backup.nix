@@ -4,7 +4,7 @@
       description = "Safely backup Docker/Arion volumes to external drive";
       
       # Added pkgs.docker here
-      path = [ pkgs.util-linux pkgs.gnutar pkgs.gzip pkgs.systemd pkgs.docker ];
+      path = [ pkgs.util-linux pkgs.gnutar pkgs.gzip pkgs.systemd pkgs.docker pkgs.gawk ];
 
       script = ''
         DRIVE_UUID="2867abdf-830d-465c-9104-c14a77a7056d"
@@ -14,7 +14,7 @@
 
         # 1. Find all currently running Arion services before we shut anything down
         echo "Identifying active Arion projects..."
-        ACTIVE_SERVICES=$(systemctl list-units --type=service --state=running "arion-*" | awk '{print $1}' | grep '^arion-')
+        ACTIVE_SERVICES=$(systemctl list-units --type=service --state=running "arion-*" | gawk '{print $1}' | grep '^arion-')
 
         if [ -z "$ACTIVE_SERVICES" ]; then
             echo "No active Arion services found running. Proceeding with backup anyway."

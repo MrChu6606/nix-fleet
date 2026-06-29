@@ -27,4 +27,34 @@
       tail = "100.99.43.45";
     };
   };
+
+  ports = {
+    sequoia = {
+      # Media Server
+      navidrome = 4533;
+      sabnzbd = 8085;
+      lidarr = 8686;
+      prowlarr = 9696;
+
+      # Infrastructure
+      prometheus = {
+        exporter = 9100;
+        service = 9090;
+      };
+      grafana = 3000;
+      # This is default i havent passed the variable
+      glances = 61208;
+
+      # Others
+      hypermind = 3001;
+      hyperswarm = 3002;
+    };
+
+    juniper = {
+      prometheus = 9100;
+    };
+
+    # Adguard is a shared module so it gets its own
+    adguard = 8080;
+  };
 }

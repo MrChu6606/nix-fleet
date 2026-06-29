@@ -109,6 +109,11 @@ input {
     position x=1280 y=0
 }
 
+output "DP-6" {
+    mode "2560x1440@59.951"
+    scale 1.25
+}
+
 // Settings that influence how windows are positioned and sized.
 // Find more information on the wiki:
 // https://yalter.github.io/niri/Configuration:-Layout
@@ -633,6 +638,3 @@ binds {
 
 include "./noctalia.kdl"
 
-
-// Monique monitor configuration
-include "monitors.kdl"

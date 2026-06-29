@@ -23,7 +23,7 @@ _: {
       # };
 
       # sabnzbd_secrets = {
-      #   owner = "sbnzbd";
+      #   owner = "sabnzbd";
       #   group = "media";
       # };
     };

@@ -15,26 +15,26 @@
 
       "adguard.home" = {
         locations."/" = {
-          proxyPass = "http://127.0.0.1:8080";
+          proxyPass = "http://127.0.0.1:${toString fleetSettings.ports.adguard}";
         };
       };
 
       "adguard-pi.home" = {
         locations."/" = {
-          proxyPass = "http://${fleetSettings.hosts.juniper.lan}:8080";
+          proxyPass = "http://${fleetSettings.hosts.juniper.lan}:${toString fleetSettings.ports.adguard}";
           proxyWebsockets = true;
         };
       };
 
       "hypermind.home" = {
         locations."/" = {
-          proxyPass = "http://127.0.0.1:3002";
+          proxyPass = "http://127.0.0.1:${toString fleetSettings.ports.sequoia.hypermind}";
         };
       };
 
       "hyperswarm.home" = {
         locations."/" = {
-          proxyPass = "http://127.0.0.1:3001";
+          proxyPass = "http://127.0.0.1:${toString fleetSettings.ports.sequoia.hyperswarm}";
         };
       };
 
@@ -46,7 +46,7 @@
 
       "grafana.home" = {
         locations."/" = {
-          proxyPass = "http://127.0.0.1:3000";
+          proxyPass = "http://127.0.0.1:${toString fleetSettings.ports.sequoia.grafana}";
         };
       };
 

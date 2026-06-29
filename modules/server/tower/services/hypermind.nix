@@ -1,4 +1,4 @@
-_: {
+{ fleetSettings, ... }: {
   virtualisation.oci-containers = {
     backend = "docker";
     containers = {
@@ -9,7 +9,7 @@ _: {
         # use host networking for Hyperswarm DHT to find peers
         extraOptions = [ "--network=host" ];
         environment = {
-          PORT = "3002";
+          PORT = toString fleetSettings.ports.sequoia.hypermind;
           ENABLE_CHAT = "true";
           ENABLE_MAP = "true";
         };
@@ -20,11 +20,9 @@ _: {
         image = "ghcr.io/lklynet/hypermind-swarm:latest";
         extraOptions = [ "--network=host" ];
         environment = {
-          PORT = "3001"; # Keep it on a different port to avoid collisions
+          PORT = toString fleetSettings.ports.sequoia.hyperswarm;
         };
       }; 
     };
   };
-
-  #networking.firewall.allowedTCPPorts = [ 3001 3002 ];
 }

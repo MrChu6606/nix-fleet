@@ -7,17 +7,17 @@
       # Grabs metrics from this machine
       exporters.node = {
         enable = true;
-        port = 9100;
+        port = fleetSettings.ports.sequoia.prometheus.exporter;
       };
       # Main prometheus service
       enable = true;
-      port = 9090;
+      port = fleetSettings.ports.sequoia.prometheus.service;
 
       scrapeConfigs = [
         # Scrape local host
         {
           job_name = "sequoia";
-          static_configs = [{ targets = [ "127.0.0.1:9100" ]; }];
+          static_configs = [{ targets = [ "127.0.0.1:${toString fleetSettings.ports.sequoia.prometheus.exporter}" ]; }];
         }
         # Scrape docker container resource states
         {
@@ -38,7 +38,7 @@
         {
           job_name = "juniper";
           static_configs = [{
-            targets = [ (fleetSettings.hosts.juniper.lan + ":9100") ];
+            targets = [ (fleetSettings.hosts.juniper.lan + ":${toString fleetSettings.ports.juniper.prometheus}") ];
           }];
         }
       ];
@@ -54,7 +54,7 @@
       settings = {
         server = {
           http_addr = "0.0.0.0";
-          http_port = 3000;
+          http_port = fleetSettings.ports.sequoia.grafana;
         };
         security.secret_key = config.sops.secrets.grafana_key.path;
       };
@@ -69,7 +69,7 @@
             {
               name = "Prometheus";
               type = "prometheus";
-              url = "http://127.0.0.1:9090";
+              url = "http://127.0.0.1:${toString fleetSettings.ports.sequoia.prometheus.service}";
               isDefault = true;
             }
           ];
@@ -139,5 +139,5 @@
     };
   };
                                     # glances grafana
-  networking.firewall.allowedTCPPorts = [ 61208 3000 ];
+  networking.firewall.allowedTCPPorts = [ 61208 fleetSettings.ports.sequoia.grafana ];
 }

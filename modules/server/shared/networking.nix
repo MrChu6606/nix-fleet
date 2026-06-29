@@ -1,21 +1,28 @@
 _: {
   
   # Configure ssh
-  services.openssh = {
-    enable = true;
-    settings = {
-      PasswordAuthentication = false;
-    };
-  };
-
-  # Setup Aahi to broadcast hostname
-  services.avahi =   {
-    enable = true;
-    nssmdns4 = true;
-    publish = {
+  services = {
+    openssh = {
       enable = true;
-      addresses = true;
-      workstation = true;
+      settings = {
+        PasswordAuthentication = false;
+      };
+    };
+
+    # Setup Aahi to broadcast hostname
+    avahi =   {
+      enable = true;
+
+      publish = {
+        enable = true;
+        addresses = true;
+        workstation = true;
+      };
+    };
+
+    resolved = {
+      enable = true;
+      settings.Resolve.MultiCastDNS = "yes";
     };
   };
 

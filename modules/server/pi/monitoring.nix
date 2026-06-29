@@ -1,7 +1,7 @@
-_: {
+{ fleetSettings, ... }: {
   services.prometheus.exporters.node = {
     enable = true;
-    port = 9100;
+    port = fleetSettings.ports.juniper.prometheus;
   };
 
   networking.firewall.allowedTCPPorts = [ 9100 ];
