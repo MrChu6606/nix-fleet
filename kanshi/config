@@ -1,4 +1,0 @@
-profile docker {
-    output "LG Electronics LG ULTRAGEAR 412BOEA0C396" mode 2560x1440 position 2240,0
-    output eDP-1 mode 2240x1400 position 0,0
-}

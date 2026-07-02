@@ -1,30 +1,26 @@
-{ loadModules, ... }:
+_:
 {
-  # This configures the Home Manager NixOS module itself
-  home-manager = {
-    useGlobalPkgs = true;
-    useUserPackages = true; 
-    
-    users.nic = {
-      # This pulls in any other .nix files in this directory
-      imports = loadModules ./.;
+  imports = [
+    ./alacritty.nix
+    ./emacs.nix
+  ];
+  programs.home-manager.enable = true;
 
-      home = {
-        username = "nic";
-        homeDirectory = "/home/nic";
-        stateVersion = "26.05"; # Crucial to prevent HM warnings
+  home = {
+    username = "nic";
+    homeDirectory = "/home/nic";
+    stateVersion = "26.05";
+  };
+
+
+  programs.git = {
+    enable = true;
+    settings = {
+      user = {
+        name = "MrChu6606";
+        email = "nmcicchi@gmail.com";
       };
-
-      programs.home-manager.enable = true;
-
-      programs.git = {
-        enable = true;
-        userName = "MrChu6606";
-        userEmail = "nmcicchi@gmail.com";
-        extraConfig = {
-          init.defaultBranch = "main";
-        };
-      };
+      init.defaultBranch = "main";
     };
   };
 }

@@ -33,6 +33,7 @@
     qalculate-qt # calculator
     fd
     nmap
+    home-manager
   ];
 
   unstable = with pkgs.unstable; [
