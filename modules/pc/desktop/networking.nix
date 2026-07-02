@@ -1,6 +1,6 @@
 _: {
   networking = {
-    hostname = "Cedar";
+    hostName = "cedar";
     networkmanager.enable = true;
   };
 }

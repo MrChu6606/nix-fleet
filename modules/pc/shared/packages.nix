@@ -33,6 +33,7 @@
 in {
   environment.systemPackages = stable ++ unstable ++ [ nvfPkg zenPkg ];
 
+  xdg.portal.enable = true;
   services.flatpak = {
     enable = true;
 

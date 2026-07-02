@@ -107,10 +107,11 @@
         ];
         modules = [
           ./modules/shared
-          ./modules/shared
+          ./modules/pc/shared
           ./modules/pc/desktop
           nix-flatpak.nixosModules.nix-flatpak
           sops-nix.nixosModules.default
+          monique.nixosModules.default
         ];
         extraSpecialArgs = { 
           inherit nvfFN;
