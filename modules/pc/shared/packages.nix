@@ -40,7 +40,7 @@ in {
     remotes = [
       {
         name = "flathub";
-        location = "https://f;athub.org/repo/flathub.flatpakrepo";
+        location = "https://flathub.org/repo/flathub.flatpakrepo";
       }
     ];
   };

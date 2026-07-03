@@ -163,6 +163,18 @@
         modules = [
           # Point this directly to your user's home manager profile
           ./modules/home/lotus
+          ./modules/shared
+        ];
+
+        extraSpecialArgs = {
+          inherit nvfFN;
+          zenPkg = zen-browser.packages."x86_64-linux".default;
+        };
+      };
+      "nic@cedar" = home-manager.lib.homeManagerConfiguration {
+        pkgs = self.nixosConfigurations.lotus.pkgs;
+        modules = [
+          ./modules/home/shared
         ];
 
         extraSpecialArgs = {
