@@ -1,6 +1,6 @@
 { pkgs, ... }: {
   programs = {
-    niri.enable = true;
+    niri.enable = false;
     gamescope.enable = true;
     monique.enable = true;
   };

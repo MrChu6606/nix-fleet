@@ -2,6 +2,7 @@ _:
 {
   imports = [
     ./alacritty.nix
+    ./niri.nix
   ];
   programs.home-manager.enable = true;
 
