@@ -1,8 +1,12 @@
 { pkgs, ... }: {
   programs = {
-    niri.enable = false;
+    niri.enable = true;
     gamescope.enable = true;
     monique.enable = true;
+  };
+
+  xdg.portal = {
+    enable = true;
   };
   
   environment.systemPackages = with pkgs; [

@@ -18,9 +18,19 @@
       url="github:uiriansan/SilentSDDM";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=latest";
+    
+    nix-flatpak = {
+      url = "github:gmodena/nix-flatpak/?ref=latest";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     zen-browser = {
       url = "github:youwen5/zen-browser-flake";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    niri = {
+      url = "github:YaLTeR/niri";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -55,6 +65,7 @@
     zen-browser,
     nix-flatpak,
     silentSDDM,
+    niri,
     monique,
     sops-nix,
     disko,
@@ -163,7 +174,8 @@
         modules = [
           # Point this directly to your user's home manager profile
           ./modules/home/lotus
-          ./modules/shared
+          ./modules/home/shared
+          niri.homeModules.niri
         ];
 
         extraSpecialArgs = {
