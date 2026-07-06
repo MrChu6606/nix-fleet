@@ -21,7 +21,6 @@
     
     nix-flatpak = {
       url = "github:gmodena/nix-flatpak/?ref=latest";
-      inputs.nixpkgs.follows = "nixpkgs";
     };
 
     zen-browser = {
@@ -30,7 +29,7 @@
     };
 
     niri = {
-      url = "github:YaLTeR/niri";
+      url = "github:sodiboo/niri-flake";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
