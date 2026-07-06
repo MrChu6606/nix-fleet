@@ -9,7 +9,7 @@ let
 
   kairo = buildGoModule {
     pname = "kairo";
-    version = "unstable-2026-05-05";
+    version = "unstable-2026-07-05";
 
 
     src = pkgs.fetchFromGitHub {
