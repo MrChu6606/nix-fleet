@@ -11,13 +11,16 @@
     
     # Get bridge-ip with DHCP
     useDHCP = false;
-    interfaces."br0".useDHCP = false;
+    interfaces = {
+      "br0".useDHCP = false;
 
-    # Set bridge-ip static
-    interfaces."br0".ipv4.addresses = [{
-      address = fleetSettings.hosts.sequoia;
-      prefixLength = 22;
-    }];
+      # Set bridge-ip static
+      "br0".ipv4.addresses = [{
+        address = fleetSettings.hosts.sequoia.lan;
+        prefixLength = 22;
+      }];
+
+    };
 
     defaultGateway = {
       address = fleetSettings.network.gateway;

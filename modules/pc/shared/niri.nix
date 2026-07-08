@@ -10,7 +10,7 @@
 
     config = {
       niri = {
-        default = [ "gnome gtk "]; # fallbacks
+        #default = [ "gnome gtk "]; # fallbacks
         "org.freedesktop.impl.portal.FileChooser" = [ "termfilechooser" ];
       };
     };
