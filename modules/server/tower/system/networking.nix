@@ -10,20 +10,20 @@
     bridges.br0.interfaces = [ "eno1" ];
     
     # Get bridge-ip with DHCP
-    useDHCP = true;
-    interfaces."br0".useDHCP = true;
+    useDHCP = false;
+    interfaces."br0".useDHCP = false;
 
     # Set bridge-ip static
-    # interfaces."br0".ipv4.addresses = [{
-    #   address = fleetSettings.hosts.sequoia.lan;
-    #   prefixLength = 22;
-    # }];
+    interfaces."br0".ipv4.addresses = [{
+      address = fleetSettings.hosts.sequoia;
+      prefixLength = 22;
+    }];
 
-    # defaultGateway = {
-    #   address = fleetSettings.network.gateway;
-    #   interface = "br0";
-    # };
+    defaultGateway = {
+      address = fleetSettings.network.gateway;
+      interface = "br0";
+    };
 
-    # nameservers = fleetSettings.network.dns;
+    nameservers = fleetSettings.network.dns;
   };
 }

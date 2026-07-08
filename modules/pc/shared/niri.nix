@@ -6,7 +6,19 @@
 
   xdg.portal = {
     enable = true;
-    extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+    configPackages = [ pkgs.niri ];
+
+    config = {
+      niri = {
+        default = [ "gnome gtk "]; # fallbacks
+        "org.freedesktop.impl.portal.FileChooser" = [ "termfilechooser" ];
+      };
+    };
+
+    extraPortals = with pkgs; [
+      xdg-desktop-portal-gtk
+      xdg-desktop-portal-termfilechooser
+    ];
   };
   
   environment.systemPackages = with pkgs; [

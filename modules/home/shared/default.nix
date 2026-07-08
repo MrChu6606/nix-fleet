@@ -3,6 +3,7 @@ _:
   imports = [
     ./alacritty.nix
     ./niri.nix
+    ./yazi.nix
   ];
   programs.home-manager.enable = true;
 
@@ -12,6 +13,9 @@ _:
     stateVersion = "26.05";
   };
 
+  xdg.configFile."alacritty/alacritty.toml" = {
+    force = true;
+  };
 
   programs.git = {
     enable = true;

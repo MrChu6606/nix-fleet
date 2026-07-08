@@ -17,7 +17,7 @@
         };
         focus-follows-mouse.max-scroll-amount = "0%";
 
-        power-key-handling = { };
+        power-key-handling.enable = false;
       };
 
 
@@ -32,11 +32,9 @@
         ];
         default-column-width = { proportion = 0.5; };
         
-        #  focus-ring = {
-        #    width = 4;
-        #    active-color = "#d97742";
-        #    inactive-color = "#505050";
-        #  };
+          focus-ring = {
+            width = 4;
+          };
         
         # border.off = true;
         
@@ -65,12 +63,21 @@
       # --- Window Rules ---
       window-rules = [
         {
-          matches = [ { app-id = "^org\\.wezfurlong\\.wezterm$"; } ];
-          default-column-width = { };
-        }
-        {
           matches = [ { app-id = "firefox$"; title = "^Picture-in-Picture$"; } ];
           open-floating = true;
+        }
+        {
+          matches = [ {app-id = "file_chooser"; } ];
+          open-floating = true;
+
+          default-floating-position = {
+            x = 0;
+            y = 0;
+            relative-to = "top-right";
+          };
+
+          default-column-width = { fixed = 1000; };
+          default-window-height = { fixed = 650; };
         }
       ];
 

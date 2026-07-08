@@ -1,4 +1,4 @@
-_: {
+{ pkgs, ... }: {
 
   # Set automatic garbage collection
   nix.gc = {
@@ -20,4 +20,16 @@ _: {
   };
 
   security.sudo.wheelNeedsPassword = false;
+
+  # wake on lan
+  networking = {
+    interfaces = {
+      eno1.wakeOnLan.enable = true;
+    };
+    firewall.allowedUDPPorts = [ 9 ];
+  };
+
+  environment.systemPackages = with pkgs; [
+    wakeonlan
+  ];
 }
