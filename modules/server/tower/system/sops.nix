@@ -19,7 +19,8 @@ _: {
         };
 
         prowlarr_env = {
-          owner = "prowlarr";
+          owner = "root";
+          group = "root";
         };
 
         sabnzbd_secrets = {

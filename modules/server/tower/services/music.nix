@@ -1,4 +1,4 @@
-{ config, fleetPorts, ... }:
+{ config, fleetSettings, ... }:
 let
   # Network Target Boundary
   # Keep as "127.0.0.1" to isolate services securely behind your proxy/Tailscale.
@@ -25,7 +25,7 @@ in
       group = "media"; # Align permissions so Navidrome can parse Lidarr imports
       settings = {
         Address = targetHost;
-        Port = fleetPorts.navidrome;
+        Port = fleetSettings.ports.sequoia.navidrome;
         MusicFolder = "/media/music";
         ScanSchedule = "@every 15m";
         LogLevel = "info";
@@ -38,7 +38,7 @@ in
       secretFiles = [ config.sops.secrets.sabnzbd_secrets.path ];
       settings = {
         misc = {
-          port = "${fleetPorts.sabnzbd}";
+          port = "${fleetSettings.ports.sequoia.sabnzbd}";
           host = targetHost;
           bandwidth_max = daytimeSpeedLimit; 
 
@@ -57,22 +57,22 @@ in
       enable = true;
       group = "media";
       settings = {
-        update = { mechanism = "disabled"; }; # Strictly immutable/declarative tracking via flakes
+        update = { mechanism = "external"; }; # Strictly immutable/declarative tracking via flakes
         server = {
-          port = fleetPorts.lidarr;
+          port = fleetSettings.ports.sequoia.lidarr;
           bindaddress = targetHost;
         };
       };
-      environmentFiles = [ config.sops.secrets.lidarr-env.path ];
+      environmentFiles = [ config.sops.secrets.lidarr_env.path ];
     };
 
     # Prowlarr - The Indexer Synchronization Layer
     prowlarr = {
       enable = true;
       settings = {
-        update = { mechanism = "disabled"; };
+        update = { mechanism = "external"; };
         server = {
-          port = fleetPorts.prowlarr;
+          port = fleetSettings.ports.sequoia.prowlarr;
           bindaddress = targetHost;
         };
       };
