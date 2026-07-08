@@ -50,11 +50,11 @@
         };
       };
 
-      #"navidrome.home" = {
-      #  loactions."/" = {
-      #    proxyPass = "http://127.0.0.1:4533";
-      #  };
-      #};
+      "navidrome.home" = {
+        loactions."/" = {
+          proxyPass = "http://127.0.0.1:4533";
+        };
+      };
     };
   };
   # open 443 when https is setup

@@ -13,19 +13,19 @@ _: {
 
       grafana_key = {};
 
-      # lidarr_env = {
-      #   owner = "lidarr";
-      #   group = "media";
-      # };
+        lidarr_env = {
+          owner = "lidarr";
+          group = "media";
+        };
 
-      # prowlarr_env = {
-      #   owner = "prowlarr";
-      # };
+        prowlarr_env = {
+          owner = "prowlarr";
+        };
 
-      # sabnzbd_secrets = {
-      #   owner = "sabnzbd";
-      #   group = "media";
-      # };
+        sabnzbd_secrets = {
+          owner = "sabnzbd";
+          group = "media";
+        };
     };
   };
 }

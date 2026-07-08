@@ -6,5 +6,6 @@
       ./monitoring.nix
       ./nginx.nix
       ./searxng-box.nix
+      ./music.nix
     ];
 }
