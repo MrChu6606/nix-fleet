@@ -4,17 +4,12 @@
     enable = true;
     mutableSettings = false;
 
-    # Declarative setting injection
+    host = "0.0.0.0";
+    port = fleetSettings.ports.adguard.http;
+
     settings = {
       schema_version = 20;
 
-      # Correct Web GUI binding syntax
-      http = {
-        address = "0.0.0.0"; # Or "127.0.0.1" if Nginx handles all entry points
-        port = fleetSettings.ports.adguard.http;
-      };
-
-      # Flattend DNS configuration block
       dns = {
         port = fleetSettings.ports.adguard.dns;
         bind_hosts = [ "127.0.0.1" ];
@@ -67,5 +62,6 @@
 
   networking.firewall = {
     allowedUDPPorts = [ fleetSettings.ports.adguard.dns ];
+    allowedTCPPorts = [ fleetSettings.ports.adguard.http ];
   };
 }
