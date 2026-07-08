@@ -15,13 +15,13 @@
 
       "adguard.home" = {
         locations."/" = {
-          proxyPass = "http://127.0.0.1:${toString fleetSettings.ports.adguard}";
+          proxyPass = "http://127.0.0.1:${toString fleetSettings.ports.adguard.http}";
         };
       };
 
       "adguard-pi.home" = {
         locations."/" = {
-          proxyPass = "http://${fleetSettings.hosts.juniper.lan}:${toString fleetSettings.ports.adguard}";
+          proxyPass = "http://${fleetSettings.hosts.juniper.lan}:${toString fleetSettings.ports.adguard.http}";
           proxyWebsockets = true;
         };
       };

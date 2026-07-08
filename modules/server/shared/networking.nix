@@ -28,6 +28,6 @@ _: {
 
   networking.firewall = {
     allowedTCPPorts = [ 22 ];
-    allowedUDPPorts = [ 5353 ];
+    allowedUDPPorts = [ 53 ];
   };
 }

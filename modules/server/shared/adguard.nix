@@ -4,7 +4,7 @@
     enable = true;
 
     host = "0.0.0.0";
-    port = fleetSettings.ports.adguard;
+    port = fleetSettings.ports.adguard.http;
 
     # makes this file the config file and ignores web dashboard configs
     mutableSettings = false;
@@ -22,6 +22,10 @@
         ];
 
         private_networks = [ "100.64.0.0/10" ];
+        dns = {
+          port = fleetSettings.ports.adguard.dns;
+          bind_hosts = [ "127.0.0.1" ];
+        };
       };
 
       filtering = {
