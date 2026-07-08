@@ -1,18 +1,12 @@
 _: {
-  
-  # Configure ssh
   services = {
     openssh = {
       enable = true;
-      settings = {
-        PasswordAuthentication = false;
-      };
+      settings.PasswordAuthentication = false;
     };
 
-    # Setup Aahi to broadcast hostname
-    avahi =   {
+    avahi = {
       enable = true;
-
       publish = {
         enable = true;
         addresses = true;
@@ -28,6 +22,6 @@ _: {
 
   networking.firewall = {
     allowedTCPPorts = [ 22 ];
-    allowedUDPPorts = [ 53 ];
+    allowedUDPPorts = [ 5353 ]; 
   };
 }

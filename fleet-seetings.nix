@@ -44,6 +44,7 @@
       grafana = 3000;
       # This is default i havent passed the variable
       glances = 61208;
+      nginx = 80;
 
       # Others
       hypermind = 3001;
