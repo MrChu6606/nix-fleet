@@ -1,4 +1,0 @@
-{ loadModules, ... }:
-{
-    imports = loadModules ./.;
-}

@@ -149,8 +149,9 @@
         system = "aarch64-linux";
         modules = [
           ./modules/shared
-          ./modules/server/pi
+          ./modules/server/assistant
           ./modules/server/shared
+          ./modules/server/pis
           disko.nixosModules.default
           sops-nix.nixosModules.default
 
@@ -162,6 +163,24 @@
           })
         ];
         extraSpecialArgs = { inherit fleetSettings; };
+      };
+
+      rowan = mkHost {
+          system = "aarch64-linux";
+          modules = [
+            ./modules/shared
+            ./modules/server/pis
+            ./modules/server/dashboard
+            sops-nix.nixosModules.default
+
+            # makes it so can build sd images
+            ({ modulesPath, ... }: {
+              imports = [
+                "${modulesPath}/installer/sd-card/sd-image-aarch64.nix"
+              ];
+            })
+          ];
+          extraSpecialArgs = { inherit fleetSettings; };
       };
 
       

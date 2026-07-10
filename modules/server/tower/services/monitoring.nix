@@ -1,6 +1,9 @@
 { pkgs, fleetSettings, config, ... }: {
   # glances for system metrics
-  services.glances.enable = true;
+  services.glances = {
+    enable = true;
+    port = fleetSettings.ports.sequoia.glances;
+  };
 
   services = {
     prometheus = {
