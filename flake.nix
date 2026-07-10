@@ -53,7 +53,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    raspi5-nix.url = "github:nix-community/raspberry-pi-nix";
+    raspi5-nix = {
+      url = "github:nix-community/raspberry-pi-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = {
