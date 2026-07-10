@@ -1,4 +1,6 @@
-{ config, lib, ... }: {
+{ config, lib, ... }: let
+  adminList = [ "lotus" "cedar" ];
+in {
   sops = {
 
     # Extract the tailscale key
@@ -9,16 +11,14 @@
     };
 
     age = {
-      keyFile = if config.networking.hostName == "lotus"
-                  then "/home/nic/.config/sops/age/keys.txt"
-                  else "/var/lib/sops-nix/key.txt";
-      sshKeyPaths = lib.optionals (config.networking.hostName != "lotus") [ 
+      keyFile = if builtins.elem config.networking.hostName adminList
+        then "/home/nic/.config/sops/age/keys.txt"
+        else "/var/lib/sops-nix/key.txt";
+      sshKeyPaths = lib.optionals (!(builtins.elem config.networking.hostName adminList)) [ 
         "/etc/ssh/ssh_host_ed25519_key" 
       ];
 
-      generateKey = if config.networking.hostName == "lotus" then false else true;
+      generateKey = !(builtins.elem config.networking.hostName adminList);
     };
-
-    
   };
 }
