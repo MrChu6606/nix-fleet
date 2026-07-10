@@ -1,5 +1,5 @@
 { lib, loadModules, modulesPath, ...}: {
-  imports = loadModules ./. + [ (modulesPath + "/installer/scan/not-detected.nix")];
+  imports = loadModules ./. ++ [ (modulesPath + "/installer/scan/not-detected.nix")];
 
   # configure pi bootloader
   boot.loader.generic-extlinux-compatible.enable = true;

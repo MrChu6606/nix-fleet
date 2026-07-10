@@ -1,5 +1,6 @@
 keys:
   - &admin_laptop age120msgn9wr2d78cmngdkgl3wsg0ftfxauw3slantwh0554h9ayprsdznwxy
+  - &admin_desktop age1dk8r7lqc4zrau64z0uqpheevmc2reerzjjwe8pegn6c9rdmjae5stax5zf
   - &server_tower age1pplwtucfg94fpsaxq488qvztqekuzs7y8wzc7nrh3tag0g640a4sph8ny8
   - &server_pi age127kdzfp3jyenv32fk0hc7ruyrpc5luw7c3v306f6xs39xj87ppdqrfla4h
 creation_rules:
@@ -8,6 +9,7 @@ creation_rules:
     key_groups:
       - age:
           - *admin_laptop
+          - *admin_desktop
           - *server_tower
           - *server_pi
 
@@ -16,6 +18,7 @@ creation_rules:
     key_groups:
       - age:
           - *admin_laptop
+          - *admin_desktop
           - *server_tower
 
   # Pi-specific secrets: Decryptable by your laptop and the pi
@@ -23,4 +26,5 @@ creation_rules:
     key_groups:
       - age:
           - *admin_laptop
+          - *admin_desktop
           - *server_pi

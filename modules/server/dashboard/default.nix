@@ -1,5 +1,5 @@
 { loadModules, ... }:
 {
   imports = loadModules ./.;
-  networking.hostname = "rowan";
+  networking.hostName = "rowan";
 }

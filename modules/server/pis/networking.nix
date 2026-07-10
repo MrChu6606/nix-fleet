@@ -1,13 +1,16 @@
-{ fleetSettings, config, ... }:
+{ fleetSettings, config, lib, ... }:
 let 
-  host = config.netowrking.hostName;
+  host = config.networking.hostName;
   hostConfig = fleetSettings.hosts.${host} or null;
+  isStatic = hostConfig != null;
 in {
-  networking = if hostConfig != null then {
+  networking = {
     firewall.enable = true;
 
-    useDHCP = false;
-    interfaces.eth0 = {
+    useDHCP = !isStatic;
+    # Conditionally create static interfaces if hostConfig exists
+    # otherwise use DHCP
+    interfaces.eth0 = lib.mkIf isStatic {
       useDHCP = false;
       ipv4.addresses = [{
         address = hostConfig.lan;
@@ -15,10 +18,7 @@ in {
       }];
     };
 
-    defaultGateway = fleetSettings.network.gateway;
-    nameservers = fleetSettings.network.dns;
-  } else {
-    firewall.enable = true;
-    useDHCP = true;
+    defaultGateway = lib.mkIf isStatic fleetSettings.network.gateway;
+    nameservers = lib.mkIf isStatic fleetSettings.network.dns;
   };
 }

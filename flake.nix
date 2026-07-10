@@ -53,6 +53,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    raspi5-nix.url = "github:nix-community/raspberry-pi-nix";
   };
 
   outputs = {
@@ -69,6 +70,7 @@
     sops-nix,
     disko,
     arion,
+    raspi5-nix,
     ...
   }: let
 
@@ -152,7 +154,6 @@
           ./modules/server/assistant
           ./modules/server/shared
           ./modules/server/pis
-          disko.nixosModules.default
           sops-nix.nixosModules.default
 
           # makes it so can build sd images
@@ -172,6 +173,7 @@
             ./modules/server/pis
             ./modules/server/dashboard
             sops-nix.nixosModules.default
+            raspi5-nix.nixosModules.raspberry-pi
 
             # makes it so can build sd images
             ({ modulesPath, ... }: {
@@ -205,6 +207,7 @@
         pkgs = self.nixosConfigurations.lotus.pkgs;
         modules = [
           ./modules/home/shared
+          niri.homeModules.niri
         ];
 
         extraSpecialArgs = {
