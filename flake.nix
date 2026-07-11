@@ -204,6 +204,7 @@
         pkgs = self.nixosConfigurations.lotus.pkgs;
         modules = [
           ./modules/home/shared
+          ./modules/home/cedar
           niri.homeModules.niri
         ];
 
