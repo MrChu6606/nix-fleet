@@ -13,4 +13,5 @@
   boot.extraModulePackages = [ ];
 
   swapDevices = [ ];
+  sdImage.compressImage = false;
 }

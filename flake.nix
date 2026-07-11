@@ -55,7 +55,7 @@
 
     raspi5-nix = {
       url = "github:nix-community/raspberry-pi-nix";
-      inputs.nixpkgs.follows = "nixpkgs";
+      #inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
@@ -177,13 +177,7 @@
             ./modules/server/dashboard
             sops-nix.nixosModules.default
             raspi5-nix.nixosModules.raspberry-pi
-
-            # makes it so can build sd images
-            ({ modulesPath, ... }: {
-              imports = [
-                "${modulesPath}/installer/sd-card/sd-image-aarch64.nix"
-              ];
-            })
+            raspi5-nix.nixosModules.sd-image
           ];
           extraSpecialArgs = { inherit fleetSettings; };
       };
