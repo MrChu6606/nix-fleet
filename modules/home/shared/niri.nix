@@ -1,4 +1,4 @@
-{ pkgs, ... }: {
+{ pkgs, lib, ... }: {
   programs.niri = {
     enable = true;
     # use nixpkgs cache instead of compiling from source
@@ -8,7 +8,7 @@
       # --- Input Configuration ---
       input = {
         keyboard = {
-          xkb.options = "caps:swapescape";
+          xkb.options = lib.mkDefault "caps:swapescape";
           numlock = true;
         };
         touchpad = {
