@@ -22,6 +22,8 @@ _: {
   };
 
   networking.firewall = {
+    enable = true;
     allowedTCPPorts = [ 22 ];
+    trustedInterfaces = [ "end0" "eth0" "en*" "wl*" "wlan*" ];
   };
 }

@@ -4,7 +4,6 @@
   networking.hostName = "sequoia";
 
   networking = {
-    firewall.enable = true;
 
     #Setup switch for managing containers
     bridges.br0.interfaces = [ "eno1" ];
