@@ -57,11 +57,6 @@
       url = "github:nix-community/raspberry-pi-nix";
       #inputs.nixpkgs.follows = "nixpkgs";
     };
-
-    sops-rpi-nix = {
-      url = "github:Mic92/sops-nix";
-      inputs.nixpkgs.follows = "raspi5-nix/nixpkgs";
-    };
   };
 
   outputs = {
@@ -70,8 +65,7 @@
     nixpkgs-unstable,
     nvf,
     home-manager,
-    zen-browser,
-    silentSDDM,
+    sops-nix,
     ...
   }@inputs: let
 
@@ -103,13 +97,13 @@
           ./modules/pc/shared
           ./modules/shared
           inputs.nix-flatpak.nixosModules.nix-flatpak
-          silentSDDM.nixosModules.default
+          inputs.silentSDDM.nixosModules.default
           inputs.sops-nix.nixosModules.default
           inputs.monique.nixosModules.default
         ];
         extraSpecialArgs = { 
           inherit nvfFN;
-          zenPkg = zen-browser.packages."x86_64-linux".default;
+          zenPkg = inputs.zen-browser.packages."x86_64-linux".default;
         };
       };
 
@@ -126,11 +120,11 @@
           inputs.nix-flatpak.nixosModules.nix-flatpak
           inputs.sops-nix.nixosModules.default
           inputs.monique.nixosModules.default
-          silentSDDM.nixosModules.default
+          inputs.silentSDDM.nixosModules.default
         ];
         extraSpecialArgs = { 
           inherit nvfFN;
-          zenPkg = zen-browser.packages."x86_64-linux".default;
+          zenPkg = inputs.zen-browser.packages."x86_64-linux".default;
         };
       };
 
@@ -178,14 +172,11 @@
             ./modules/shared
             ./modules/server/pis
             ./modules/server/dashboard
-            inputs.sops-rpi-nix.nixosModules.default
+            inputs.sops-nix.nixosModules.default
             inputs.raspi5-nix.nixosModules.raspberry-pi
             inputs.raspi5-nix.nixosModules.sd-image
           ];
-          overlays = [ 
-            (import ./overlays/rpi-go125.nix) 
-          ];
-          extraSpecialArgs = { inherit fleetSettings; };
+          extraSpecialArgs = { inherit fleetSettings sops-nix; };
       };
 
       
@@ -202,8 +193,7 @@
         ];
 
         extraSpecialArgs = {
-          inherit nvfFN;
-          zenPkg = zen-browser.packages."x86_64-linux".default;
+            # zenPkg = inputs.zen-browser.packages."x86_64-linux".default;
         };
       };
       "nic@cedar" = home-manager.lib.homeManagerConfiguration {
@@ -215,8 +205,7 @@
         ];
 
         extraSpecialArgs = {
-          inherit nvfFN;
-          zenPkg = zen-browser.packages."x86_64-linux".default;
+            # zenPkg = inputs.zen-browser.packages."x86_64-linux".default;
         };
       };
     };

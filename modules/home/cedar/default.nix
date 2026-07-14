@@ -1,3 +1,6 @@
 _:{
-  imports = [ ./niri.nix ];
+  imports = [ 
+    ./niri.nix
+    ./bottom.nix
+  ];
 }

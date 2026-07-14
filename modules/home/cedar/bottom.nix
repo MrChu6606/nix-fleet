@@ -14,4 +14,5 @@ _: {
       };
     };
   };
+  xdg.configFile."bottom/bottom.toml".force = true;
 }
