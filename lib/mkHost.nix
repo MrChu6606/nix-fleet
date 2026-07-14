@@ -1,21 +1,21 @@
-{ nixpkgs }:
 { 
-    system, 
-    overlays ? [], 
-    modules, 
-    extraSpecialArgs ? {}
+  system, 
+  overlays ? [], 
+  modules, 
+  extraSpecialArgs ? {},
+  pkgsInput
 }:
 
-nixpkgs.lib.nixosSystem {
-    inherit system modules;
+pkgsInput.lib.nixosSystem {
+  inherit system modules;
 
-    pkgs = import nixpkgs {
-        inherit system overlays;
-        config = { allowUnfree = true; };
-    };
+  pkgs = import pkgsInput {
+      inherit system overlays;
+      config = { allowUnfree = true; };
+  };
 
-    specialArgs = {
-        loadModules = 
-            import ./load-modules.nix {inherit (nixpkgs) lib; };
-    } // extraSpecialArgs;
+  specialArgs = {
+      loadModules = 
+          import ./load-modules.nix {inherit (pkgsInput) lib; };
+  } // extraSpecialArgs;
 }

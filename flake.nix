@@ -57,6 +57,11 @@
       url = "github:nix-community/raspberry-pi-nix";
       #inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    sops-rpi-nix = {
+      url = "github:Mic92/sops-nix";
+      inputs.nixpkgs.follows = "raspi5-nix/nixpkgs";
+    };
   };
 
   outputs = {
@@ -66,16 +71,9 @@
     nvf,
     home-manager,
     zen-browser,
-    nix-flatpak,
     silentSDDM,
-    niri,
-    monique,
-    sops-nix,
-    disko,
-    arion,
-    raspi5-nix,
     ...
-  }: let
+  }@inputs: let
 
     # a function for creating nvf
     nvfFN = systemPkgs: 
@@ -84,7 +82,7 @@
         modules = [./nvf/nvf-configuration.nix];
       }).neovim;
 
-    mkHost = import ./lib/mkHost.nix { inherit nixpkgs; };
+    mkHost = import ./lib/mkHost.nix;
 
     fleetSettings = import ./fleet-seetings.nix;
 
@@ -93,6 +91,7 @@
 
       lotus = mkHost {
         system = "x86_64-linux";
+        pkgsInput = nixpkgs;
         overlays = [
             (import ./overlays/flameshot.nix)
             (import ./overlays/qutebrowser.nix)
@@ -103,10 +102,10 @@
           ./modules/pc/laptop
           ./modules/pc/shared
           ./modules/shared
-          nix-flatpak.nixosModules.nix-flatpak
+          inputs.nix-flatpak.nixosModules.nix-flatpak
           silentSDDM.nixosModules.default
-          sops-nix.nixosModules.default
-          monique.nixosModules.default
+          inputs.sops-nix.nixosModules.default
+          inputs.monique.nixosModules.default
         ];
         extraSpecialArgs = { 
           inherit nvfFN;
@@ -116,17 +115,17 @@
 
       cedar = mkHost {
         system = "x86_64-linux";
+        pkgsInput = nixpkgs;
         overlays = [
-          (import ./overlays/steam.nix)
           (import ./overlays/unstable.nix { inherit nixpkgs-unstable; } )
         ];
         modules = [
           ./modules/shared
           ./modules/pc/shared
           ./modules/pc/desktop
-          nix-flatpak.nixosModules.nix-flatpak
-          sops-nix.nixosModules.default
-          monique.nixosModules.default
+          inputs.nix-flatpak.nixosModules.nix-flatpak
+          inputs.sops-nix.nixosModules.default
+          inputs.monique.nixosModules.default
           silentSDDM.nixosModules.default
         ];
         extraSpecialArgs = { 
@@ -137,13 +136,14 @@
 
       sequoia = mkHost {
         system = "x86_64-linux";
+        pkgsInput = nixpkgs;
         modules = [
           ./modules/shared
           ./modules/server/tower
           ./modules/server/shared
-          sops-nix.nixosModules.default
-          disko.nixosModules.default
-          arion.nixosModules.arion
+          inputs.sops-nix.nixosModules.default
+          inputs.disko.nixosModules.default
+          inputs.arion.nixosModules.arion
         ];
         overlays = [
           (import ./overlays/unstable.nix { inherit nixpkgs-unstable; } )
@@ -153,12 +153,13 @@
 
       juniper = mkHost {
         system = "aarch64-linux";
+        pkgsInput = nixpkgs;
         modules = [
           ./modules/shared
           ./modules/server/assistant
           ./modules/server/shared
           ./modules/server/pis
-          sops-nix.nixosModules.default
+          inputs.sops-nix.nixosModules.default
 
           # makes it so can build sd images
           ({ modulesPath, ... }: {
@@ -172,13 +173,17 @@
 
       rowan = mkHost {
           system = "aarch64-linux";
+          pkgsInput = inputs.raspi5-nix.inputs.nixpkgs;
           modules = [
             ./modules/shared
             ./modules/server/pis
             ./modules/server/dashboard
-            sops-nix.nixosModules.default
-            raspi5-nix.nixosModules.raspberry-pi
-            raspi5-nix.nixosModules.sd-image
+            inputs.sops-rpi-nix.nixosModules.default
+            inputs.raspi5-nix.nixosModules.raspberry-pi
+            inputs.raspi5-nix.nixosModules.sd-image
+          ];
+          overlays = [ 
+            (import ./overlays/rpi-go125.nix) 
           ];
           extraSpecialArgs = { inherit fleetSettings; };
       };
@@ -193,7 +198,7 @@
           # Point this directly to your user's home manager profile
           ./modules/home/lotus
           ./modules/home/shared
-          niri.homeModules.niri
+          inputs.niri.homeModules.niri
         ];
 
         extraSpecialArgs = {
@@ -202,11 +207,11 @@
         };
       };
       "nic@cedar" = home-manager.lib.homeManagerConfiguration {
-        pkgs = self.nixosConfigurations.lotus.pkgs;
+        pkgs = self.nixosConfigurations.cedar.pkgs;
         modules = [
           ./modules/home/shared
           ./modules/home/cedar
-          niri.homeModules.niri
+          inputs.niri.homeModules.niri
         ];
 
         extraSpecialArgs = {
