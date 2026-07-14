@@ -60,7 +60,9 @@
         "middleClickCommand": "",
         "middleClickFollowMouse": false,
         "monitors": [
-            "eDP-1"
+            "eDP-1",
+            "DP-3",
+            "HDMI-A-1"
         ],
         "mouseWheelAction": "none",
         "mouseWheelWrap": true,
@@ -275,7 +277,7 @@
             }
         ],
         "diskPath": "/",
-        "position": "center",
+        "position": "top_center",
         "shortcuts": {
             "left": [
                 {
@@ -591,6 +593,20 @@
                 "countdownEnabled": true,
                 "enabled": true,
                 "keybind": "6"
+            },
+            {
+                "action": "userspaceReboot",
+                "command": "",
+                "countdownEnabled": true,
+                "enabled": false,
+                "keybind": ""
+            },
+            {
+                "action": "rebootToUefi",
+                "command": "",
+                "countdownEnabled": true,
+                "enabled": true,
+                "keybind": "7"
             }
         ],
         "showHeader": true,
@@ -670,13 +686,13 @@
         "panelBackgroundOpacity": 0.8700000000000001,
         "panelsAttachedToBar": true,
         "scrollbarAlwaysVisible": true,
-        "settingsPanelMode": "attached",
+        "settingsPanelMode": "window",
         "settingsPanelSideBarCardStyle": false,
         "tooltipsEnabled": true,
         "translucentWidgets": false
     },
     "wallpaper": {
-        "automationEnabled": false,
+        "automationEnabled": true,
         "directory": "/home/nic/nix-fleet/Wallpapers",
         "enableMultiMonitorDirectories": false,
         "enabled": true,
@@ -692,13 +708,13 @@
         "overviewEnabled": false,
         "overviewTint": 0.6,
         "panelPosition": "follow_bar",
-        "randomIntervalSec": 300,
+        "randomIntervalSec": 3780,
         "setWallpaperOnAllMonitors": true,
         "showHiddenFiles": false,
         "skipStartupTransition": false,
         "solidColor": "#1a1a2e",
         "sortOrder": "name",
-        "transitionDuration": 1500,
+        "transitionDuration": 1000,
         "transitionEdgeSmoothness": 0.05,
         "transitionType": [
             "fade",
@@ -716,7 +732,7 @@
         "wallhavenCategories": "111",
         "wallhavenOrder": "desc",
         "wallhavenPurity": "100",
-        "wallhavenQuery": "",
+        "wallhavenQuery": "nazgul",
         "wallhavenRatios": "",
         "wallhavenResolutionHeight": "",
         "wallhavenResolutionMode": "atleast",

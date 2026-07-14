@@ -44,7 +44,6 @@
     gcc
     tree-sitter
     yazi
-    noctalia-shell
   ];
 
   nvfPkg = nvfFN pkgs.unstable;

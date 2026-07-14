@@ -127,6 +127,7 @@
           nix-flatpak.nixosModules.nix-flatpak
           sops-nix.nixosModules.default
           monique.nixosModules.default
+          silentSDDM.nixosModules.default
         ];
         extraSpecialArgs = { 
           inherit nvfFN;

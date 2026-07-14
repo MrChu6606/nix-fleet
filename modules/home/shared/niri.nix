@@ -1,4 +1,4 @@
-{ pkgs, lib, ... }: {
+{ pkgs, config, lib, ... }: {
   programs.niri = {
     enable = true;
     # use nixpkgs cache instead of compiling from source
@@ -285,6 +285,9 @@
         
         "Mod+Shift+P".action.power-off-monitors = { };
       };
+      
+      include = "${config.home.homeDirectory}/.config/niri/theme.kdl";
     };
   };
+
 } 
