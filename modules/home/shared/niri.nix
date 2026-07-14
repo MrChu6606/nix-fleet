@@ -285,9 +285,14 @@
         
         "Mod+Shift+P".action.power-off-monitors = { };
       };
-      
-      include = "${config.home.homeDirectory}/.config/niri/theme.kdl";
     };
   };
+  xdg.configFile.niri-config = lib.mkForce {
+    target = "niri/config.kdl";
+    source = pkgs.writeText "niri-config.kdl" ''
+      include "${config.home.homeDirectory}/.config/niri/noctalia.kdl"
 
+      ${config.programs.niri.finalConfig}
+    '';
+  };
 } 

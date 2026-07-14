@@ -13,8 +13,10 @@ _:
     stateVersion = "26.05";
   };
 
-  xdg.configFile."alacritty/alacritty.toml" = {
-    force = true;
+  xdg.configFile = {
+    "alacritty/alacritty.toml" = {
+      force = true;
+    };
   };
 
   programs.git = {
