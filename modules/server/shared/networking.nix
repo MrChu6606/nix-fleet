@@ -7,6 +7,7 @@ _: {
 
     avahi = {
       enable = true;
+      openFirewall = true; # UDP 5353
       publish = {
         enable = true;
         addresses = true;
@@ -22,6 +23,5 @@ _: {
 
   networking.firewall = {
     allowedTCPPorts = [ 22 ];
-    allowedUDPPorts = [ 5353 ]; 
   };
 }
