@@ -20,29 +20,38 @@ in {
   };
 
   # Interface Management
-  systemd.network = {
-    enable = true;
-    networks = {
-      # Wired Ethernet - Always Static
-      "10-ethernet-static" = {
-        matchConfig.Name = "en* eth* end*";
-        networkConfig = {
-          Address = [ "${hostConfig.lan}/${toString fleetSettings.network.subnetPrefix}" ];
-          Gateway = fleetSettings.network.gateway;
-          DNS = fleetSettings.network.dns;
+  systemd = {
+    network = {
+      enable = true;
+      networks = {
+        # Wired Ethernet - Always Static
+        "10-ethernet-static" = {
+          matchConfig.Name = "en* eth* end*";
+          networkConfig = {
+            Address = [ "${hostConfig.lan}/${toString fleetSettings.network.subnetPrefix}" ];
+            Gateway = fleetSettings.network.gateway;
+            DNS = fleetSettings.network.dns;
+          };
         };
-      };
 
-      # Wireless - Conditional on host config having a wifi entry
-      "20-wireless-static" = lib.mkIf hasWifi {
-        matchConfig.Name = "wl* wlan*";
-        networkConfig = {
-          Address = [ "${hostConfig.wifi}/${toString fleetSettings.network.subnetPrefix}" ];
-          Gateway = fleetSettings.network.gateway;
-          DNS = fleetSettings.network.dns;
-          IgnoreCarrierLoss = "3s";
+        # Wireless - Conditional on host config having a wifi entry
+        "20-wireless-static" = lib.mkIf hasWifi {
+          matchConfig.Name = "wl* wlan*";
+          networkConfig = {
+            Address = [ "${hostConfig.wifi}/${toString fleetSettings.network.subnetPrefix}" ];
+            Gateway = fleetSettings.network.gateway;
+            DNS = fleetSettings.network.dns;
+            IgnoreCarrierLoss = "3s";
+          };
         };
       };
+    };
+    services.systemd-networkd-wait-online = {
+      # Tell it to succeed as long as at least ONE interface is online
+      serviceConfig.ExecStart = [
+        "" # This clears the default arguments
+        "${config.systemd.package}/lib/systemd/systemd-networkd-wait-online --any"
+      ];
     };
   };
 
