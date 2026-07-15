@@ -170,6 +170,7 @@
           pkgsInput = inputs.raspi5-nix.inputs.nixpkgs;
           modules = [
             ./modules/shared
+            ./modules/server/shared
             ./modules/server/pis
             ./modules/server/dashboard
             inputs.sops-nix.nixosModules.default
