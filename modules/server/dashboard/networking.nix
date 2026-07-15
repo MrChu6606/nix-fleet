@@ -7,8 +7,10 @@
   };           
 
   config = {
-    services.resolved.extraConfig = ''
-      MultiCastDNS=yes
-    '';
+    # services.resolved.extraConfig = ''
+    #   MultiCastDNS=yes
+    # '';
+    services.resolved.enable = lib.mkForce false;
+    services.avahi.enable = lib.mkForce false;
   };
 }
