@@ -1,56 +1,52 @@
 { fleetSettings, config, lib, ... }:
 let 
-  host = config.networking.hostName; #[cite: 3]
-  hostConfig = fleetSettings.hosts.${host} or null; #[cite: 3]
-  isStatic = hostConfig != null; #[cite: 3]
-  
-  # Check if a specific Wi-Fi static IP is configured for this host
-  hasWifiStatic = isStatic && (hostConfig ? wifi && hostConfig.wifi != null);
+  host = config.networking.hostName;
+  hostConfig = fleetSettings.hosts.${host};
+  hasWifi = hostConfig ? wifi && hostConfig.wifi != null;
 in {
-  # Backend Wireless Configuration (iwd)
+  # Force exclusive systemd-networkd control to prevent IP collisions
+  networking = {
+    useDHCP = false;
+    useNetworkd = true;
+  };
+
+  # Backend Wireless Configuration
   networking.wireless.iwd = {
     enable = true;
-    settings = {
-      Network = {
-        EnableIPv6 = false;
-        # Prioritize ethernet routing over Wi-Fi if both are active
-        RoutePriorityOffset = 300; 
-      };
+    settings.Network = {
+      EnableIPv6 = false;
+      RoutePriorityOffset = 300; 
     };
   };
 
-  # Interface Management (systemd-networkd matching)
+  # Interface Management
   systemd.network = {
     enable = true;
     networks = {
-      # Wired Ethernet Profiles
-      "10-ethernet-dhcp" = lib.mkIf (!isStatic) {
+      # Wired Ethernet - Always Static
+      "10-ethernet-static" = {
         matchConfig.Name = "en* eth* end*";
-        networkConfig.DHCP = "ipv4";
-      };
-      "10-ethernet-static" = lib.mkIf isStatic {
-        matchConfig.Name = "en* eth* end*";
-        address = [ "${hostConfig.lan}/${toString fleetSettings.network.subnetPrefix}" ];
-        gateway = [ fleetSettings.network.gateway ];
-        dns = fleetSettings.network.dns;
+        networkConfig = {
+          Address = [ "${hostConfig.lan}/${toString fleetSettings.network.subnetPrefix}" ];
+          Gateway = fleetSettings.network.gateway;
+          DNS = fleetSettings.network.dns;
+        };
       };
 
-      # Wireless Profiles
-      "20-wireless-dhcp" = lib.mkIf (!hasWifiStatic) {
+      # Wireless - Conditional on host config having a wifi entry
+      "20-wireless-static" = lib.mkIf hasWifi {
         matchConfig.Name = "wl* wlan*";
-        networkConfig.DHCP = "ipv4";
-      };
-      "20-wireless-static" = lib.mkIf hasWifiStatic {
-        matchConfig.Name = "wl* wlan*";
-        address = [ "${hostConfig.wifi}/${toString fleetSettings.network.subnetPrefix}" ];
-        gateway = [ fleetSettings.network.gateway ];
-        dns = fleetSettings.network.dns;
-        networkConfig.IgnoreCarrierLoss = "3s";
+        networkConfig = {
+          Address = [ "${hostConfig.wifi}/${toString fleetSettings.network.subnetPrefix}" ];
+          Gateway = fleetSettings.network.gateway;
+          DNS = fleetSettings.network.dns;
+          IgnoreCarrierLoss = "3s";
+        };
       };
     };
   };
 
-  # Dynamic Wi-Fi Credential Provisioning
+  # Wireless Provisioning
   systemd.services."iwd-config" = {
     description = "Provision Wi-Fi network credentials";
     wantedBy = [ "multi-user.target" ];
@@ -59,7 +55,6 @@ in {
       Type = "oneshot";
       RemainAfterExit = true;
     };
-    # CHANGE THIS TO SOPS OR SOME
     script = ''
       mkdir -p /var/lib/iwd
       chmod 700 /var/lib/iwd
