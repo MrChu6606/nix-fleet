@@ -40,7 +40,7 @@ in
   genericName = "Mod Manager";
   comment = "Native Linux Mod Manager for Bethesda games and Cyberpunk 2077";
   # This points directly to the binary installed by your custom derivation
-  exec = "${pkgs.appimage-run}/bin/appimage-run ${amethyst}/bin/amethyst";
+  exec = "${pkgs.appimage-run.fhs}/bin/appimage-run ${amethyst}/bin/amethyst";
   icon = "${amethystIcon}";
   terminal = false;
   categories = [ "Game" ];
