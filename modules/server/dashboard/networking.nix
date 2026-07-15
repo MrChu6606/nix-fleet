@@ -6,7 +6,9 @@
     description = "Dummy option to prevent older nixpkgs from crashing on shared config";
   };           
 
-  services.resolved.extraConfig = ''
-    MultiCastDNS=yes
-  '';
+  config = {
+    services.resolved.extraConfig = ''
+      MultiCastDNS=yes
+    '';
+  };
 }
