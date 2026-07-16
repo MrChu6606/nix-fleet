@@ -62,7 +62,7 @@
     # Adguard is a shared module so it gets its own
     adguard = {
       http = 8080;
-      dns = 5353;
+      dns = 53;
     };
   };
 }
