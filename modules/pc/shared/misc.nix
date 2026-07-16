@@ -13,11 +13,4 @@
   # enable binfmt with qemu for building aarch64 images
   boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
 
-  swapDevices = [
-  {
-      device = "/swapfile";
-      size = 8 * 1024;
-  }
-  ];
-
 }
