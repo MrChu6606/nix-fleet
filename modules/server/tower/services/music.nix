@@ -114,58 +114,75 @@ in
     ];
     services = {
       # Tell prowlarr how to talk to sabnzbd
-      prowlarr.postStart = let
-        linkDownloader = pkgs.replaceVarsWith {
-          src = ../../../../lib/connect-to-sabnzbd.sh;
-          dir = "bin";
-          isExecutable = true;
-          replacements = {
-            targetAppPort = toString fleetSettings.ports.sequoia.prowlarr;
-            downloaderPort = toString fleetSettings.ports.sequoia.sabnzbd;
-            categoryName = "none";
-            categoryValue = "";
-            targetAppEnvPath = config.sops.secrets.prowlarr_env.path;
-            downloaderSecretsPath = config.sops.secrets.sabnzbd_secrets.path;
+      prowlarr = {
+        after = [ "sabnzbd.service" ]; 
+        path = [ pkgs.curl pkgs.gnused ];
+
+        serviceConfig.ExecStartPost = let
+          linkDownloader = pkgs.replaceVarsWith {
+            src = ../../../../lib/connect-to-sabnzbd.sh;
+            dir = "bin";
+            isExecutable = true;
+            replacements = {
+              scriptPath = pkgs.lib.makeBinPath [ pkgs.curl pkgs.gnused pkgs.gnugrep ];
+              serviceName = "PROWLARR";
+              targetAppPort = toString fleetSettings.ports.sequoia.prowlarr;
+              downloaderPort = toString fleetSettings.ports.sequoia.sabnzbd;
+              categoryName = "none";
+              categoryValue = "";
+              targetAppEnvPath = config.sops.secrets.prowlarr_env.path;
+              downloaderSecretsPath = config.sops.secrets.sabnzbd_secrets.path;
+            };
           };
-        };
-        in "${linkDownloader}/bin/connect-downloader.sh";
+        in "-+${linkDownloader}/bin/connect-to-sabnzbd.sh";
+      };
 
       # Tell lidarr how to talk to sabnzbd
-      lidarr.postStart = let
-        linkDownloader = pkgs.replaceVarsWith {
-          src = ../../../../lib/connect-to-sabnzbd.sh;
-          dir = "bin";
-          isExecutable = true;
-          replacements = {
-            targetAppPort = toString fleetSettings.ports.sequoia.lidarr;
-            downloaderPort = toString fleetSettings.ports.sequoia.sabnzbd;
-            categoryName = "musicCategory";
-            categoryValue = "music";
-            targetAppEnvPath = config.sops.secrets.lidarr_env.path;
-            downloaderSecretsPath = config.sops.secrets.sabnzbd_secrets.path;
+      lidarr = {
+        after = [ "sabnzbd.service" ]; 
+        path = [ pkgs.curl pkgs.gnused ];
+
+        serviceConfig.ExecStartPost = let
+          linkDownloader = pkgs.replaceVarsWith {
+            src = ../../../../lib/connect-to-sabnzbd.sh;
+            dir = "bin";
+            isExecutable = true;
+            replacements = {
+              scriptPath = pkgs.lib.makeBinPath [ pkgs.curl pkgs.gnused pkgs.gnugrep pkgs.coreutils ];
+              serviceName = "LIDARR";
+              targetAppPort = toString fleetSettings.ports.sequoia.lidarr;
+              downloaderPort = toString fleetSettings.ports.sequoia.sabnzbd;
+              categoryName = "musicCategory";
+              categoryValue = "music";
+              targetAppEnvPath = config.sops.secrets.lidarr_env.path;
+              downloaderSecretsPath = config.sops.secrets.sabnzbd_secrets.path;
+            };
           };
-        };
-      in "${linkDownloader}/bin/connect-downloader.sh";
+        in "-+${linkDownloader}/bin/connect-to-sabnzbd.sh";
+      };
 
       prowlarr-link-lidarr = {
         description = "Link Lidarr to Prowlarr API indexer sync";
         after = [ "prowlarr.service" "lidarr.service" ];
         wantedBy = [ "multi-user.target" ];
-        serviceConfig.Type = "oneshot";
-        script = let
-          linkApp = pkgs.replaceVarsWith {
-            src = ./connect-to-prowlarr.sh;
-            dir = "bin";
-            isExecutable = true;
-            replacements = {
-              prowlarrPort = toString fleetSettings.ports.sequoia.prowlarr;
-              subAppPort = toString fleetSettings.ports.sequoia.lidarr;
-              subAppName = "Lidarr";
-              prowlarrEnvPath = config.sops.secrets.prowlarr_env.path;
-              subAppEnvPath = config.sops.secrets.lidarr_env.path;
+        serviceConfig = {
+          Type = "oneshot";
+          ExecStart = let
+            linkApp = pkgs.replaceVarsWith {
+              src = ../../../../lib/connect-to-prowlarr.sh;
+              dir = "bin";
+              isExecutable = true;
+              replacements = {
+                scriptPath = pkgs.lib.makeBinPath [ pkgs.curl pkgs.gnused pkgs.gnugrep ];
+                prowlarrPort = toString fleetSettings.ports.sequoia.prowlarr;
+                subAppPort = toString fleetSettings.ports.sequoia.lidarr;
+                subAppName = "Lidarr";
+                prowlarrEnvPath = config.sops.secrets.prowlarr_env.path;
+                subAppEnvPath = config.sops.secrets.lidarr_env.path;
+              };
             };
-          };
-        in "${linkApp}/bin/connect-to-prowlarr.sh";
+          in "${linkApp}/bin/connect-to-prowlarr.sh";
+        };
       };
     };
   };

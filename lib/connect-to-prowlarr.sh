@@ -2,6 +2,7 @@
 # This scrpt tells prowlarr a downstrean media app lives so it can sync indexers
 set -euo pipefail
 
+export PATH="@scriptPath@:$PATH"
 PROWLARR_URL="http://127.0.0.1:@prowlarrPort@"
 SUB_APP_URL="http://127.0.0.1:@subAppPort@"
 SUB_APP_NAME="@subAppName@" # e.g., "Lidarr", "Sonarr", "Radarr"
@@ -9,12 +10,21 @@ SUB_APP_NAME="@subAppName@" # e.g., "Lidarr", "Sonarr", "Radarr"
 source "@prowlarrEnvPath@"
 source "@subAppEnvPath@"
 
-PROWLARR_KEY="$PROWLARR__SERVER__APIKEY"
-# Dynamically pull the correct child key depending on which app we are linking
-SUB_APP_KEY="${LIDARR__SERVER__APIKEY:-${SONARR__SERVER__APIKEY:-$RADARR__SERVER__APIKEY}}"
+PROWLARR_KEY="$PROWLARR__AUTH__APIKEY"
+
+# Convert service to upper
+SERVICE_PREFIX="${SUB_APP_NAME^^}"
+# Built key variable with name string
+ENV_VAR_NAME="${SERVICE_PREFIX}__AUTH__APIKEY"
+# Indirectly expand it to get the token
+SUB_APP_KEY="${!ENV_VAR_NAME}"
 
 echo "Waiting for Prowlarr web engine..."
-until curl -s -o /dev/null -w "%{http_code}" "$PROWLARR_URL/api/v1/system/status?apiKey=$PROWLARR_KEY" | grep -q "200"; do
+while true; do
+  STATUS_CODE=$(curl -s -o /dev/null -w "%{http_code}" "$PROWLARR_URL/api/v1/system/status?apiKey=$PROWLARR_KEY" || echo "000")
+  if [ "$STATUS_CODE" = "200" ]; then
+    break
+  fi
   sleep 2
 done
 
