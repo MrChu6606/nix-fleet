@@ -1,4 +1,4 @@
-{ config, fleetSettings, ... }:
+{ config, pkgs, fleetSettings, ... }:
 let
   # Network Target Boundary
   # Keep as "127.0.0.1" to isolate services securely behind your proxy/Tailscale.
@@ -35,19 +35,42 @@ in
     sabnzbd = {
       enable = true;
       group = "media";
+      configFile = null;
       secretFiles = [ config.sops.secrets.sabnzbd_secrets.path ];
       settings = {
         misc = {
-          port = "${fleetSettings.ports.sequoia.sabnzbd}";
-          host = targetHost;
+          port = fleetSettings.ports.sequoia.sabnzbd;
+          host = "0.0.0.0";
           bandwidth_max = daytimeSpeedLimit; 
 
           # Automated Night-Owl Scheduling Matrix
           # Syntax: "hour minute day_of_week action [argument]" (0 = Daily)
-          scheduler = [
-            "${nightScheduleHour} 0 0 speedlimit ${nighttimeSpeedLimit}"
-            "${dayScheduleHour} 0 0 speedlimit ${daytimeSpeedLimit}"
-          ];
+          scheduler = 
+            "${nightScheduleHour} 0 0 speedlimit ${nighttimeSpeedLimit}, ${dayScheduleHour} 0 0 speedlimit ${daytimeSpeedLimit}";
+        };
+        servers = {
+          "frugal-main" = {
+            enable = true;
+            host = "news.frugalusenet.com";
+            name = "frugal-main";
+            displayname = "main";
+            connections = 25;
+            ssl = true;
+            port = 563;
+            optional = true;
+            priority = 0;
+          };
+          "frugal-backup" = {
+            enable = true;
+            host = "bonus.frugalusenet.com";
+            name = "frugal-backup";
+            displayname = "backup";
+            connections = 25;
+            ssl = true;
+            port = 563;
+            optional = true;
+            priority = 1;
+          };
         };
       };
     };
@@ -62,6 +85,7 @@ in
           port = fleetSettings.ports.sequoia.lidarr;
           bindaddress = targetHost;
         };
+        auth.required = "DisabledForLocalAddresses";
       };
       environmentFiles = [ config.sops.secrets.lidarr_env.path ];
     };
@@ -75,15 +99,74 @@ in
           port = fleetSettings.ports.sequoia.prowlarr;
           bindaddress = targetHost;
         };
+        auth.required = "DisabledForLocalAddresses";
       };
       environmentFiles = [ config.sops.secrets.prowlarr_env.path ];
     };
   };
 
   # 6. Automated Persistent Storage Scaffolding & Permissions Enforcement
-  systemd.tmpfiles.rules = [
-    "d /media/music 0775 lidarr media -"
-    "d /media/downloads/incomplete 0775 sabnzbd media -"
-    "d /media/downloads/complete 0775 sabnzbd media -"
-  ];
+  systemd = {
+    tmpfiles.rules = [
+      "d /media/music 0775 lidarr media -"
+      "d /media/downloads/incomplete 0775 sabnzbd media -"
+      "d /media/downloads/complete 0775 sabnzbd media -"
+    ];
+    services = {
+      # Tell prowlarr how to talk to sabnzbd
+      prowlarr.postStart = let
+        linkDownloader = pkgs.replaceVarsWith {
+          src = ../../../../lib/connect-to-sabnzbd.sh;
+          dir = "bin";
+          isExecutable = true;
+          replacements = {
+            targetAppPort = toString fleetSettings.ports.sequoia.prowlarr;
+            downloaderPort = toString fleetSettings.ports.sequoia.sabnzbd;
+            categoryName = "none";
+            categoryValue = "";
+            targetAppEnvPath = config.sops.secrets.prowlarr_env.path;
+            downloaderSecretsPath = config.sops.secrets.sabnzbd_secrets.path;
+          };
+        };
+        in "${linkDownloader}/bin/connect-downloader.sh";
+
+      # Tell lidarr how to talk to sabnzbd
+      lidarr.postStart = let
+        linkDownloader = pkgs.replaceVarsWith {
+          src = ../../../../lib/connect-to-sabnzbd.sh;
+          dir = "bin";
+          isExecutable = true;
+          replacements = {
+            targetAppPort = toString fleetSettings.ports.sequoia.lidarr;
+            downloaderPort = toString fleetSettings.ports.sequoia.sabnzbd;
+            categoryName = "musicCategory";
+            categoryValue = "music";
+            targetAppEnvPath = config.sops.secrets.lidarr_env.path;
+            downloaderSecretsPath = config.sops.secrets.sabnzbd_secrets.path;
+          };
+        };
+      in "${linkDownloader}/bin/connect-downloader.sh";
+
+      prowlarr-link-lidarr = {
+        description = "Link Lidarr to Prowlarr API indexer sync";
+        after = [ "prowlarr.service" "lidarr.service" ];
+        wantedBy = [ "multi-user.target" ];
+        serviceConfig.Type = "oneshot";
+        script = let
+          linkApp = pkgs.replaceVarsWith {
+            src = ./connect-to-prowlarr.sh;
+            dir = "bin";
+            isExecutable = true;
+            replacements = {
+              prowlarrPort = toString fleetSettings.ports.sequoia.prowlarr;
+              subAppPort = toString fleetSettings.ports.sequoia.lidarr;
+              subAppName = "Lidarr";
+              prowlarrEnvPath = config.sops.secrets.prowlarr_env.path;
+              subAppEnvPath = config.sops.secrets.lidarr_env.path;
+            };
+          };
+        in "${linkApp}/bin/connect-to-prowlarr.sh";
+      };
+    };
+  };
 }

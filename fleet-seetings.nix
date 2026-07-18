@@ -28,7 +28,7 @@
     mc-26 = "192.168.5.103";
     mc-ts = {
       lan = "192.168.4.104";
-      tail = "100.99.43.45";
+      tail = "100.84.69.97";
     };
   };
 
@@ -61,7 +61,7 @@
 
     # Adguard is a shared module so it gets its own
     adguard = {
-      http = 8080;
+      http = 3080;
       dns = 53;
     };
   };

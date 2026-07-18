@@ -4,7 +4,7 @@
     enable = true;
     mutableSettings = false;
 
-    host = "0.0.0.0";
+    host = "127.0.0.1";
     port = fleetSettings.ports.adguard.http;
 
     settings = {
@@ -12,8 +12,12 @@
 
       dns = {
         port = fleetSettings.ports.adguard.dns;
-        bind_hosts = [ "127.0.0.1" ];
-        private_networks = [ "100.64.0.0/10" ];
+        bind_hosts = [ 
+          fleetSettings.hosts.sequoia.lan
+          fleetSettings.hosts.sequoia.tail
+        ];
+
+        private_networks = [ "100.64.0.0/10" "192.168.0.0/16" ];
         
         bootstrap_dns = [
           "1.1.1.1"
@@ -24,17 +28,24 @@
           "https://dns.cloudflare.com/dns-query"
           "https://dns.quad9.net/dns-query"
         ];
-      };
 
-      filtering = {
-        filtering_enabled = true;
         rewrites = [
           {
             domain = "*.home";
             answer = fleetSettings.hosts.sequoia.tail;
             enabled = true;
           }
+          # this one should not be necessary
+          {
+            domain = "adguard.home";
+            answer = fleetSettings.hosts.sequoia.tail;
+            enabled = true;
+          }
         ];
+      };
+      filtering = {
+        filtering_enabled = true;
+
 
         filters = [
           {

@@ -7,5 +7,6 @@
       ./nginx.nix
       ./searxng-box.nix
       ./music.nix
+      ./adguard.nix
     ];
 }

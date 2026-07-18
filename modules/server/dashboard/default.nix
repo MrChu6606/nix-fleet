@@ -1,6 +1,6 @@
 { loadModules, lib, pkgs, ... }:
 {
-  imports = loadModules ./.;
+  imports = loadModules ./. ++ ../tower/services/adguard.nix;
   networking.hostName = "rowan";
 
   raspberry-pi-nix = {
