@@ -29,7 +29,15 @@ while true; do
 done
 
 echo "Checking if $SUB_APP_NAME is registered in Prowlarr..."
-if ! curl -s -H "X-Api-Key: $PROWLARR_KEY" "$PROWLARR_URL/api/v1/applications" | grep -q "$SUB_APP_NAME"; then
+APPS_RESPONSE=$(curl -s -w "\n%{http_code}" -H "X-Api-Key: $PROWLARR_KEY" "$PROWLARR_URL/api/v1/applications")
+APPS_STATUS="${APPS_RESPONSE##*$'\n'}"
+APPS_BODY="${APPS_RESPONSE%$'\n'*}"
+if [ "$APPS_STATUS" != "200" ]; then
+  echo "ERROR: Failed to list Prowlarr applications (HTTP $APPS_STATUS): $APPS_BODY" >&2
+  exit 1
+fi
+
+if ! echo "$APPS_BODY" | grep -q "$SUB_APP_NAME"; then
   echo "Linking $SUB_APP_NAME target profile..."
   PAYLOAD=$(cat <<EOF
 {
@@ -45,5 +53,12 @@ if ! curl -s -H "X-Api-Key: $PROWLARR_KEY" "$PROWLARR_URL/api/v1/applications" |
 }
 EOF
 )
-  curl -s -X POST -H "Content-Type: application/json" -H "X-Api-Key: $PROWLARR_KEY" -d "$PAYLOAD" "$PROWLARR_URL/api/v1/applications"
+  POST_RESPONSE=$(curl -s -w "\n%{http_code}" -X POST -H "Content-Type: application/json" -H "X-Api-Key: $PROWLARR_KEY" -d "$PAYLOAD" "$PROWLARR_URL/api/v1/applications")
+  POST_STATUS="${POST_RESPONSE##*$'\n'}"
+  POST_BODY="${POST_RESPONSE%$'\n'*}"
+  echo "Prowlarr application registration response (HTTP $POST_STATUS): $POST_BODY"
+  if [ "$POST_STATUS" != "200" ] && [ "$POST_STATUS" != "201" ]; then
+    echo "ERROR: Failed to register $SUB_APP_NAME with Prowlarr (HTTP $POST_STATUS)" >&2
+    exit 1
+  fi
 fi

@@ -28,10 +28,18 @@ while true; do
 done
 
 echo "Checking if downloader link exists..."
-if ! curl -s -H "X-Api-Key: $APP_KEY" "$TARGET_APP_URL/api/v1/downloadclient" | grep -q "SABnzbd"; then
+DC_RESPONSE=$(curl -s -w "\n%{http_code}" -H "X-Api-Key: $APP_KEY" "$TARGET_APP_URL/api/v1/downloadclient")
+DC_STATUS="${DC_RESPONSE##*$'\n'}"
+DC_BODY="${DC_RESPONSE%$'\n'*}"
+if [ "$DC_STATUS" != "200" ]; then
+  echo "ERROR: Failed to list download clients on $SERVICE_NAME (HTTP $DC_STATUS): $DC_BODY" >&2
+  exit 1
+fi
+
+if ! echo "$DC_BODY" | grep -q "SABnzbd"; then
   echo "Registering SABnzbd download client..."
   
-  FIELDS="[{\"name\": \"host\", \"value\": \"127.0.0.1\"}, {\"name\": \"port\", \"value\": $DOWNLOADER_PORT}, {\"name\": \"apiKey\", \"value\": \"$DOWNLOADER_KEY\"}"
+  FIELDS="[{\"name\": \"host\", \"value\": \"127.0.0.1\"}, {\"name\": \"port\", \"value\": $DOWNLOADER_PORT}, {\"name\": \"apiKey\", \"value\": \"$DOWNLOADER_KEY\"}, {\"name\": \"priority\", \"value\": 1}"
   if [ "$CAT_NAME" != "none" ]; then
     FIELDS="$FIELDS, {\"name\": \"$CAT_NAME\", \"value\": \"$CAT_VAL\"}"
   fi
@@ -48,5 +56,12 @@ if ! curl -s -H "X-Api-Key: $APP_KEY" "$TARGET_APP_URL/api/v1/downloadclient" | 
 EOF
 )
 
-  curl -s -X POST -H "Content-Type: application/json" -H "X-Api-Key: $APP_KEY" -d "$PAYLOAD" "$TARGET_APP_URL/api/v1/downloadclient"
+  POST_RESPONSE=$(curl -s -w "\n%{http_code}" -X POST -H "Content-Type: application/json" -H "X-Api-Key: $APP_KEY" -d "$PAYLOAD" "$TARGET_APP_URL/api/v1/downloadclient")
+  POST_STATUS="${POST_RESPONSE##*$'\n'}"
+  POST_BODY="${POST_RESPONSE%$'\n'*}"
+  echo "SABnzbd registration response (HTTP $POST_STATUS): $POST_BODY"
+  if [ "$POST_STATUS" != "200" ] && [ "$POST_STATUS" != "201" ]; then
+    echo "ERROR: Failed to register SABnzbd with $SERVICE_NAME (HTTP $POST_STATUS)" >&2
+    exit 1
+  fi
 fi
