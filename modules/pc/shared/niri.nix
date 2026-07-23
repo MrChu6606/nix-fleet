@@ -10,18 +10,23 @@
 
     config = {
       niri = {
-        #default = [ "gnome gtk "]; # fallbacks
-        "org.freedesktop.impl.portal.FileChooser" = [ "termfilechooser" ];
+        "org.freedesktop.impl.portal.FileChooser" = [
+          "termfilechooser"
+          "gnome"
+          "gtk"
+        ];
       };
     };
 
     extraPortals = with pkgs; [
       xdg-desktop-portal-gtk
       xdg-desktop-portal-termfilechooser
+      xdg-desktop-portal-gnome # Handles Nautilus file picker delegation
     ];
   };
   
   environment.systemPackages = with pkgs; [
     xwayland-satellite
+    nautilus # Required for xdg-desktop-portal-gnome to launch the file chooser
   ];
 }
