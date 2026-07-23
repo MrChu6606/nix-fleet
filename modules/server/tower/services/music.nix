@@ -42,6 +42,9 @@ in
           port = fleetSettings.ports.sequoia.sabnzbd;
           host = "0.0.0.0";
           bandwidth_max = daytimeSpeedLimit; 
+          download_dir = "/media/downloads/incomplete/";
+          complete_dir = "/media/downloads/complete/";
+          permissions = "775";
 
           # Automated Night-Owl Scheduling Matrix
           # Syntax: "hour minute day_of_week action [argument]" (0 = Daily)
@@ -56,7 +59,7 @@ in
             displayname = "main";
             connections = 25;
             ssl = true;
-            port = 563;
+            port = 443;
             optional = true;
             priority = 0;
           };
@@ -67,15 +70,23 @@ in
             displayname = "backup";
             connections = 25;
             ssl = true;
-            port = 563;
+            port = 443;
             optional = true;
             priority = 1;
+          };
+        };
+        categories = {
+          music = {
+            dir = "music";
+            priority = 1;
+            pp = 3;
+            script = "None";
           };
         };
       };
     };
 
-    # 4. Lidarr - The Music Collection & Automation Manager
+    # Lidarr - The Music Collection & Automation Manager
     lidarr = {
       enable = true;
       group = "media";
@@ -105,8 +116,8 @@ in
     };
   };
 
-  # 6. Automated Persistent Storage Scaffolding & Permissions Enforcement
   systemd = {
+    # Automated Persistent Storage Scaffolding & Permissions Enforcement
     tmpfiles.rules = [
       "d /media/music 0775 lidarr media -"
       "d /media/downloads/incomplete 0775 sabnzbd media -"

@@ -39,7 +39,7 @@ fi
 if ! echo "$DC_BODY" | grep -q "SABnzbd"; then
   echo "Registering SABnzbd download client..."
   
-  FIELDS="[{\"name\": \"host\", \"value\": \"127.0.0.1\"}, {\"name\": \"port\", \"value\": $DOWNLOADER_PORT}, {\"name\": \"apiKey\", \"value\": \"$DOWNLOADER_KEY\"}, {\"name\": \"priority\", \"value\": 1}"
+  FIELDS="[{\"name\": \"host\", \"value\": \"127.0.0.1\"}, {\"name\": \"port\", \"value\": $DOWNLOADER_PORT}, {\"name\": \"apiKey\", \"value\": \"$DOWNLOADER_KEY\"}"
   if [ "$CAT_NAME" != "none" ]; then
     FIELDS="$FIELDS, {\"name\": \"$CAT_NAME\", \"value\": \"$CAT_VAL\"}"
   fi
@@ -48,6 +48,7 @@ if ! echo "$DC_BODY" | grep -q "SABnzbd"; then
   PAYLOAD=$(cat <<EOF
 {
   "enable": true,
+  "priority": 1,
   "name": "SABnzbd",
   "implementation": "Sabnzbd",
   "configContract": "SabnzbdSettings",

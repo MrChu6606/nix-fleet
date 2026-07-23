@@ -1,0 +1,3 @@
+{ loadModules, ... }: {
+  import = loadModules ./.;
+}

@@ -180,6 +180,17 @@
           extraSpecialArgs = { inherit fleetSettings sops-nix; };
       };
 
+      Aspen = mkHost {
+        system = "x86_64-linux";
+        pkgsInput = nixpkgs;
+        module = [
+            ./modules/shared
+            ./modules/server/shared
+            ./modules/server/ai
+            inputs.sops-nix.nixosModules.default
+        ];
+        extraSpecialArgs = { inherit fleetSettings; };
+      };
       
     };
 
