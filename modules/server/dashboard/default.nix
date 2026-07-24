@@ -1,6 +1,6 @@
 { loadModules, lib, pkgs, ... }:
 {
-  imports = loadModules ./. ++ ../tower/services/adguard.nix;
+  imports = loadModules ./.;
 
   raspberry-pi-nix = {
     board = "bcm2712";

@@ -5,16 +5,15 @@
     mutableSettings = false;
 
     host = "127.0.0.1";
-    port = fleetSettings.ports.adguard.http;
-
+    port = fleetSettings.sequoia.ports.adguard.http;
     settings = {
       schema_version = 20;
 
       dns = {
         port = fleetSettings.ports.adguard.dns;
         bind_hosts = [ 
-          fleetSettings.hosts.sequoia.lan
-          fleetSettings.hosts.sequoia.tail
+          fleetSettings.sequoia.lan
+          fleetSettings.sequoia.tail
         ];
 
         private_networks = [ "100.64.0.0/10" "192.168.0.0/16" ];
@@ -32,13 +31,13 @@
         rewrites = [
           {
             domain = "*.home";
-            answer = fleetSettings.hosts.sequoia.tail;
+            answer = fleetSettings.sequoia.tail;
             enabled = true;
           }
           # this one should not be necessary
           {
             domain = "adguard.home";
-            answer = fleetSettings.hosts.sequoia.tail;
+            answer = fleetSettings.sequoia.tail;
             enabled = true;
           }
         ];
@@ -72,7 +71,7 @@
   };
 
   networking.firewall = {
-    allowedUDPPorts = [ fleetSettings.ports.adguard.dns ];
-    allowedTCPPorts = [ fleetSettings.ports.adguard.http ];
+    allowedUDPPorts = [ fleetSettings.sequoia.ports.adguard.dns ];
+    allowedTCPPorts = [ fleetSettings.sequoia.ports.adguard.http ];
   };
 }

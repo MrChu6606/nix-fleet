@@ -36,13 +36,6 @@ let
       };
     };
 
-    "adguard-pi.home" = {
-      locations."/" = {
-        proxyPass = "http://${fleetSettings.juniper.lan}:${toString fleetSettings.juniper.ports.adguard.http}";
-        proxyWebsockets = true;
-      };
-    };
-
     "sabnzbd.home" = {
       locations."/" = {
         proxyPass = "http://127.0.0.1:${toString fleetSettings.sequoia.ports.sabnzbd}";
