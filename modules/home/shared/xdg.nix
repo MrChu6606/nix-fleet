@@ -45,5 +45,8 @@
         exec $termcmd $cmd "$@"
       '';
     };
+
+    # this is not working
+    configFile."mimeapps.list".force = true;
   };
 }

@@ -1,16 +1,15 @@
-{ fleetSettings, config, lib, ... }:
+{ fleetSettings, networkSettings, config, lib, ... }:
 let 
-  host = config.networking.hostName;
-  hostConfig = fleetSettings.hosts.${host};
-  hasWifi = hostConfig ? wifi && hostConfig.wifi != null;
+  subnetPrefix = toString networkSettings.subnetPrefix;
+  hasWifi = fleetSettings ? wifi && fleetSettings.wifi != null;
 in {
-  # Force exclusive systemd-networkd control to prevent IP collisions
+  # Force exclusive systemd-networkd control on Pis
   networking = {
     useDHCP = false;
     useNetworkd = true;
   };
 
-  # Backend Wireless Configuration
+  # Backend Wireless Configuration via iwd
   networking.wireless.iwd = {
     enable = true;
     settings.Network = {
@@ -24,32 +23,33 @@ in {
     network = {
       enable = true;
       networks = {
-        # Wired Ethernet - Always Static
+        # Wired Ethernet - Primary interface
         "10-ethernet-static" = {
           matchConfig.Name = "en* eth* end*";
           networkConfig = {
-            Address = [ "${hostConfig.lan}/${toString fleetSettings.network.subnetPrefix}" ];
-            Gateway = fleetSettings.network.gateway;
-            DNS = fleetSettings.network.dns;
+            Address = [ "${fleetSettings.lan}/${subnetPrefix}" ];
+            Gateway = networkSettings.gateway;
+            DNS = networkSettings.dns;
           };
         };
 
-        # Wireless - Conditional on host config having a wifi entry
+        # Wireless Interface
         "20-wireless-static" = lib.mkIf hasWifi {
           matchConfig.Name = "wl* wlan*";
           networkConfig = {
-            Address = [ "${hostConfig.wifi}/${toString fleetSettings.network.subnetPrefix}" ];
-            Gateway = fleetSettings.network.gateway;
-            DNS = fleetSettings.network.dns;
+            Address = [ "${fleetSettings.wifi}/${subnetPrefix}" ];
+            Gateway = networkSettings.gateway;
+            DNS = networkSettings.dns;
             IgnoreCarrierLoss = "3s";
           };
         };
       };
     };
+
     services.systemd-networkd-wait-online = {
-      # Tell it to succeed as long as at least ONE interface is online
+      # Allow system boot as long as at least ONE interface connects
       serviceConfig.ExecStart = [
-        "" # This clears the default arguments
+        "" # Clear default binary arguments
         "${config.systemd.package}/lib/systemd/systemd-networkd-wait-online --any"
       ];
     };

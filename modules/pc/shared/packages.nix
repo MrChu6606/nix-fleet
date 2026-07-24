@@ -1,16 +1,7 @@
-{
-  pkgs,
-  nvfFN,
-  zenPkg,
-  ...
-}: let
+{ pkgs, nvfFN, zenPkg, ... }: let
   stable = with pkgs; [
-    git
-    sops
     rclone
     ripgrep
-    curl 
-    fastfetch # system fetcher
     numix-cursor-theme # cursor
     tealdeer # tldr tool
     zathura # terminal pdf viewer
@@ -18,11 +9,10 @@
     unzip
     zip
     vscode # ide
-    neovim # text editor
-    wl-clipboard # clipboard for wayland
     pavucontrol # audio
     brightnessctl # brightness
     vesktop # discord
+    tailspin # log highlighter
   ];
 
   unstable = with pkgs.unstable; [

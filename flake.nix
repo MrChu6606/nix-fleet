@@ -78,12 +78,11 @@
 
     mkHost = import ./lib/mkHost.nix;
 
-    fleetSettings = import ./fleet-seetings.nix;
-
   in {
     nixosConfigurations = {
 
       lotus = mkHost {
+        hostname = "lotus";
         system = "x86_64-linux";
         pkgsInput = nixpkgs;
         overlays = [
@@ -108,6 +107,7 @@
       };
 
       cedar = mkHost {
+        hostname = "cedar";
         system = "x86_64-linux";
         pkgsInput = nixpkgs;
         overlays = [
@@ -129,6 +129,8 @@
       };
 
       sequoia = mkHost {
+        hostname = "sequoia";
+        routing = true;
         system = "x86_64-linux";
         pkgsInput = nixpkgs;
         modules = [
@@ -142,10 +144,10 @@
         overlays = [
           (import ./overlays/unstable.nix { inherit nixpkgs-unstable; } )
         ];
-        extraSpecialArgs = { inherit fleetSettings; };
       };
 
       juniper = mkHost {
+        hostname = "juniper";
         system = "aarch64-linux";
         pkgsInput = nixpkgs;
         modules = [
@@ -162,10 +164,10 @@
             ];
           })
         ];
-        extraSpecialArgs = { inherit fleetSettings; };
       };
 
       rowan = mkHost {
+          hostname = "rowan";
           system = "aarch64-linux";
           pkgsInput = inputs.raspi5-nix.inputs.nixpkgs;
           modules = [
@@ -177,19 +179,19 @@
             inputs.raspi5-nix.nixosModules.raspberry-pi
             inputs.raspi5-nix.nixosModules.sd-image
           ];
-          extraSpecialArgs = { inherit fleetSettings sops-nix; };
+          extraSpecialArgs = { inherit sops-nix; };
       };
 
-      Aspen = mkHost {
+      aspen = mkHost {
+        hostname = "aspen";
         system = "x86_64-linux";
         pkgsInput = nixpkgs;
-        module = [
+        modules = [
             ./modules/shared
             ./modules/server/shared
             ./modules/server/ai
             inputs.sops-nix.nixosModules.default
         ];
-        extraSpecialArgs = { inherit fleetSettings; };
       };
       
     };
@@ -198,7 +200,6 @@
       "nic@lotus" = home-manager.lib.homeManagerConfiguration {
         pkgs = self.nixosConfigurations.lotus.pkgs;
         modules = [
-          # Point this directly to your user's home manager profile
           ./modules/home/lotus
           ./modules/home/shared
           inputs.niri.homeModules.niri

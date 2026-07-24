@@ -125,7 +125,7 @@ in
           image = "tailscale/tailscale:latest";
           
           networks.lan-bridge = {
-            ipv4_address = fleetSettings.containers.mc-ts.lan;
+            ipv4_address = fleetSettings.sequoia.containers.mc-ts.lan;
           };
 
           volumes = [
@@ -139,7 +139,7 @@ in
             TS_STATEFUL_CONFIG = "true";
             TS_HOSTNAME = "mc-pool-box";
             # Crucial: Tell this specific sidecar to advertise the LAN IPs of the other two containers
-            TS_ROUTES = "${fleetSettings.containers.mc-20}/32,${fleetSettings.containers.mc-26}/32";
+            TS_ROUTES = "${fleetSettings.sequoia.containers.mc-20}/32,${fleetSettings.sequoia.containers.mc-26}/32";
           };
           capabilities = { NET_ADMIN = true; };
 
@@ -157,7 +157,7 @@ in
           image = "itzg/minecraft-server:latest";
           
           networks.lan-bridge = {
-            ipv4_address = fleetSettings.containers.mc-20; # Separate LAN IP
+            ipv4_address = fleetSettings.sequoia.containers.mc-20; # Separate LAN IP
           };
 
           volumes = [
@@ -190,7 +190,7 @@ in
           image = "itzg/minecraft-server:latest";
           
           networks.lan-bridge = {
-            ipv4_address = fleetSettings.containers.mc-26; # Separate LAN IP
+            ipv4_address = fleetSettings.sequoia.containers.mc-26; # Separate LAN IP
           };
 
           volumes = [

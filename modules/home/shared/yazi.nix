@@ -1,6 +1,7 @@
 _: {
   programs.yazi = {
     enable = true;
+    
     settings = {
       opener = {
         zathura = [
@@ -12,9 +13,9 @@ _: {
       };
 
       open = {
-        rules = [
+        prepend_rules = [
           { mime = "application/pdf"; use = [ "zathura" "okular" ]; }
-          { name = "*.pdf"; use = [ "zathura" "okular" ]; }
+          { url = "*.pdf"; use = [ "zathura" "okular" ]; }
         ];
       };
     };

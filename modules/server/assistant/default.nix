@@ -1,7 +1,6 @@
 { loadModules, lib, ... }:
 {
   imports = loadModules ./.;
-  networking.hostName = "juniper";
 
   # bootloader stuff
   boot.loader.generic-extlinux-compatible.enable = true;

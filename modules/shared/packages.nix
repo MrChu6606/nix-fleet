@@ -4,7 +4,6 @@
     git
     fastfetch
     curl
-    neovim
     yazi
     wl-clipboard
     sops

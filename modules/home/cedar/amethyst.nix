@@ -32,7 +32,7 @@ in
 
   xdg.desktopEntries.amethyst = {
     name = "Amethyst Mod Manager";
-    exec = "amethyst";
+    exec = "${pkgs.steam-run}/bin/steam-run amethyst";
     icon = amethystIcon;
     terminal = false;
     categories = [ "Game" ];

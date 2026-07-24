@@ -5,7 +5,6 @@
   ...
 }: let
   stable = with pkgs; [
-    wget
     qutebrowser
     mpv # terminal video player
     yt-dlp # yt vid downloader
@@ -14,10 +13,8 @@
     imv
     exiftool # idk what this is
     evtest # or this
-    tailspin # log highlighter
     tree # filesystem viewer thing
     wireshark # network traffic monitor
-    zathura # pdf viewer
     dig
     kanshi # todo list
     ffmpeg
@@ -37,32 +34,10 @@
   ];
 
   unstable = with pkgs.unstable; [
-    openjdk17
-    python3
-    lua
-    luajit
-    gcc
-    tree-sitter
-    yazi
   ];
 
   nvfPkg = nvfFN pkgs.unstable;
 
 in {
   environment.systemPackages = stable ++ unstable ++ [ nvfPkg zenPkg ];
-
-  services.flatpak = {
-    enable = true;
-
-    remotes = [
-      {
-        name = "flathub";
-        location = "https://flathub.org/repo/flathub.flatpakrepo";
-      }
-    ];
-
-    packages = [
-      "org.vinegarhq.Sober"
-    ];
-  };
 }

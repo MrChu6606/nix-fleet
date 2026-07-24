@@ -4,6 +4,7 @@ _:
     ./alacritty.nix
     ./niri.nix
     ./yazi.nix
+    ./xdg.nix
   ];
   programs.home-manager.enable = true;
 

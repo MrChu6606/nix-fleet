@@ -1,8 +1,4 @@
 { fleetSettings, ... }: {
-  
-  # Configure hostname
-  networking.hostName = "sequoia";
-
   networking = {
 
     #Setup switch for managing containers
@@ -15,7 +11,7 @@
 
       # Set bridge-ip static
       "br0".ipv4.addresses = [{
-        address = fleetSettings.hosts.sequoia.lan;
+        address = fleetSettings.sequoia.lan;
         prefixLength = 22;
       }];
 

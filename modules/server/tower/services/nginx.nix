@@ -5,7 +5,7 @@ let
     name = "${service}.home";
     value = {
       locations."/" = {
-        proxyPass = "http://127.0.0.1:${toString fleetSettings.ports.${host}.${service}}";
+        proxyPass = "http://127.0.0.1:${toString fleetSettings.${host}.ports.${service}}";
       };
     };
   };
@@ -25,27 +25,27 @@ let
   customHosts = {
     "searxng.home" = {
       locations."/" = {
-        proxyPass = "http://${fleetSettings.containers.searxng}:${toString fleetSettings.ports.adguard.http}";
+        proxyPass = "http://${fleetSettings.sequoia.containers.searxng}:${toString fleetSettings.ports.adguard.http}";
         proxyWebsockets = true;
       };
     };
 
     "adguard.home" = {
       locations."/" = {
-        proxyPass = "http://127.0.0.1:${toString fleetSettings.ports.adguard.http}";
+        proxyPass = "http://127.0.0.1:${toString fleetSettings.sequoia.ports.adguard.http}";
       };
     };
 
     "adguard-pi.home" = {
       locations."/" = {
-        proxyPass = "http://${fleetSettings.hosts.juniper.lan}:${toString fleetSettings.ports.adguard.http}";
+        proxyPass = "http://${fleetSettings.juniper.lan}:${toString fleetSettings.juniper.ports.adguard.http}";
         proxyWebsockets = true;
       };
     };
 
     "sabnzbd.home" = {
       locations."/" = {
-        proxyPass = "http://127.0.0.1:${toString fleetSettings.ports.sequoia.sabnzbd}";
+        proxyPass = "http://127.0.0.1:${toString fleetSettings.sequoia.ports.sabnzbd}";
         
         # Explicitly pass the original host header down to SABnzbd
         extraConfig = ''
@@ -68,5 +68,5 @@ in
     virtualHosts = sequoiaStandardHosts // customHosts;
   };
 
-  networking.firewall.allowedTCPPorts = [ fleetSettings.ports.sequoia.nginx ];
+  networking.firewall.allowedTCPPorts = [ fleetSettings.sequoia.ports.nginx ];
 }

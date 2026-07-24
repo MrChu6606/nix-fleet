@@ -9,7 +9,7 @@
         # use host networking for Hyperswarm DHT to find peers
         extraOptions = [ "--network=host" ];
         environment = {
-          PORT = toString fleetSettings.ports.sequoia.hypermind;
+          PORT = toString fleetSettings.sequoia.ports.hypermind;
           ENABLE_CHAT = "true";
           ENABLE_MAP = "true";
         };
@@ -20,7 +20,7 @@
         image = "ghcr.io/lklynet/hypermind-swarm:latest";
         extraOptions = [ "--network=host" ];
         environment = {
-          PORT = toString fleetSettings.ports.sequoia.hyperswarm;
+          PORT = toString fleetSettings.sequoia.ports.hyperswarm;
         };
       }; 
     };

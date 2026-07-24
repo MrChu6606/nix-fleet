@@ -4,7 +4,7 @@
 
     privateNetwork = true;
     hostBridge = "br0";
-    localAddress = "${fleetSettings.containers.searxng}/${toString fleetSettings.network.subnetPrefix}";
+    localAddress = "${fleetSettings.sequoia.containers.searxng}/${toString fleetSettings.network.subnetPrefix}";
 
     specialArgs = { inherit fleetSettings; };
 
@@ -23,7 +23,7 @@
 
       services.searx = {
         enable = true;
-        domain = fleetSettings.containers.searxng;
+        domain = fleetSettings.sequoia.containers.searxng;
 
         redisCreateLocally = true;
         

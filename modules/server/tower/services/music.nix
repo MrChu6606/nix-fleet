@@ -25,7 +25,7 @@ in
       group = "media"; # Align permissions so Navidrome can parse Lidarr imports
       settings = {
         Address = targetHost;
-        Port = fleetSettings.ports.sequoia.navidrome;
+        Port = fleetSettings.sequoia.ports.navidrome;
         MusicFolder = "/media/music";
         ScanSchedule = "@every 15m";
         LogLevel = "info";
@@ -39,7 +39,7 @@ in
       secretFiles = [ config.sops.secrets.sabnzbd_secrets.path ];
       settings = {
         misc = {
-          port = fleetSettings.ports.sequoia.sabnzbd;
+          port = fleetSettings.sequoia.ports.sabnzbd;
           host = "0.0.0.0";
           bandwidth_max = daytimeSpeedLimit; 
           download_dir = "/media/downloads/incomplete/";
@@ -93,7 +93,7 @@ in
       settings = {
         update = { mechanism = "external"; }; # Strictly immutable/declarative tracking via flakes
         server = {
-          port = fleetSettings.ports.sequoia.lidarr;
+          port = fleetSettings.sequoia.ports.lidarr;
           bindaddress = targetHost;
         };
         auth.required = "DisabledForLocalAddresses";
@@ -107,7 +107,7 @@ in
       settings = {
         update = { mechanism = "external"; };
         server = {
-          port = fleetSettings.ports.sequoia.prowlarr;
+          port = fleetSettings.sequoia.ports.prowlarr;
           bindaddress = targetHost;
         };
         auth.required = "DisabledForLocalAddresses";
@@ -137,8 +137,8 @@ in
             replacements = {
               scriptPath = pkgs.lib.makeBinPath [ pkgs.curl pkgs.gnused pkgs.gnugrep ];
               serviceName = "PROWLARR";
-              targetAppPort = toString fleetSettings.ports.sequoia.prowlarr;
-              downloaderPort = toString fleetSettings.ports.sequoia.sabnzbd;
+              targetAppPort = toString fleetSettings.sequoia.ports.prowlarr;
+              downloaderPort = toString fleetSettings.sequoia.ports.sabnzbd;
               categoryName = "none";
               categoryValue = "";
               targetAppEnvPath = config.sops.secrets.prowlarr_env.path;
@@ -161,8 +161,8 @@ in
             replacements = {
               scriptPath = pkgs.lib.makeBinPath [ pkgs.curl pkgs.gnused pkgs.gnugrep pkgs.coreutils ];
               serviceName = "LIDARR";
-              targetAppPort = toString fleetSettings.ports.sequoia.lidarr;
-              downloaderPort = toString fleetSettings.ports.sequoia.sabnzbd;
+              targetAppPort = toString fleetSettings.sequoia.ports.lidarr;
+              downloaderPort = toString fleetSettings.sequoia.ports.sabnzbd;
               categoryName = "musicCategory";
               categoryValue = "music";
               targetAppEnvPath = config.sops.secrets.lidarr_env.path;
@@ -185,8 +185,8 @@ in
               isExecutable = true;
               replacements = {
                 scriptPath = pkgs.lib.makeBinPath [ pkgs.curl pkgs.gnused pkgs.gnugrep ];
-                prowlarrPort = toString fleetSettings.ports.sequoia.prowlarr;
-                subAppPort = toString fleetSettings.ports.sequoia.lidarr;
+                prowlarrPort = toString fleetSettings.sequoia.ports.prowlarr;
+                subAppPort = toString fleetSettings.sequoia.ports.lidarr;
                 subAppName = "Lidarr";
                 prowlarrEnvPath = config.sops.secrets.prowlarr_env.path;
                 subAppEnvPath = config.sops.secrets.lidarr_env.path;
