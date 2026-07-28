@@ -14,6 +14,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # Official NixOS hardware module replaces raspi5-nix
+    nixos-hardware = {
+      url = "github:NixOS/nixos-hardware/master";
+    };
+
     silentSDDM = {
       url="github:uiriansan/SilentSDDM";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -52,11 +57,7 @@
       url = "github:hercules-ci/arion";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
-    raspi5-nix = {
-      url = "github:nix-community/raspberry-pi-nix";
-      #inputs.nixpkgs.follows = "nixpkgs";
-    };
+   
   };
 
   outputs = {
@@ -167,19 +168,17 @@
       };
 
       rowan = mkHost {
-          hostname = "rowan";
-          system = "aarch64-linux";
-          pkgsInput = inputs.raspi5-nix.inputs.nixpkgs;
-          modules = [
-            ./modules/shared
-            ./modules/server/shared
-            ./modules/server/pis
-            ./modules/server/dashboard
-            inputs.sops-nix.nixosModules.default
-            inputs.raspi5-nix.nixosModules.raspberry-pi
-            inputs.raspi5-nix.nixosModules.sd-image
-          ];
-          extraSpecialArgs = { inherit sops-nix; };
+        hostname = "rowan";
+        system = "aarch64-linux";
+        pkgsInput = nixpkgs-unstable;
+        modules = [
+          ./modules/shared
+          ./modules/server/shared
+          ./modules/server/pis
+          ./modules/server/dashboard
+          inputs.sops-nix.nixosModules.default
+          inputs.nixos-hardware.nixosModules.raspberry-pi-5
+        ];
       };
 
       aspen = mkHost {

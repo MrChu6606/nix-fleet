@@ -1,10 +1,6 @@
 { loadModules, lib, pkgs, ... }:
 {
-  imports = loadModules ./. ++ ../tower/services/adguard.nix;
-
-  raspberry-pi-nix = {
-    board = "bcm2712";
-  };
+  imports = loadModules ./.;
 
   boot = {
     loader.generic-extlinux-compatible.enable = lib.mkForce false;
@@ -16,7 +12,6 @@
       "bcm2835_dma"
       "i2c_bcm2835"
       "pcie_brcmstb" # Needed for RPi 4/5 PCIe/USB controllers
-      "reset-raspberrypi"
-];    
+    ];    
   };
 }
