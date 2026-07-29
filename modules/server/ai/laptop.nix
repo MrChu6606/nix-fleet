@@ -10,8 +10,6 @@ _: {
 
   powerManagement = {
     enable = true;
-    cpuFreqGovernor = "powersave";
+    cpuFreqGovernor = "performance";
   };
-
-  services.power-profiles-daemon.enable = true;
 }
