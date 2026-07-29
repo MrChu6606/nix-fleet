@@ -1,11 +1,6 @@
 { loadModules, lib, pkgs, ... }:
 {
   imports = loadModules ./.;
-
-  raspberry-pi-nix = {
-    board = "bcm2712";
-  };
-
   boot = {
     loader.generic-extlinux-compatible.enable = lib.mkForce false;
     initrd.availableKernelModules = pkgs.lib.mkForce [
@@ -16,7 +11,6 @@
       "bcm2835_dma"
       "i2c_bcm2835"
       "pcie_brcmstb" # Needed for RPi 4/5 PCIe/USB controllers
-      "reset-raspberrypi"
-];    
+    ];    
   };
 }

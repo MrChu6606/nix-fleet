@@ -1,15 +1,12 @@
 { fleetSettings, ... }: {
   virtualisation.oci-containers.containers.librechat = {
     image = "ghcr.io/danny-avila/librechat:latest";
-
-    ports = [
-      "${toString fleetSettings.ports.librechat}:3080"
-    ];
+    extraOptions = [ "--network=host" ]; # Allows connecting directly to host 127.0.0.1:11434
 
     environment = {
       HOST = "0.0.0.0";
-
-      OLLAMA_API_BASE_URL = "http://127.0.0.1:11434";
+      PORT = toString fleetSettings.ports.librechat;
+      OLLAMA_API_BASE_URL = "http://127.0.0.1:${toString fleetSettings.ports.ollama}";
     };
 
     volumes = [

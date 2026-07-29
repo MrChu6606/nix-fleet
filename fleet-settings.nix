@@ -67,6 +67,7 @@
       whisper = 10300;
       piper = 10200;
       wakeWord = 10400;
+      glances = 61208;
     };
   };
 
