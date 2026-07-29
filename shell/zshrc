@@ -3,6 +3,7 @@ HISTFILE=~/.histfile
 HISTSIZE=1000
 SAVEHIST=1000
 setopt extendedglob nomatch notify
+setopt interactivecomments
 unsetopt autocd beep
 bindkey -v
 # End of lines configured by zsh-newuser-install
@@ -17,44 +18,10 @@ compinit
 autoload -U promptinit; promptinit
 autoload -U prompt pure
 
-#-------------------
-# customize colors
-#-------------------
-
-# Execution time
-# zstyle :prompt:pure:execution_time color "#a8a29e"        # subtext
-# 
-# # Git
-# zstyle :prompt:pure:git:arrow color "#d97742"             # amber arrow
-# zstyle :prompt:pure:git:stash color "#9bb39b"             # sage
-# zstyle :prompt:pure:git:branch color "#9bb39b"            # sage
-# zstyle :prompt:pure:git:branch:cached color "#9bb39b"     # sage
-# zstyle :prompt:pure:git:action color "#e6e1dc"            # main text
-# zstyle :prompt:pure:git:dirty color "#d97742"             # brown offwhite
-# 
-# # Host
-# zstyle :prompt:pure:host color "#e6e1dc"                  # main text
-# 
-# # Path
-# zstyle :prompt:pure:path color "#9bb39b"                  # main text
-# 
-# # Prompt symbols
-# zstyle :prompt:pure:prompt:error color "#bf616a"          # red-ish errors
-# zstyle :prompt:pure:prompt:success color "#bfa78a"        # sage for success
-# zstyle :prompt:pure:prompt:continuation color "#a8a29e"   # subtext for multi-line
-# 
-# # Suspended jobs
-# zstyle :prompt:pure:suspended_jobs color "#a8a29e"       # subtext
-# 
-# # User
-# zstyle :prompt:pure:user color "#e6e1dc"                  # default user
-# zstyle :prompt:pure:user:root color "#FFBF00"             # amber for root
-# 
-# # Virtualenv (Python)
-# zstyle :prompt:pure:virtualenv color "#9bb39b"            # sage
-# 
-# # Prompt continuation
-# zstyle :prompt:continuation color "#9bb39b"               # sage
-
 # activate pure
 prompt pure
+
+# Source external aliases if the file exists
+if [ -f "$HOME/.zsh_aliases" ]; then
+    source "$HOME/.zsh_aliases"
+fi

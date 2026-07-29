@@ -1,4 +1,7 @@
-_: {
+{ pkgs, ... }: let
+
+  DISPLAY = "HDMI-A-1";
+in {
   # Systemd services for controlling screen power
   systemd = {
     services = {
@@ -9,7 +12,7 @@ _: {
           # Runs wlr-randr or fallback to kernel console blanking if no Wayland server is active
           ExecStart = pkgs.writeShellScript "display-off" ''
             if [ -n "$WAYLAND_DISPLAY" ] || [ -S "/run/user/1000/wayland-0" ]; then
-              WAYLAND_DISPLAY=wayland-0 XDG_RUNTIME_DIR=/run/user/1000 ${pkgs.wlr-randr}/bin/wlr-randr --output HDMI-A-1 --off
+              WAYLAND_DISPLAY=wayland-0 XDG_RUNTIME_DIR=/run/user/1000 ${pkgs.wlr-randr}/bin/wlr-randr --output ${DISPLAY} --off
             else
               echo 1 > /sys/class/graphics/fb0/blank 2>/dev/null || true
             fi
@@ -23,7 +26,7 @@ _: {
           Type = "oneshot";
           ExecStart = pkgs.writeShellScript "display-on" ''
             if [ -n "$WAYLAND_DISPLAY" ] || [ -S "/run/user/1000/wayland-0" ]; then
-              WAYLAND_DISPLAY=wayland-0 XDG_RUNTIME_DIR=/run/user/1000 ${pkgs.wlr-randr}/bin/wlr-randr --output HDMI-A-1 --on
+              WAYLAND_DISPLAY=wayland-0 XDG_RUNTIME_DIR=/run/user/1000 ${pkgs.wlr-randr}/bin/wlr-randr --output ${DISPLAY} --on
             else
               echo 0 > /sys/class/graphics/fb0/blank 2>/dev/null || true
             fi

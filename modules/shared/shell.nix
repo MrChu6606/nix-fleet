@@ -1,7 +1,4 @@
-{
-  pkgs,
-  ...
-}: {
+{ pkgs, ... }: {
   programs.zsh = {
     enable = true;
 
@@ -17,4 +14,11 @@
     iftop
     btop
   ];
+
+  system.userActivationScripts.linkZsh = {
+    text = ''
+      ln -sfn "$HOME/nix-fleet/shell/zshrc" "$HOME/.zshrc"
+      ln -sfn "$HOME/nix-fleet/aliases" "$HOME/.zsh_aliases"
+    '';
+  };
 }
