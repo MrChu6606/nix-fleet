@@ -107,11 +107,11 @@
         };
 
         # Core Noctalia Binds
-        "Mod+R" = {
+        "Mod+R" = lib.mkDefault {
           hotkey-overlay.title = "Open launcher";
           action.spawn = [ "sh" "-c" "noctalia-shell ipc call launcher toggle" ];
         };
-        "Mod+S" = {
+        "Mod+S" = lib.mkDefault {
           hotkey-overlay.title = "Open control center";
           action.spawn = [ "sh" "-c" "noctalia-shell ipc call controlCenter toggle" ];
         };
@@ -290,6 +290,7 @@
   xdg.configFile.niri-config = lib.mkForce {
     target = "niri/config.kdl";
     source = pkgs.writeText "niri-config.kdl" ''
+      include "${config.home.homeDirectory}/.config/niri/monitors.kdl"
       include "${config.home.homeDirectory}/.config/niri/noctalia.kdl"
 
       ${config.programs.niri.finalConfig}
