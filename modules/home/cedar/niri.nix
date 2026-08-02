@@ -16,7 +16,7 @@
 
     # Replace Noctalia auto-start with Tide Island
     spawn-at-startup = lib.mkForce [
-      { command = [ "systemctl" "--user" "start" "tide-island.service" ]; }
+      { command = [ "systemctl" "--user" "start" "quickshell" ]; }
     ];
 
     # Override Noctalia keybindings with Fuzzel, Swaylock, and Tide Island IPC
@@ -27,18 +27,24 @@
       };
 
       "Mod+S" = {
-        hotkey-overlay.title = "Wallpaper selector";
-        action.spawn = [ "waypaper" ];
+        hotkey-overlay.title = "Control Center";
+        action.spawn = [ "quickshell" "ipc" "call" "bar" "toggleControlCenter" ];
       };
 
       "Mod+N" = {
         hotkey-overlay.title = "Toggle Notification Center";
-        action.spawn = [ "quickshell" "ipc" "call" "tide" "toggleNotificationCenter" ];
+        action.spawn = [ "quickshell" "ipc" "call" "bar" "toggleNotificationCenter" ];
       };
 
       "Mod+Alt+L" = {
         hotkey-overlay.title = "Lock screen";
         action.spawn = [ "swaylock" ];
+      };
+    };
+
+    layout = {
+      struts = {
+        top = 7;
       };
     };
   };

@@ -1,4 +1,3 @@
-# pkgs/tide-island.nix
 { pkgs }:
 
 pkgs.stdenv.mkDerivation {
@@ -17,6 +16,7 @@ pkgs.stdenv.mkDerivation {
     pkg-config
     python3
     qt6.wrapQtAppsHook
+    makeBinaryWrapper
   ];
 
   buildInputs = with pkgs; [
