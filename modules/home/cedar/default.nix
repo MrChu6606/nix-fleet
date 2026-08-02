@@ -3,8 +3,7 @@ _:{
     ./niri.nix
     ./bottom.nix
     ./amethyst.nix
-    ./tide-island.nix
-    ./fuzzel.nix.
+    ./fuzzel.nix
     ./swaylock.nix
   ];
 }

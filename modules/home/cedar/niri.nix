@@ -27,8 +27,8 @@
       };
 
       "Mod+S" = {
-        hotkey-overlay.title = "Toggle Control Center";
-        action.spawn = [ "quickshell" "ipc" "call" "tide" "toggleControlCenter" ];
+        hotkey-overlay.title = "Wallpaper selector";
+        action.spawn = [ "waypaper" ];
       };
 
       "Mod+N" = {

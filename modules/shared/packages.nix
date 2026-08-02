@@ -8,6 +8,7 @@
     wl-clipboard
     sops
     age
+    tree
   ];
 in {
   environment.systemPackages = stable;

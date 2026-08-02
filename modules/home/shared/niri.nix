@@ -287,7 +287,7 @@
       };
     };
   };
-  xdg.configFile.niri-config = lib.mkForce {
+  xdg.configFile.niri-config = lib.mkDefault {
     target = "niri/config.kdl";
     source = pkgs.writeText "niri-config.kdl" ''
       include "${config.home.homeDirectory}/.config/niri/monitors.kdl"
