@@ -13,4 +13,7 @@
   # enable binfmt with qemu for building aarch64 images
   boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
 
+  # Enable PCSC daemon for YubiKey smart card support
+  services.pcscd.enable = true;
+
 }

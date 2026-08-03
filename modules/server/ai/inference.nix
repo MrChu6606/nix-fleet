@@ -4,7 +4,7 @@
   services.ollama = {
     enable = true;
 
-    acceleration = "cuda";
+    package = pkgs.ollam-cuda;
 
     host = "0.0.0.0";
     port = fleetSettings.ports.ollama;

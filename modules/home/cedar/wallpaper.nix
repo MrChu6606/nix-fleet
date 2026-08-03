@@ -2,7 +2,6 @@
   home.packages = with pkgs; [
     waypaper
     matugen
-    awww
   ];
 
   xdg.configFile = {

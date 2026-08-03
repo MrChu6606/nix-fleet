@@ -202,11 +202,6 @@
         "Mod+Shift+Ctrl+K".action.move-column-to-monitor-up = { };
         "Mod+Shift+Ctrl+L".action.move-column-to-monitor-right = { };
 
-        "Mod+Left".action.move-column-to-monitor-left = { };
-        "Mod+Right".action.move-column-to-monitor-right = { };
-        "Mod+Down".action.move-column-to-workspace-down = { };
-        "Mod+Up".action.move-column-to-workspace-up = { };
-
         "Mod+U".action.focus-workspace-down = { };
         "Mod+I".action.focus-workspace-up = { };
         "Mod+Ctrl+U".action.move-column-to-workspace-down = { };

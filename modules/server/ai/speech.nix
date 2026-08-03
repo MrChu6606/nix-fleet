@@ -1,6 +1,6 @@
 { fleetSettings, ... }: {
   services = {
-    wyoming.whisper.servers."local-stt" = {
+    wyoming.faster-whisper.servers."local-stt" = {
       enable = true;
       # Bind to all interfaces so Home Assistant or satellite satellites can reach it
       uri = "tcp://0.0.0.0:${fleetSettings.ports.whisper}";

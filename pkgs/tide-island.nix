@@ -25,25 +25,40 @@ pkgs.stdenv.mkDerivation {
     qt6.qtsvg
     qt6.qt5compat
     qt6.qtconnectivity
+    qt6.qtwayland
     quickshell
   ];
 
-  # Force CMake to install QML modules and support files to $out/share/tide-island
-  cmakeFlags = [
-    "-DCMAKE_INSTALL_PREFIX=${placeholder "out"}"
-    "-DCMAKE_INSTALL_DATADIR=${placeholder "out"}/share/tide-island"
-  ];
+  dontWrapQtApps = true;
 
   postInstall = ''
-    # Copy source QML/JS assets into share directory if CMake install skips non-compiled QML files
     mkdir -p $out/share/tide-island
     cp -rn $src/* $out/share/tide-island/ || true
 
-    # Ensure $out/bin exists and wrapper for tide-island launcher is created
+    if [ -d "$out/lib/qt6/qml/IslandBackend" ]; then
+      ln -s $out/lib/qt6/qml/IslandBackend $out/share/tide-island/IslandBackend
+    fi
+    if [ -d "$out/lib/qt6/qml/TideIsland" ]; then
+      ln -s $out/lib/qt6/qml/TideIsland $out/share/tide-island/TideIsland
+    fi
+
+    # Stub lyricsmpris binary so warnings disappear
     mkdir -p $out/bin
+    echo '#!/bin/sh' > $out/bin/lyricsmpris
+    echo 'exit 0' >> $out/bin/lyricsmpris
+    chmod +x $out/bin/lyricsmpris
+
+    # Shared QML import paths
+    QML_PATHS="$out/lib/qt6/qml:$out/share/tide-island:${pkgs.qt6.qtdeclarative}/lib/qt-6/qml:${pkgs.qt6.qt5compat}/lib/qt-6/qml:${pkgs.qt6.qtsvg}/lib/qt-6/qml:${pkgs.qt6.qtwayland}/lib/qt-6/qml"
+
+    # Wrap main tide-island launcher
     makeWrapper ${pkgs.quickshell}/bin/quickshell $out/bin/tide-island \
       --add-flags "-p $out/share/tide-island" \
-      --set QML2_IMPORT_PATH "$out/lib/qt-6/qml:$out/lib:$out/share/tide-island:${pkgs.qt6.qtdeclarative}/lib/qt-6/qml" \
+      --set QT_QPA_PLATFORM wayland \
+      --prefix QML2_IMPORT_PATH : "$QML_PATHS" \
+      --prefix QT_PLUGIN_PATH : "${pkgs.qt6.qtdeclarative}/lib/qt-6/plugins" \
+      --prefix QUICKSHELL_IMPORT_PATH : "$out/lib/qt6/qml" \
+      --prefix QUICKSHELL_IMPORT_PATH : "$out/share/tide-island" \
       --prefix PATH : ${pkgs.lib.makeBinPath (with pkgs; [
         quickshell
         brightnessctl
@@ -51,6 +66,24 @@ pkgs.stdenv.mkDerivation {
         gammastep
         cava
         awww
+        playerctl
+        upower
+        bluez
+        procps
+        jq
       ])}
+
+    # Wrap tide-island-config-app with required QML & Plugin paths
+    if [ -f "$out/bin/tide-island-config-app" ]; then
+      wrapProgram $out/bin/tide-island-config-app \
+        --prefix QML2_IMPORT_PATH : "$QML_PATHS" \
+        --prefix QT_PLUGIN_PATH : "${pkgs.qt6.qtdeclarative}/lib/qt-6/plugins"
+    fi
+
+    # Update .desktop launcher file to point directly to wrapped binary in $out/bin
+    if [ -f "$out/share/applications/tide-island-config-app.desktop" ]; then
+      substituteInPlace $out/share/applications/tide-island-config-app.desktop \
+        --replace-fail "Exec=tide-island-config-app" "Exec=$out/bin/tide-island-config-app"
+    fi
   '';
 }

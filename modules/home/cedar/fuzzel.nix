@@ -1,9 +1,9 @@
-_:{
+{ pkgs, ... }:{
   programs.fuzzel = {
     enable = true;
     settings = {
       main = {
-        terminal = "alacritty";
+        terminal = "${pkgs.alacritty}/bin/alacritty -e";
         layer = "overlay";
         width = 35;
         font = "monospace:size=11";
