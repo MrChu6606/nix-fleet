@@ -3,7 +3,7 @@
     wyoming.faster-whisper.servers."local-stt" = {
       enable = true;
       # Bind to all interfaces so Home Assistant or satellite satellites can reach it
-      uri = "tcp://0.0.0.0:${fleetSettings.ports.whisper}";
+      uri = "tcp://0.0.0.0:${toString fleetSettings.ports.whisper}";
       
       # Model size options: tiny, base, small, medium
       # "base" or "small" offers the best balance on a laptop CPU/GPU

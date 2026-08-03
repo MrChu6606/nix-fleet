@@ -4,7 +4,7 @@
   services.ollama = {
     enable = true;
 
-    package = pkgs.ollam-cuda;
+    package = pkgs.ollama-cuda;
 
     host = "0.0.0.0";
     port = fleetSettings.ports.ollama;
