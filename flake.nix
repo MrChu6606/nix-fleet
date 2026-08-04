@@ -185,6 +185,7 @@
         hostname = "aspen";
         system = "x86_64-linux";
         pkgsInput = nixpkgs;
+        cudaSupport = true;
         modules = [
             ./modules/shared
             ./modules/server/shared

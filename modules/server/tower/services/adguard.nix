@@ -10,7 +10,7 @@
       schema_version = 20;
 
       dns = {
-        port = fleetSettings.ports.adguard.dns;
+        port = fleetSettings.sequoia.ports.adguard.dns;
         bind_hosts = [ 
           fleetSettings.sequoia.lan
           fleetSettings.sequoia.tail

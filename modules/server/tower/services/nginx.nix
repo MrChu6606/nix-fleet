@@ -25,9 +25,16 @@ let
   customHosts = {
     "searxng.home" = {
       locations."/" = {
-        proxyPass = "http://${fleetSettings.sequoia.containers.searxng}:${toString fleetSettings.ports.adguard.http}";
+        proxyPass = "http://${fleetSettings.sequoia.containers.searxng}:${toString fleetSettings.sequoia.ports.adguard.http}";
         proxyWebsockets = true;
       };
+    };
+
+    "librechat.home" = {
+      locations."/" = {
+        proxyPass = "http://${toString fleetSettings.aspen.lan}:${toString fleetSettings.aspen.ports.librechat}";
+      };
+      proxyWebsockets = true;
     };
 
     "adguard.home" = {

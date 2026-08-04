@@ -5,8 +5,9 @@ keys:
   - &server_tower age1pplwtucfg94fpsaxq488qvztqekuzs7y8wzc7nrh3tag0g640a4sph8ny8
   - &server_assistant age127kdzfp3jyenv32fk0hc7ruyrpc5luw7c3v306f6xs39xj87ppdqrfla4h
   - &server_dashboard age1xh3zmwd879d7frp3we3nspga6kgr7ukmdcfyq5m3kj4wdexdtgxqvrene9
+  - &server_ai age1ftyyn6qcvv0v0nz8098sshc33v20gssvjreka6gfs4kl8864kq2scr2a54
 creation_rules:
-  # Global secrets: Decryptable by your laptop admin key, the tower, AND the pis
+  # Global secrets
   - path_regex: secrets/global\.yaml$
     key_groups:
       - age:
@@ -16,8 +17,9 @@ creation_rules:
           - *server_tower
           - *server_assistant
           - *server_dashboard
+          - *server_ai
 
-  # Tower-specific secrets: Decryptable by your laptop and the tower
+  # Tower-specific secrets
   - path_regex: secrets/tower\.yaml$
     key_groups:
       - age:
@@ -26,7 +28,7 @@ creation_rules:
           - *yubikey 
           - *server_tower
 
-  # Pi-specific secrets: Decryptable by your laptop and the pis
+  # Pi-specific secrets
   - path_regex: secrets/pi\.yaml$
     key_groups:
       - age:
@@ -35,3 +37,11 @@ creation_rules:
           - *admin_desktop
           - *server_assistant
           - *server_dashboard
+  # Laptop-specific secrets
+  - path_regex: secrets/laptop\.yaml$
+    key_groups:
+      - age:
+        - *admin_laptop
+        - *yubikey 
+        - *admin_desktop
+        - *server_ai

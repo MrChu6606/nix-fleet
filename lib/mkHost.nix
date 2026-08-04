@@ -3,6 +3,7 @@
   routing ? false,
   system,
   overlays ? [],
+  cudaSupport ? false,
   modules,
   extraSpecialArgs ? {},
   pkgsInput
@@ -15,6 +16,7 @@ pkgsInput.lib.nixosSystem {
   pkgs = import pkgsInput {
     inherit system overlays;
     config = {
+      inherit cudaSupport;
       allowUnfree = true;
     };
   };
