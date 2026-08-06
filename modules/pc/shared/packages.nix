@@ -17,6 +17,7 @@
 
   unstable = with pkgs.unstable; [
     yazi # file manager
+    noctalia-shell
   ];
   
   nvfPkg = nvfFN pkgs.unstable;

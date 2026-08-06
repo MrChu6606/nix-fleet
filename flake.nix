@@ -79,6 +79,8 @@
 
     mkHost = import ./lib/mkHost.nix;
 
+    mkHome = import ./lib/mkHome.nix { inherit home-manager; };
+
   in {
     nixosConfigurations = {
 
@@ -193,33 +195,25 @@
             inputs.sops-nix.nixosModules.default
         ];
       };
-      
     };
 
-    homeConfigurations = {
-      "nic@lotus" = home-manager.lib.homeManagerConfiguration {
+    homeConfigurations = builtins.mapAttrs (target: config: mkHome target config) {
+      "nic@lotus" = {
         pkgs = self.nixosConfigurations.lotus.pkgs;
         modules = [
           ./modules/home/lotus
           ./modules/home/shared
           inputs.niri.homeModules.niri
         ];
-
-        extraSpecialArgs = {
-            # zenPkg = inputs.zen-browser.packages."x86_64-linux".default;
-        };
       };
-      "nic@cedar" = home-manager.lib.homeManagerConfiguration {
+
+      "nic@cedar" = {
         pkgs = self.nixosConfigurations.cedar.pkgs;
         modules = [
           ./modules/home/shared
           ./modules/home/cedar
           inputs.niri.homeModules.niri
         ];
-
-        extraSpecialArgs = {
-            # zenPkg = inputs.zen-browser.packages."x86_64-linux".default;
-        };
       };
     };
   };

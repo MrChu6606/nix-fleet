@@ -34,7 +34,6 @@
   ];
 
   unstable = with pkgs.unstable; [
-    noctalia-shell
   ];
 
   nvfPkg = nvfFN pkgs.unstable;

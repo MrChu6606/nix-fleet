@@ -68,6 +68,7 @@
     ports = {
       ollama = 11434;
       librechat = 3080;
+      mongodb = 27017; # this is hardcoded in laptop.yaml
       whisper = 10300;
       piper = 10200;
       wakeWord = 10400;

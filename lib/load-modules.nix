@@ -1,8 +1,5 @@
-{ lib }:
-
-let
+{ lib }: let
   inherit (builtins) readDir attrNames;
-
 in
 dir:
   let
@@ -15,5 +12,6 @@ dir:
         entries.${name} == "regular"
         && lib.hasSuffix ".nix" name
         && !(lib.hasSuffix ".nix~" name)
+        && !(lib.hasPrefix "_" name)
         && name != "default.nix"
       ) (attrNames entries))
