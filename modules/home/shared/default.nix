@@ -1,24 +1,6 @@
-_:
+{ loadModules, ... }:
 {
-  imports = [
-    ./alacritty.nix
-    ./niri.nix
-    ./yazi.nix
-    ./xdg.nix
-  ];
-  programs.home-manager.enable = true;
-
-  home = {
-    username = "nic";
-    homeDirectory = "/home/nic";
-    stateVersion = "26.05";
-  };
-
-  xdg.configFile = {
-    "alacritty/alacritty.toml" = {
-      force = true;
-    };
-  };
+  imports = loadModules ./.;
 
   programs.git = {
     enable = true;

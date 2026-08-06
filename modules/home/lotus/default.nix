@@ -1,5 +1,4 @@
-_:
+{ loadModules, ... }:
 {
-  imports = [
-  ];
+  imports = loadModules ./.;
 }

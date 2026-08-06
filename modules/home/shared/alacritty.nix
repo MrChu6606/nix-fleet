@@ -20,12 +20,18 @@ _: {
       font = {
         size = 12.5;
         normal = {
-          family = "JetBrainsMono Nerd Font";
+          family = "FiraCode Nerd Font";
           style = "Regular";
         };
       };
 
       cursor.style = "Beam";
+    };
+  };
+
+  xdg.configFile = {
+    "alacritty/alacritty.toml" = {
+      force = true;
     };
   };
 }

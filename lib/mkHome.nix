@@ -14,8 +14,11 @@ home-manager.lib.homeManagerConfiguration {
   inherit pkgs;
   modules = modules ++ [
     {
-      home.username = username;
-      home.homeDirectory = "/home/${username}";
+      home = {
+        inherit username;
+        homeDirectory = "/home/${username}";
+        stateVersion = "26.05";
+      };
     }
   ];
   extraSpecialArgs = {
