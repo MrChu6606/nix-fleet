@@ -1,3 +1,4 @@
+# legacy module
 { config, pkgs, fleetSettings, ... }: 
 # This modlist is stinky as hell, will probably move it to separate file one day
 let

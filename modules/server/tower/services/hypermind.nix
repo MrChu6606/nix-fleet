@@ -1,6 +1,6 @@
 { fleetSettings, ... }: {
   virtualisation.oci-containers = {
-    backend = "docker";
+    backend = "podman";
     containers = {
 
       # Original Hypermind

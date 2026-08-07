@@ -1,4 +1,5 @@
 # This file creates network variables
+# note that tailscale address are not static and may be outdated
 {
   sequoia = {
     lan = "192.168.5.100";
@@ -6,11 +7,13 @@
 
     containers = {
       searxng = "192.168.5.101";
-      mc-20 = "192.168.5.102";
-      mc-26 = "192.168.5.103";
-      mc-ts = {
-        lan = "192.168.4.104";
-        tail = "100.84.69.97";
+      mc-20 = {
+        lan = "192.168.5.102";
+        tail = "";
+      };
+      mc-26 = {
+        lan = "192.168.5.103";
+        tail = "";
       };
       homeassistant = "192.168.5.105";
     };
