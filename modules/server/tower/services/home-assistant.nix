@@ -1,8 +1,6 @@
 { pkgs, fleetSettings, ... }:
 let
-  haIp = fleetSettings.sequoia.containers.homeassistant;
   haConfigDir = "/var/lib/homeassistant-config";
-  shimIp = fleetSettings.sequoia.shim;
 in
 {
   virtualisation.oci-containers.backend = "podman";
@@ -32,37 +30,16 @@ http:
   trusted_proxies:
     - 192.168.4.0/22
     - ${fleetSettings.sequoia.lan}
-    - ${shimIp}
 EOF
         chmod 644 "$CONFIG_FILE"
       '';
     };
   };
 
-  systemd.services.podman-macvlan-setup = {
-    description = "Create Podman Macvlan network on br0";
-    after = [ "network-online.target" ];
-    wants = [ "network-online.target" ];
-    wantedBy = [ "multi-user.target" ];
-    serviceConfig = {
-      Type = "oneshot";
-      RemainAfterExit = true;
-      ExecStart = pkgs.writeShellScript "setup-podman-macvlan" ''
-        if ! ${pkgs.podman}/bin/podman network exists br0_lan; then
-          ${pkgs.podman}/bin/podman network create -d macvlan \
-            -o parent=br0 \
-            --subnet=${fleetSettings.network.subnet}/${toString fleetSettings.network.subnetPrefix} \
-            --gateway=${fleetSettings.network.gateway} \
-            br0_lan
-        fi
-      '';
-    };
-  };
-
   # Container Definition
   systemd.services.podman-homeassistant = {
-    after = [ "setup-macvlan-shim.service" "podman-macvlan-setup.service" "homeassistant-config-init.service" ];
-    requires = [ "setup-macvlan-shim.service" "podman-macvlan-setup.service" "homeassistant-config-init.service" ];
+    after = [ "homeassistant-config-init.service" ];
+    requires = [ "homeassistant-config-init.service" ];
   };
 
   virtualisation.oci-containers.containers.homeassistant = {
@@ -74,9 +51,7 @@ EOF
       "${haConfigDir}:/config"
     ];
     extraOptions = [
-      "--network=br0_lan"
-      "--ip=${haIp}"
-      "--dns=${builtins.head fleetSettings.network.dns}"
+      "--network=host"
     ];
   };
 

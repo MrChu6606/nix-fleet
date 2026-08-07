@@ -19,6 +19,7 @@ let
     "grafana"
     "glances"
     "lidarr"
+    "homeassistant"
   ]);
 
   # Non-standard or unique mappings that break the cookie-cutter pattern
@@ -30,16 +31,16 @@ let
       };
     };
 
-    "homeassistant.home" = {
-      locations."/" = {
-        proxyPass = "http://${fleetSettings.sequoia.containers.homeassistant}:8123";
-        proxyWebsockets = true;
-        extraConfig = ''
-          proxy_set_header Upgrade $http_upgrade;
-          proxy_set_header Connection "upgrade";
-        '';
-      };
-    };
+    #    "homeassistant.home" = {
+    #      locations."/" = {
+    #        proxyPass = "http://${fleetSettings.sequoia.containers.homeassistant}:8123";
+    #        proxyWebsockets = true;
+    #        extraConfig = ''
+    #          proxy_set_header Upgrade $http_upgrade;
+    #          proxy_set_header Connection "upgrade";
+    #        '';
+    #      };
+    #    };
 
     "librechat.home" = {
       locations."/" = {
