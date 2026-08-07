@@ -1,8 +1,8 @@
 _: {
   sops = {
     # Point to tower secrets file relative to this module
-    defaultSopsFile = ../../../../secrets/tower.yaml;
-    defaultSopsFormat = "yaml";
+    sopsFile = ../../../../secrets/tower.yaml;
+    sopsFormat = "yaml";
 
     # extract the secrets
     secrets = {

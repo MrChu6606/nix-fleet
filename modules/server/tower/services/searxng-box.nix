@@ -29,7 +29,7 @@
         
         settings = {
           server = {
-            port = 8080;
+            port = 80;
             bind_address = "0.0.0.0"; # Listen within the container network boundary
             secret_key = "acfe583c3e14089548c186467efb7ebbdef765b643ede173790fc6bc9252b3cf";
           };

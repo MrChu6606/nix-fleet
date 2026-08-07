@@ -1,6 +1,7 @@
 { loadModules, lib, pkgs, ... }:
 {
-  imports = loadModules ./.;
+  imports = loadModules ./. ++ [../pis/default.nix];
+
   boot = {
     loader.generic-extlinux-compatible.enable = lib.mkForce false;
     initrd.availableKernelModules = pkgs.lib.mkForce [

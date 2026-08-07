@@ -3,11 +3,11 @@
 in {
   sops = {
 
+    defaultSopsFile = ../../secrets/global.yaml;
+
     # Extract the tailscale key
     secrets = {
-      tailscale_key = {
-        sopsFile = ../../secrets/global.yaml;
-      };
+      tailscale_key = { };
     };
 
     age = {

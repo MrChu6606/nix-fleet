@@ -26,11 +26,15 @@ in {
   services.flatpak = {
     enable = true;
 
-    remotes = [
-      {
-        name = "flathub";
-        location = "https://flathub.org/repo/flathub.flatpakrepo";
-      }
+    packages = [
+      "com.rtosta.zapzap"
+      "org.vinegarhq.Sober"
+      "com.github.tchx84.Flatseal"
     ];
+
+    update.auto = {
+      enable = true;
+      onCalendar = "weekly";
+    };
   };
 }

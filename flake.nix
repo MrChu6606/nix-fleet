@@ -150,7 +150,6 @@
         modules = [
           ./modules/shared
           ./modules/server/tower
-          ./modules/server/shared
           inputs.sops-nix.nixosModules.default
           inputs.disko.nixosModules.default
           inputs.arion.nixosModules.arion
@@ -167,8 +166,6 @@
         modules = [
           ./modules/shared
           ./modules/server/assistant
-          ./modules/server/shared
-          ./modules/server/pis
           inputs.sops-nix.nixosModules.default
 
           # makes it so can build sd images
@@ -186,8 +183,6 @@
         pkgsInput = nixpkgs-unstable;
         modules = [
           ./modules/shared
-          ./modules/server/shared
-          ./modules/server/pis
           ./modules/server/dashboard
           inputs.sops-nix.nixosModules.default
           inputs.nixos-hardware.nixosModules.raspberry-pi-5
@@ -201,7 +196,6 @@
         cudaSupport = true;
         modules = [
             ./modules/shared
-            ./modules/server/shared
             ./modules/server/ai
             inputs.sops-nix.nixosModules.default
         ];

@@ -25,8 +25,20 @@ let
   customHosts = {
     "searxng.home" = {
       locations."/" = {
-        proxyPass = "http://${fleetSettings.sequoia.containers.searxng}:${toString fleetSettings.sequoia.ports.adguard.http}";
+        proxyPass = "http://${fleetSettings.sequoia.containers.searxng}";
         proxyWebsockets = true;
+      };
+    };
+
+    "homeassistant.home" = {
+      locations."/" = {
+        proxyPass = "http://${fleetSettings.sequoia.containers.homeassistant}:8123";
+        proxyWebsockets = true;
+        extraConfig = ''
+          proxy_set_header Host $host;
+          proxy_set_header Upgrade $http_upgrade;
+          proxy_set_header Connection "upgrade";
+        '';
       };
     };
 

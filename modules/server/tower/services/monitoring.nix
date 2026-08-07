@@ -1,4 +1,4 @@
-{ pkgs, fleetSettings, config, ... }: {
+{ pkgs, fleetSettings, config, lib, ... }: {
   # glances for system metrics
   services.glances = {
     enable = true;
@@ -8,10 +8,7 @@
   services = {
     prometheus = {
       # Grabs metrics from this machine
-      exporters.node = {
-        enable = true;
-        port = fleetSettings.sequoia.ports.prometheus.exporter;
-      };
+      exporters.node.port = lib.mkForce fleetSettings.sequoia.ports.prometheus.exporter;
       # Main prometheus service
       enable = true;
       port = fleetSettings.sequoia.ports.prometheus.service;

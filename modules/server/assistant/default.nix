@@ -1,6 +1,6 @@
 { loadModules, lib, ... }:
 {
-  imports = loadModules ./.;
+  imports = loadModules ./. ++ [../pis/default.nix];
 
   # bootloader stuff
   boot.loader.generic-extlinux-compatible.enable = true;
