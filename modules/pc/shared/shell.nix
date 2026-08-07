@@ -1,4 +1,4 @@
-_: {
+{ pkgs, ... }: {
   programs.zsh.interactiveShellInit = ''
     eval $(direnv hook zsh)
   '';
@@ -9,4 +9,14 @@ _: {
 
     flake = "/home/nic/nix-fleet/";
   };
+  # Enables direnv
+  programs = {
+    direnv = {
+      enable = true;
+      nix-direnv.enable = true;
+      enableZshIntegration = true;
+    };
+  };
+
+  environment.systemPackages = [ pkgs.devenv ];
 }

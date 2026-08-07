@@ -1,12 +1,6 @@
 { pkgs, ... }: {
-  # Enables direnv
   programs = {
-    direnv = {
-      enable = true;
-      nix-direnv.enable = true;
-      enableZshIntegration = true;
-    };
-    dconf.enable = true;
+   dconf.enable = true;
   };
 
   # Sets kernel to zen kernel
