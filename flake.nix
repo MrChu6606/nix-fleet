@@ -19,6 +19,8 @@
       url = "github:NixOS/nixos-hardware/master";
     };
 
+    impermanence.url = "github:nix-community/impermanence";
+
     silentSDDM = {
       url="github:uiriansan/SilentSDDM";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -153,6 +155,7 @@
           inputs.sops-nix.nixosModules.default
           inputs.disko.nixosModules.default
           inputs.arion.nixosModules.arion
+          inputs.impermanence.nixosModules.impermanence
         ];
         overlays = [
           (import ./overlays/unstable.nix { inherit nixpkgs-unstable; } )

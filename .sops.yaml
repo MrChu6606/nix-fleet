@@ -2,7 +2,7 @@ keys:
   - &admin_laptop age120msgn9wr2d78cmngdkgl3wsg0ftfxauw3slantwh0554h9ayprsdznwxy
   - &admin_desktop age1dk8r7lqc4zrau64z0uqpheevmc2reerzjjwe8pegn6c9rdmjae5stax5zf
   - &yubikey age10apn3gq685qj6nhtk8jxv4hx7tt5ffqvj099nt86keu7glryne0ss6df3c
-  - &server_tower age1pplwtucfg94fpsaxq488qvztqekuzs7y8wzc7nrh3tag0g640a4sph8ny8
+  - &server_tower age1vz9kkgx72vk30kce8e8k6t7z0yu0jsakd2fxjta3hqrytd6h55lq9xh6qd
   - &server_assistant age127kdzfp3jyenv32fk0hc7ruyrpc5luw7c3v306f6xs39xj87ppdqrfla4h
   - &server_dashboard age1xh3zmwd879d7frp3we3nspga6kgr7ukmdcfyq5m3kj4wdexdtgxqvrene9
   - &server_ai age1ftyyn6qcvv0v0nz8098sshc33v20gssvjreka6gfs4kl8864kq2scr2a54

@@ -18,7 +18,6 @@
         router = "192.168.5.104";
         tail = "";
       };
-      homeassistant = "192.168.5.105";
     };
 
     ports = {
@@ -27,6 +26,7 @@
       sabnzbd = 8085;
       lidarr = 8686;
       prowlarr = 9696;
+      homeassistant = 8123;
 
       # Infrastructure
       prometheus = {
