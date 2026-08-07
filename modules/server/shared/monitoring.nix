@@ -1,8 +1,11 @@
-{ fleetSettings, ... }: {
+{ fleetSettings, lib, hostname, ... }: {
   services.prometheus.exporters.node = {
     enable = true;
-    port = fleetSettings.ports.prometheus;
+    port = lib.mkDefault fleetSettings.ports.prometheus;
   };
 
-  networking.firewall.allowedTCPPorts = [ fleetSettings.ports.prometheus ];
+  # Open the port on the firewall for all hosts except sequoia
+  networking.firewall.allowedTCPPorts = lib.optionals (hostname != "sequoia") [
+    fleetSettings.ports.prometheus
+  ];
 }

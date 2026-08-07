@@ -2,19 +2,18 @@
 let
   haIp = fleetSettings.sequoia.containers.homeassistant;
   haConfigDir = "/var/lib/homeassistant-config";
+  shimIp = fleetSettings.sequoia.shim;
 in
 {
-  virtualisation.podman.enable = true;
   virtualisation.oci-containers.backend = "podman";
 
-  # Ensure state directory exists on the host
   systemd.tmpfiles.rules = [
     "d ${haConfigDir} 0755 root root -"
   ];
 
-  # Declaratively initialize/append configuration.yaml without locking out UI edits
+  # Declaratively overwrite configuration.yaml with standard ASCII spaces and clean YAML structure
   systemd.services.homeassistant-config-init = {
-    description = "Initialize Home Assistant configuration.yaml if missing/incomplete";
+    description = "Initialize Home Assistant configuration.yaml with reverse proxy settings";
     before = [ "podman-homeassistant.service" ];
     wantedBy = [ "multi-user.target" ];
     serviceConfig = {
@@ -23,9 +22,8 @@ in
       ExecStart = pkgs.writeShellScript "init-ha-config" ''
         CONFIG_FILE="${haConfigDir}/configuration.yaml"
         
-        # Touch file if it doesn't exist
-        if [ ! -f "$CONFIG_FILE" ]; then
-          cat <<EOF > "$CONFIG_FILE"
+        # Overwrite file to remove non-breaking spaces, duplicate keys, or malformed sections
+        cat <<EOF > "$CONFIG_FILE"
 # Home Assistant Configuration
 default_config:
 
@@ -33,24 +31,14 @@ http:
   use_x_forwarded_for: true
   trusted_proxies:
     - 192.168.4.0/22
+    - ${fleetSettings.sequoia.lan}
+    - ${shimIp}
 EOF
-        else
-          # Append trusted_proxies configuration if missing
-          if ! grep -q "use_x_forwarded_for" "$CONFIG_FILE"; then
-            cat <<EOF >> "$CONFIG_FILE"
-
-http:
-  use_x_forwarded_for: true
-  trusted_proxies:
-    - 192.168.4.0/22
-EOF
-          fi
-        fi
+        chmod 644 "$CONFIG_FILE"
       '';
     };
   };
 
-  # Podman Macvlan Network Setup on br0
   systemd.services.podman-macvlan-setup = {
     description = "Create Podman Macvlan network on br0";
     after = [ "network-online.target" ];
@@ -72,6 +60,11 @@ EOF
   };
 
   # Container Definition
+  systemd.services.podman-homeassistant = {
+    after = [ "setup-macvlan-shim.service" "podman-macvlan-setup.service" "homeassistant-config-init.service" ];
+    requires = [ "setup-macvlan-shim.service" "podman-macvlan-setup.service" "homeassistant-config-init.service" ];
+  };
+
   virtualisation.oci-containers.containers.homeassistant = {
     image = "ghcr.io/home-assistant/home-assistant:stable";
     environment = {
@@ -84,12 +77,9 @@ EOF
       "--network=br0_lan"
       "--ip=${haIp}"
       "--dns=${builtins.head fleetSettings.network.dns}"
-      # Map persistent USB Zigbee Dongle (adjust path if needed)
-      "--device=/dev/serial/by-id/usb-ITead_Sonoff_Zigbee_3.0_USB_Dongle_Plus_v2_20230508104532-if00-port0:/dev/ttyZigbee"
     ];
   };
 
-  # Grant container access to serial hardware
   services.udev.extraRules = ''
     KERNEL=="ttyUSB*", MODE="0666"
     KERNEL=="ttyACM*", MODE="0666"

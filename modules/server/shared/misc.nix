@@ -11,11 +11,19 @@ _: {
   nix.optimise.automatic = true;
   nix.optimise.dates = [ "weekly" ];
 
-  # Enable docker
-  virtualisation.docker = {
+  # Enable Podman
+  virtualisation.podman = {
     enable = true;
-    daemon.settings = {
-      data-root = "/appdata/docker";
+    dockerSocket.enable = true;
+    dockerCompat = true;
+  };
+
+  # Configure storage graphroot (where Podman stores images/layers)
+  virtualisation.containers.storage.settings = {
+    storage = {
+      driver = "overlay";
+      graphroot = "/appdata/podman/storage";
+      runroot = "/run/containers/storage";
     };
   };
 

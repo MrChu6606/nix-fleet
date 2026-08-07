@@ -38,6 +38,7 @@ in
     projects.minecraft-26.settings = {
       project.name = "minecraft-26";
 
+      # Attach directly to the existing br0 host bridge
       networks.lan-bridge = {
         name = "lan-bridge";
         driver = "macvlan";
@@ -52,8 +53,9 @@ in
         service = {
           image = "tailscale/tailscale:latest";
           
+          # Assign a dedicated, distinct IP for the Tailscale sidecar container
           networks.lan-bridge = {
-            ipv4_address = fleetSettings.sequoia.lan;
+            ipv4_address = fleetSettings.sequoia.containers.mc-26.router;
           };
 
           volumes = [
@@ -66,7 +68,7 @@ in
             TS_AUTHKEY = "file:///run/secrets/tailscale_key";
             TS_STATEFUL_CONFIG = "true";
             TS_HOSTNAME = "mc-pool-box-26";
-            # Route traffic directly to 26.1 container IP (192.168.5.103)
+            # Subnet route advertising the Minecraft container's dedicated LAN IP into Tailscale
             TS_ROUTES = "${fleetSettings.sequoia.containers.mc-26.lan}/32";
           };
           capabilities = { NET_ADMIN = true; };
@@ -83,6 +85,7 @@ in
         service = {
           image = "itzg/minecraft-server:latest";
           
+          # Container gets its dedicated LAN IP on br0 (192.168.5.103)
           networks.lan-bridge = {
             ipv4_address = fleetSettings.sequoia.containers.mc-26.lan;
           };
@@ -110,6 +113,15 @@ in
           restart = "unless-stopped";
         };
       };
+    };
+  };
+
+  systemd.services.arion-minecraft-26 = {
+    after = [ "podman.socket" "podman.service" "network-online.target" ];
+    wants = [ "podman.socket" "network-online.target" ];
+    requires = [ "podman.socket" ];
+    environment = {
+      DOCKER_HOST = "unix:///run/podman/podman.sock";
     };
   };
 }

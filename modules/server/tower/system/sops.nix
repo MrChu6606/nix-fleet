@@ -1,32 +1,35 @@
 _: {
   sops = {
-    # Point to tower secrets file relative to this module
-    sopsFile = ../../../../secrets/tower.yaml;
-    sopsFormat = "yaml";
-
-    # extract the secrets
-    secrets = {
+    secrets = let
+      towerSecrets = ../../../../secrets/tower.yaml;
+    in {
       grafana_env = {
+        sopsFile = towerSecrets;
         owner = "grafana";
         group = "grafana";
       };
 
-      grafana_key = {};
+      grafana_key = {
+        sopsFile = towerSecrets;
+      };
 
-        lidarr_env = {
-          owner = "lidarr";
-          group = "media";
-        };
+      lidarr_env = {
+        sopsFile = towerSecrets;
+        owner = "lidarr";
+        group = "media";
+      };
 
-        prowlarr_env = {
-          owner = "root";
-          group = "root";
-        };
+      prowlarr_env = {
+        sopsFile = towerSecrets;
+        owner = "root";
+        group = "root";
+      };
 
-        sabnzbd_secrets = {
-          owner = "sabnzbd";
-          group = "media";
-        };
+      sabnzbd_secrets = {
+        sopsFile = towerSecrets;
+        owner = "sabnzbd";
+        group = "media";
+      };
     };
   };
 }

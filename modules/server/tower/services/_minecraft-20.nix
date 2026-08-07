@@ -78,7 +78,7 @@ let
     ${pkgs.lib.concatMapStringsSep "\n" (mod: "ln -s ${mod} $out/${mod.name}") modlist}
   '';
 
-  modpack20-1 = makeModpack "mc-mods-1-20-1" mods20-1;
+  modpack20-1 = makeModpack "mc-mods-20-1" mods20-1;
 
   aikarFlags = "-XX:+UseG1GC -XX:+ParallelRefProcEnabled -XX:MaxGCPauseMillis=200 -XX:+UnlockExperimentalVMOptions -XX:+AlwaysPreTouch -XX:G1NewSizePercent=30 -XX:G1MaxNewSizePercent=40 -XX:G1HeapRegionSize=8m -XX:G1ReservePercent=20 -XX:G1HeapWastePercent=5 -XX:G1MixedGCCountTarget=4 -XX:InitiatingHeapOccupancyPercent=15 -XX:G1MixedGCLiveThresholdPercent=90 -XX:G1RSetUpdatingPauseTimePercent=5 -XX:SurvivorRatio=32 -XX:+PerfDisableSharedMem -XX:MaxTenuringThreshold=1";
 in
@@ -93,6 +93,7 @@ in
     projects.minecraft-20.settings = {
       project.name = "minecraft-20";
 
+      # Attach directly to the existing br0 host bridge
       networks.lan-bridge = {
         name = "lan-bridge";
         driver = "macvlan";
@@ -107,9 +108,9 @@ in
         service = {
           image = "tailscale/tailscale:latest";
           
+          # Assign a dedicated, distinct IP for the Tailscale sidecar container
           networks.lan-bridge = {
-            # Dedicated IP for mc-ts router (or share sequoia LAN IP if unassigned)
-            ipv4_address = fleetSettings.sequoia.lan; 
+            ipv4_address = fleetSettings.sequoia.containers.mc-20.router;
           };
 
           volumes = [
@@ -122,7 +123,7 @@ in
             TS_AUTHKEY = "file:///run/secrets/tailscale_key";
             TS_STATEFUL_CONFIG = "true";
             TS_HOSTNAME = "mc-pool-box-20";
-            # Route traffic directly to 1.20.1 container IP (192.168.5.102)
+            # Subnet route advertising the Minecraft container's dedicated LAN IP into Tailscale
             TS_ROUTES = "${fleetSettings.sequoia.containers.mc-20.lan}/32";
           };
           capabilities = { NET_ADMIN = true; };
@@ -139,12 +140,13 @@ in
         service = {
           image = "itzg/minecraft-server:latest";
           
+          # Container gets its dedicated LAN IP on br0
           networks.lan-bridge = {
             ipv4_address = fleetSettings.sequoia.containers.mc-20.lan;
           };
 
           volumes = [
-            "/appdata/minecraft/data:/data"
+            "/appdata/minecraft-20/data:/data"
             "${modpack20-1}:/data/mods"
           ];
 
@@ -166,6 +168,15 @@ in
           restart = "unless-stopped";
         };
       };
+    };
+  };
+
+  systemd.services.arion-minecraft-20 = {
+    after = [ "podman.socket" "podman.service" "network-online.target" ];
+    wants = [ "podman.socket" "network-online.target" ];
+    requires = [ "podman.socket" ];
+    environment = {
+      DOCKER_HOST = "unix:///run/podman/podman.sock";
     };
   };
 }

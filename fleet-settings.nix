@@ -4,15 +4,18 @@
   sequoia = {
     lan = "192.168.5.100";
     tail = "100.123.59.57";
+    shim = "192.168.6.200";
 
     containers = {
       searxng = "192.168.5.101";
       mc-20 = {
         lan = "192.168.5.102";
+        router = "192.168.5.106";
         tail = "";
       };
       mc-26 = {
         lan = "192.168.5.103";
+        router = "192.168.5.104";
         tail = "";
       };
       homeassistant = "192.168.5.105";
@@ -37,8 +40,7 @@
         http = 3080;
         dns = 53;
       };
-
-      # Others
+# Others
       hypermind = 3001;
       hyperswarm = 3002;
     };
@@ -65,6 +67,7 @@
     
     ports = {
       glances = 61208;
+      prometheus = 9100;
     };
   };
 

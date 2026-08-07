@@ -35,7 +35,6 @@ let
         proxyPass = "http://${fleetSettings.sequoia.containers.homeassistant}:8123";
         proxyWebsockets = true;
         extraConfig = ''
-          proxy_set_header Host $host;
           proxy_set_header Upgrade $http_upgrade;
           proxy_set_header Connection "upgrade";
         '';
@@ -45,8 +44,8 @@ let
     "librechat.home" = {
       locations."/" = {
         proxyPass = "http://${toString fleetSettings.aspen.lan}:${toString fleetSettings.aspen.ports.librechat}";
+        proxyWebsockets = true;
       };
-      proxyWebsockets = true;
     };
 
     "adguard.home" = {
