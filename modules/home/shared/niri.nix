@@ -89,10 +89,6 @@
           hotkey-overlay.title = "Open a Terminal: alacritty";
           action.spawn = [ "alacritty" ];
         };
-        "Mod+P" = {
-          hotkey-overlay.title = "Open browser: qutebrowser";
-          action.spawn = [ "qutebrowser" ];
-        };
         "Mod+Q" = {
           hotkey-overlay.title = "Open browser: Zen";
           action.spawn = [ "zen" ];
@@ -216,7 +212,7 @@
         "Mod+WheelScrollDown" = { cooldown-ms = 150; action.focus-workspace-down = { }; };
         "Mod+WheelScrollUp" = { cooldown-ms = 150; action.focus-workspace-up = { }; };
         "Mod+Ctrl+WheelScrollDown" = { cooldown-ms = 150; action.move-column-to-workspace-down = { }; };
-        "Mod+Ctrl+WheelScrollUp" = { cooldown-ms = 150; action.move-column-to-workspace-up = { }; };
+       "Mod+Ctrl+WheelScrollUp" = { cooldown-ms = 150; action.move-column-to-workspace-up = { }; };
 
         "Mod+Shift+WheelScrollDown".action.focus-column-right = { };
         "Mod+Shift+WheelScrollUp".action.focus-column-left = { };
@@ -270,6 +266,7 @@
 
         # Screen Capture & Escapes
         "Print".action.screenshot = { };
+        "Mod+P".action.screenshot = { };
         "Ctrl+Print".action.screenshot-screen = { };
         "Alt+Print".action.screenshot-window = { };
 

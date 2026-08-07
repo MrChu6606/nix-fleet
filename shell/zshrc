@@ -25,3 +25,18 @@ prompt pure
 if [ -f "$HOME/.zsh_aliases" ]; then
     source "$HOME/.zsh_aliases"
 fi
+
+# Helper function to check for active Nix / devenv environments
+nix_shell_status() {
+  if [ -n "$DEVENV_STATE" ]; then
+    echo "%F{cyan}☕ devenv%f "
+  elif [ -n "$IN_NIX_SHELL" ]; then
+    echo "%F{blue}❄️ nix-shell%f "
+  fi
+}
+
+# Enable prompt expansion
+setopt PROMPT_SUBST
+
+# Inject the function output into your prompt
+PROMPT='$(nix_shell_status)'"$PROMPT"

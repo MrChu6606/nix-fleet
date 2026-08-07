@@ -8,7 +8,6 @@
     prismlauncher # minecraft
     unzip
     zip
-    vscode # ide
     pavucontrol # audio
     brightnessctl # brightness
     vesktop # discord

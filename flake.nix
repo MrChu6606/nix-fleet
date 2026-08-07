@@ -82,6 +82,15 @@
     mkHome = import ./lib/mkHome.nix { inherit home-manager; };
 
   in {
+    templates = {
+      # initialize a devenv with
+      # nix flake init -t ~/nix-fleet#java
+      java = {
+        path = ./devFlakes/java;
+        description = "CS Java Dev Environment with devenv, direnv, and Checkstyle";
+      };
+    };
+
     nixosConfigurations = {
 
       lotus = mkHost {

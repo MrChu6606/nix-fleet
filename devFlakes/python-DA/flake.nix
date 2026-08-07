@@ -1,1 +1,0 @@
-/home/nic/pytest/flake.nix

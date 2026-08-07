@@ -1,7 +1,13 @@
 { pkgs, ... }: {
   # Enables direnv
-  programs.direnv.enable = true;
-  programs.direnv.nix-direnv.enable = true;
+  programs = {
+    direnv = {
+      enable = true;
+      nix-direnv.enable = true;
+      enableZshIntegration = true;
+    };
+    dconf.enable = true;
+  };
 
   # Sets kernel to zen kernel
   boot.kernelPackages = pkgs.linuxPackages_zen;
@@ -15,5 +21,6 @@
 
   # Enable PCSC daemon for YubiKey smart card support
   services.pcscd.enable = true;
+
 
 }
