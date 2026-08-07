@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 
 let
   defaultCheckstyleXml = ''
@@ -18,22 +18,27 @@ let
       </module>
     </module>
   '';
+
+  vscodeExtensionsJson = ''
+    {
+      "recommendations": [
+        "vscjava.vscode-java-pack",
+        "shengchen.vscode-checkstyle"
+      ]
+    }
+  '';
 in
 {
   languages.java = {
     enable = true;
-    jdk = pkgs.jdk21;
+    jdk.package = pkgs.jdk21;
   };
 
   env = {
-    JAVA_HOME = "${pkgs.jdk21}";
+    JAVA_HOME = lib.mkForce "${pkgs.jdk21}";
     CHECKSTYLE_CONFIG = "${toString ./.}/checkstyle.xml";
+    NIX_CFLAGS_COMPILE = "-Wno-error"; # Standard way to set compile flags in devenv
   };
-
-  vscode.extensions = [
-    "vscjava.vscode-java-pack"
-    "shengchen.vscode-checkstyle"
-  ];
 
   enterShell = ''
     # Create .envrc if it doesn't exist
@@ -47,6 +52,14 @@ in
       cat << 'EOF' > checkstyle.xml
 ${defaultCheckstyleXml}EOF
       echo "Created starter checkstyle.xml configuration."
+    fi
+
+    # Create .vscode/extensions.json if it doesn't exist
+    if [ ! -f .vscode/extensions.json ]; then
+      mkdir -p .vscode
+      cat << 'EOF' > .vscode/extensions.json
+${vscodeExtensionsJson}EOF
+      echo "Created .vscode/extensions.json workspace recommendations."
     fi
 
     echo "☕ Java Development Shell Ready"

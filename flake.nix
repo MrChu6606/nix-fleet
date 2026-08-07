@@ -66,7 +66,6 @@
     nixpkgs-unstable,
     nvf,
     home-manager,
-    sops-nix,
     ...
   }@inputs: let
 
