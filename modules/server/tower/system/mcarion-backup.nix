@@ -21,8 +21,7 @@
         DRIVE_UUID="2867abdf-830d-465c-9104-c14a77a7056d"
         MOUNT_TARGET="/mnt/external_backup"
         DOCKER_VOLUME_DIR="/appdata"
-        BACKUP_NAME="docker_volumes_$(date +%Y%m%d_%H%M%S).tar.gz"
-        ACTIVE_SERVICES=""
+        ACTIVE_SERVICES=$(systemctl list-units --type=service --state=running "arion-*" | gawk '/^arion-/ {print $1}')
 
         # Cleanup function ensures services restart and drive unmounts even on failure
         cleanup() {
@@ -58,9 +57,19 @@
             sleep 2
         fi
 
-        echo "Creating compressed volume archive..."
-        # We allow tar to exit gracefully on minor warnings (e.g., if a file changed while reading)
-        tar -czf "$MOUNT_TARGET/$BACKUP_NAME" -C "$DOCKER_VOLUME_DIR" . || echo "Warning: Tar completed with minor errors, moving on..."
+        # Loop through each subdirectory in /appdata and archive them separately
+        for dir in "$DOCKER_VOLUME_DIR"/*/; do
+            [ -d "$dir" ] || continue
+            
+            SERVICE_NAME=$(basename "$dir")
+            TARGET_DIR="$MOUNT_TARGET/$SERVICE_NAME"
+            mkdir -p "$TARGET_DIR"
+            
+            BACKUP_FILE="$TARGET_DIR/$${SERVICE_NAME}_$(date +%Y%m%d_%H%M%S).tar.gz"
+            
+            echo "Creating compressed volume archive for $SERVICE_NAME..."
+            tar -czf "$BACKUP_FILE" -C "$dir" . || echo "Warning: Tar for $SERVICE_NAME completed with minor errors, moving on..."
+        done
 
         echo "Backup process finished successfully!"
         # The trap will automatically handle restarting services and unmounting the drive here
@@ -75,7 +84,6 @@
       description = "Timer for Docker Arion volume backup";
       wantedBy = [ "timers.target" ];
       timerConfig = {
-        # Fixed the invalid syntax (-2:00:00 to 02:00:00)
         OnCalendar = "*-*-* 02:00:00";
 
         # Ensures the backups run on boot if server was powered off at 2 am

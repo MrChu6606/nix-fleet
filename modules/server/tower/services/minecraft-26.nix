@@ -67,11 +67,12 @@ in
           environment = {
             TS_AUTHKEY = "file:///run/secrets/tailscale_key";
             TS_STATEFUL_CONFIG = "true";
-            TS_HOSTNAME = "mc-pool-box-26";
+            TS_HOSTNAME = "mc-26";
             # Subnet route advertising the Minecraft container's dedicated LAN IP into Tailscale
             TS_ROUTES = "${fleetSettings.sequoia.containers.mc-26.lan}/32";
+            TS_EXTRA_ARGS = "--snat-subnet-routes=true";
           };
-          capabilities = { NET_ADMIN = true; };
+          capabilities = { NET_ADMIN = true; NET_RAW = true; };
 
           sysctls = {
             "net.ipv4.ip_forward" = "1";
@@ -98,7 +99,7 @@ in
           environment = {
             EULA = "TRUE";
             TYPE = "FABRIC";
-            VERSION = "1.20.1";
+            VERSION = "26.1.2";
             MEMORY = "12G";
             JVM_OPTS = aikarFlags;
             ENABLE_AUTOPAUSE = "TRUE";

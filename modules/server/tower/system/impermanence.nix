@@ -6,7 +6,7 @@
       "/var/log"            # Systemd journal logs
       "/var/lib/nixos"      # Keeps UID/GID allocations consistent
       "/var/lib/systemd"    # Systemd state and timers
-      # "/var/lib/docker"   # Uncomment if running Docker
+      "var/lib/tailscale-mc-26"
     ];
 
     files = [

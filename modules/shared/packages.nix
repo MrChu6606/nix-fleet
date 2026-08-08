@@ -1,6 +1,7 @@
 { pkgs, ... }: let
   stable = with pkgs; [
     wget
+    tmux
     git
     fastfetch
     curl
@@ -9,6 +10,9 @@
     sops
     age
     tree
+    usbutils
+    iftop
+    btop
   ];
 in {
   environment.systemPackages = stable;

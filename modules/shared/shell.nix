@@ -10,9 +10,6 @@
 
   environment.systemPackages = with pkgs; [
     pure-prompt
-    usbutils
-    iftop
-    btop
   ];
 
   system.userActivationScripts.linkZsh = {
