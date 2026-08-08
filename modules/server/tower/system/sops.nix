@@ -30,6 +30,8 @@ _: {
         owner = "sabnzbd";
         group = "media";
       };
+
+      restic_media_password = { };
     };
   };
 }
