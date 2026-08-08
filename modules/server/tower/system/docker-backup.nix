@@ -1,20 +1,46 @@
-{ pkgs, ...}: {
+{ pkgs, ... }: {
   systemd = {
-      services.docker-volume-backup = {
+    services.docker-volume-backup = {
       description = "Safely backup Docker/Arion volumes to external drive";
       
-      # Added pkgs.docker here
-      path = [ pkgs.util-linux pkgs.gnutar pkgs.gzip pkgs.systemd pkgs.docker pkgs.gawk ];
+      # Added coreutils, removed need for grep
+      path = [ 
+        pkgs.util-linux 
+        pkgs.gnutar 
+        pkgs.gzip 
+        pkgs.systemd 
+        pkgs.docker 
+        pkgs.gawk 
+        pkgs.coreutils 
+      ];
 
       script = ''
+        # Fail on first error, catch undefined variables, fail in pipelines
+        set -euo pipefail
+
         DRIVE_UUID="2867abdf-830d-465c-9104-c14a77a7056d"
         MOUNT_TARGET="/mnt/external_backup"
         DOCKER_VOLUME_DIR="/appdata"
         BACKUP_NAME="docker_volumes_$(date +%Y%m%d_%H%M%S).tar.gz"
+        ACTIVE_SERVICES=""
 
-        # 1. Find all currently running Arion services before we shut anything down
+        # Cleanup function ensures services restart and drive unmounts even on failure
+        cleanup() {
+          echo "Running cleanup..."
+          if [ -n "$ACTIVE_SERVICES" ]; then
+              echo "Restoring Arion projects..."
+              systemctl start $ACTIVE_SERVICES || true
+          fi
+          cd /
+          mountpoint -q "$MOUNT_TARGET" && umount "$MOUNT_TARGET" || true
+        }
+        
+        # Trap ERR, INT, TERM, EXIT to guarantee cleanup runs
+        trap cleanup EXIT
+
         echo "Identifying active Arion projects..."
-        ACTIVE_SERVICES=$(systemctl list-units --type=service --state=running "arion-*" | gawk '{print $1}' | grep '^arion-')
+        # Simplified to use awk for both matching and extracting
+        ACTIVE_SERVICES=$(systemctl list-units --type=service --state=running "arion-*" | gawk '/^arion-/ {print $1}')
 
         if [ -z "$ACTIVE_SERVICES" ]; then
             echo "No active Arion services found running. Proceeding with backup anyway."
@@ -24,50 +50,35 @@
         mkdir -p "$MOUNT_TARGET"
 
         echo "Mounting external drive by UUID..."
-        if ! mount -U "$DRIVE_UUID" "$MOUNT_TARGET"; then
-            echo "Error: Failed to mount the drive. Exiting."
-            exit 1
-        fi
+        mount -U "$DRIVE_UUID" "$MOUNT_TARGET"
 
-        # Gracefully stop only the services that were actually running
-        if [ ! -z "$ACTIVE_SERVICES" ]; then
-            echo "Stopping active Arion projects:"
-            echo "$ACTIVE_SERVICES"
-            # echo stops them all in a single parallelizable systemd call
+        if [ -n "$ACTIVE_SERVICES" ]; then
+            echo "Stopping active Arion projects: $ACTIVE_SERVICES"
             systemctl stop $ACTIVE_SERVICES
             sleep 2
         fi
 
         echo "Creating compressed volume archive..."
-        if ! tar -czf "$MOUNT_TARGET/$BACKUP_NAME" -C "$DOCKER_VOLUME_DIR" .; then
-            echo "Warning: Tar completed with minor errors, moving on..."
-        fi
-
-        # Bring the exact same services back online cleanly
-        if [ ! -z "$ACTIVE_SERVICES" ]; then
-            echo "Restoring Arion projects..."
-            systemctl start $ACTIVE_SERVICES
-        fi
-
-        echo "Safely unmounting external drive..."
-        cd /
-        umount "$MOUNT_TARGET"
+        # We allow tar to exit gracefully on minor warnings (e.g., if a file changed while reading)
+        tar -czf "$MOUNT_TARGET/$BACKUP_NAME" -C "$DOCKER_VOLUME_DIR" . || echo "Warning: Tar completed with minor errors, moving on..."
 
         echo "Backup process finished successfully!"
+        # The trap will automatically handle restarting services and unmounting the drive here
       '';
       serviceConfig = {
         Type = "oneshot";
         User = "root";
       };
     };
+    
     timers.docker-volume-backup = {
       description = "Timer for Docker Arion volume backup";
       wantedBy = [ "timers.target" ];
       timerConfig = {
-        OnCalendar = "*-*-* -2:00:00";
+        # Fixed the invalid syntax (-2:00:00 to 02:00:00)
+        OnCalendar = "*-*-* 02:00:00";
 
-        # Ensures the backups run on boot if server is powered
-        # off at 2 am
+        # Ensures the backups run on boot if server was powered off at 2 am
         Persistent = true;
       };
     };

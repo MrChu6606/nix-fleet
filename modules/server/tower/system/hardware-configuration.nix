@@ -8,20 +8,38 @@
   boot.kernelModules = [ "kvm-intel" ];
   boot.extraModulePackages = [ ];
 
-  # 1. Root mapped to 16GB of RAM (adjust size as needed)
+  # Supermicro ASPEED BMC framebuffer fix to prevent EFI boot crashes
+  boot.kernelParams = [
+    "console=tty0"
+    "panic=10"
+    "video=efifb:off"
+    "initcall_blacklist=sysfb_init"
+  ];
+
+  # Root mapped to RAM (tmpfs)
   fileSystems."/" = {
-    device = "none";
+    device = "tmpfs";
     fsType = "tmpfs";
     options = [ "defaults" "size=16G" "mode=755" ];
   };
 
-  # 2. Existing ext4 root drive reassigned to /persist
+  # Ext4 root drive mapped to /persist
   fileSystems."/persist" = {
     device = "/dev/disk/by-uuid/d0555a94-cf8f-4d6d-8cff-45ec4ee57abf";
     fsType = "ext4";
-    neededForBoot = true; # CRITICAL: ensures /persist mounts in stage 1 before bind mounts
+    neededForBoot = true; # CRITICAL: ensures /persist mounts in stage 1
   };
 
+  # Persistent Nix Store bind-mounted from /persist
+  # (CRITICAL: Prevents 16GB RAM overflow from nix store allocations)
+  fileSystems."/nix" = {
+    device = "/persist/nix";
+    fsType = "none";
+    options = [ "bind" ];
+    neededForBoot = true;
+  };
+
+  # EFI Boot Partition
   fileSystems."/boot" = {
     device = "/dev/disk/by-uuid/B41B-EF9A";
     fsType = "vfat";

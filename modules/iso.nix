@@ -1,19 +1,23 @@
-{ pkgs, ... }:
+{ pkgs, modulesPath, ... }:
 
 {
   imports = [
     # Import standard minimal NixOS ISO base
-    "${pkgs.path}/nixos/modules/installer/cd-dvd/installation-cd-minimal.nix"
+    "${modulesPath}/installer/cd-dvd/installation-cd-minimal.nix"
   ];
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   # Bootloader & kernel console settings for headless / IPMI / Serial compatibility
-  boot.kernelParams = [ "console=tty0" "console=ttyS0,115200n8" ];
+  boot = {
+    kernelParams = [ "nomodeset" "console=tty0" "console=ttyS0,115200n8" ];
+    loader.grub.gfxmodeEfi = "text";
+    zfs.forceImportRoot = false;
+  };
 
   # Network & Host configuration
   networking.hostName = "nixos-installer";
-  networking.wireless.enable = false; # Avoid conflicts with NetworkManager / wpa_supplicant
+  # networking.wireless.enable = false; # Avoid conflicts with NetworkManager / wpa_supplicant
 
   # Enable OpenSSH server for remote provisioning
   services.openssh = {

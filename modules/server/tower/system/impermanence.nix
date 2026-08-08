@@ -1,4 +1,4 @@
-_: {
+{ ... }: {
   environment.persistence."/persist" = {
     hideMounts = true;
 
@@ -6,7 +6,7 @@ _: {
       "/var/log"            # Systemd journal logs
       "/var/lib/nixos"      # Keeps UID/GID allocations consistent
       "/var/lib/systemd"    # Systemd state and timers
-      # "/var/lib/docker"   # Uncomment if running Docker containers locally outside of /appdata
+      # "/var/lib/docker"   # Uncomment if running Docker
     ];
 
     files = [

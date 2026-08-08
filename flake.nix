@@ -96,6 +96,13 @@
     };
 
     nixosConfigurations = {
+      installer = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        modules = [
+          ./modules/iso.nix
+        ];
+        specialArgs = { inherit inputs; };
+      };
 
       lotus = mkHost {
         hostname = "lotus";
@@ -222,17 +229,6 @@
           ./modules/home/cedar
           inputs.niri.homeModules.niri
         ];
-      };
-    };
-
-    nixosConfigurations = {
-
-      installer = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-        modules = [
-          ./modules/iso.nix
-        ];
-        specialArgs = { inherit inputs; };
       };
     };
   };
