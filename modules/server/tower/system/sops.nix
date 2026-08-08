@@ -31,7 +31,9 @@ _: {
         group = "media";
       };
 
-      restic_media_password = { };
+      restic_media_password = {
+        sopsFile = towerSecrets;
+      };
     };
   };
 }
