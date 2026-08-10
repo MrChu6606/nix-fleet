@@ -279,13 +279,15 @@
       };
     };
   };
-  xdg.configFile.niri-config = lib.mkDefault {
-    target = "niri/config.kdl";
-    source = pkgs.writeText "niri-config.kdl" ''
-      include "${config.home.homeDirectory}/.config/niri/monitors.kdl"
-      include "${config.home.homeDirectory}/.config/niri/noctalia.kdl"
+  xdg = {
+    configFile.niri-config = lib.mkDefault {
+      target = "niri/config.kdl";
+      source = pkgs.writeText "niri-config.kdl" ''
+        include "${config.home.homeDirectory}/.config/niri/monitors.kdl"
+        include "${config.home.homeDirectory}/.config/niri/noctalia.kdl"
 
-      ${config.programs.niri.finalConfig}
-    '';
+        ${config.programs.niri.finalConfig}
+      '';
+    };
   };
 } 

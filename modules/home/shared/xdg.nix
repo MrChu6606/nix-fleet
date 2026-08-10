@@ -1,25 +1,42 @@
-{ config, ... }: {
+{ pkgs, config, ... }: {
   xdg = {
-    # Set default xdg apps
+    enable = true;
+
+    portal = {
+      enable = true;
+
+      extraPortals = [
+        pkgs.xdg-desktop-portal-termfilechooser
+        pkgs.xdg-desktop-portal-gnome
+      ];
+
+      config = {
+        niri = {
+          default = ["termfilechooser" "gnome"];
+
+          "org.freedesktop.impl.portal.ScreenCast" = [ "gnome" ];
+          "org.freedesktop.impl.portal.Screenshot" = [ "gnome" ];
+          "org.freedesktop.impl.portal.FileChooser" = [ "termfilechooser" ];
+        };
+      };
+    };
+
     mimeApps = {
       enable = true;
       defaultApplications = {
-        # set zathura as primary and okular as secondary
-        "application/pdf" = [ 
+        "application/pdf" = [
           "org.pwmt.zathura.desktop"
           "org.kde.okular.desktop"
         ];
       };
     };
 
-    # Termfilechooser configuration
     configFile."xdg-desktop-portal-termfilechooser/config".text = ''
       [filechooser]
       cmd=${config.home.homeDirectory}/.config/xdg-desktop-portal-termfilechooser/yazi-wrapper.sh
       default_dir=$HOME
     '';
 
-    # Termfilechooser wrapper script
     configFile."xdg-desktop-portal-termfilechooser/yazi-wrapper.sh" = {
       executable = true;
       text = ''
@@ -46,7 +63,6 @@
       '';
     };
 
-    # this is not working
     configFile."mimeapps.list".force = true;
   };
 }

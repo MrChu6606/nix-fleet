@@ -26,7 +26,9 @@
       sabnzbd = 8085;
       lidarr = 8686;
       prowlarr = 9696;
-      homeassistant = 8123;
+      homeassistant = 8123; # forced cause docker
+      mosquitto = 1883;
+      zigbee = 8125;
 
       # Infrastructure
       prometheus = {
@@ -91,5 +93,6 @@
     gateway = "192.168.4.1";
     dns = [ "192.168.4.1" "1.1.1.1" ];
     ssid = "rialsplace";
+    tz = "America/New_York";
   };
 }

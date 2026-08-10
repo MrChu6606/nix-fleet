@@ -1,62 +1,115 @@
-{ pkgs, fleetSettings, ... }:
-let
-  haConfigDir = "/var/lib/homeassistant-config";
-in
-{
-  virtualisation.oci-containers.backend = "podman";
+{ fleetSettings, pkgs, ... }:let 
+  mosquittoConf = pkgs.writeText "mosquitto.conf" ''
+    listener 1883 0.0.0.0
+    allow_anonymous true
+  '';
+  z2mConf = pkgs.writeText "configuration.yaml" ''
+    homeassistant: true
+    permit_join: false
+    mqtt:
+      base_topic: zigbee2mqtt
+      server: mqtt://mosquitto:${toString fleetSettings.sequoia.ports.mosquitto}
+    serial:
+      port: /dev/ttyACM0
+      adapter: zstack
+    frontend:
+      port: 8080
+      host: 0.0.0.0
+    advanced:
+      network_key: GENERATE
+  '';
+in {
+  virtualisation.arion = {
+    backend = "podman-socket";
+
+    projects.home-automation.settings = {
+      project.name = "home-automation";
+
+      services = {
+        homeassistant = {
+          service = {
+            container_name = "homeassistant";
+            image = "ghcr.io/home-assistant/home-assistant:stable";
+
+            restart = "unless-stopped";
+
+            network_mode = "host";
+
+            privileged = true;
+
+            volumes = [
+              "/appdata/home-automation/home-assistant:/config"
+              "/etc/localtime:/etc/localtime:ro"
+              "/run/dbus:/run/dbus:ro"
+            ];
+
+            environment = {
+              TZ = toString fleetSettings.network.tz;
+            };
+          };
+        };
+
+        mosquitto = {
+          service = {
+            container_name = "mosquitto";
+            image = "eclipse-mosquitto:2";
+
+            restart = "unless-stopped";
+
+            ports = [
+              "127.0.0.1:${toString fleetSettings.sequoia.ports.mosquitto}:1883"
+            ];
+
+            volumes = [
+              "/appdata/home-automation/mosquitto/data:/mosquitto/data"
+              "/appdata/home-automation/mosquitto/log:/mosquitto/log"
+              "${mosquittoConf}:/mosquitto/config/mosquitto.conf:ro"
+            ];
+          };
+        };
+
+        zigbee2mqtt = {
+          service = {
+            container_name = "zigbee2mqtt";
+            image = "ghcr.io/koenkk/zigbee2mqtt:latest";
+
+            restart = "unless-stopped";
+
+            ports = [
+              "127.0.0.1:${toString fleetSettings.sequoia.ports.zigbee}:8080"
+            ];
+
+            volumes = [
+              "/appdata/home-automation/zigbee2mqtt:/app/data"
+              "/run/udev:/run/udev:ro"
+            ];
+
+            devices = [
+              "/dev/serial/by-id/usb-SONOFF_SONOFF_Dongle_Plus_CC2674P10_90352febbffef01197d3f41f364a576b-if00-port0:/dev/ttyACM0"
+            ];
+
+            environment = {
+              TZ = toString fleetSettings.network.tz;
+            };
+
+            depends_on = [
+              "mosquitto"
+            ];
+          };
+        };
+      };
+    };
+  };
 
   systemd.tmpfiles.rules = [
-    "d ${haConfigDir} 0755 root root -"
+    "d /appdata/home-automation 0755 root root -"
+    "d /appdata/home-automation/home-assistant 0755 root root -"
+    "d /appdata/home-automation/mosquitto 0755 root root -"
+    "d /appdata/home-automation/mosquitto/data 0755 root root -"
+    "d /appdata/home-automation/mosquitto/log 0755 root root -"
+    "d /appdata/home-automation/zigbee2mqtt 0755 root root -"
+    "C /appdata/home-automation/zigbee2mqtt/configuration.yaml 0644 root root - ${z2mConf}"
   ];
 
-  # Declaratively overwrite configuration.yaml with standard ASCII spaces and clean YAML structure
-  systemd.services.homeassistant-config-init = {
-    description = "Initialize Home Assistant configuration.yaml with reverse proxy settings";
-    before = [ "podman-homeassistant.service" ];
-    wantedBy = [ "multi-user.target" ];
-    serviceConfig = {
-      Type = "oneshot";
-      RemainAfterExit = true;
-      ExecStart = pkgs.writeShellScript "init-ha-config" ''
-        CONFIG_FILE="${haConfigDir}/configuration.yaml"
-        
-        # Overwrite file to remove non-breaking spaces, duplicate keys, or malformed sections
-        cat <<EOF > "$CONFIG_FILE"
-# Home Assistant Configuration
-default_config:
-
-http:
-  use_x_forwarded_for: true
-  trusted_proxies:
-    - 192.168.4.0/22
-    - ${fleetSettings.sequoia.lan}
-EOF
-        chmod 644 "$CONFIG_FILE"
-      '';
-    };
-  };
-
-  # Container Definition
-  systemd.services.podman-homeassistant = {
-    after = [ "homeassistant-config-init.service" ];
-    requires = [ "homeassistant-config-init.service" ];
-  };
-
-  virtualisation.oci-containers.containers.homeassistant = {
-    image = "ghcr.io/home-assistant/home-assistant:stable";
-    environment = {
-      TZ = "America/New_York";
-    };
-    volumes = [
-      "${haConfigDir}:/config"
-    ];
-    extraOptions = [
-      "--network=host"
-    ];
-  };
-
-  services.udev.extraRules = ''
-    KERNEL=="ttyUSB*", MODE="0666"
-    KERNEL=="ttyACM*", MODE="0666"
-  '';
+  networking.firewall.allowedTCPPorts = [ fleetSettings.sequoia.ports.homeassistant ];
 }

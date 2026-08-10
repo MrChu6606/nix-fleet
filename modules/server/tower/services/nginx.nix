@@ -19,7 +19,7 @@ let
     "grafana"
     "glances"
     "lidarr"
-    "homeassistant"
+    "zigbee"
   ]);
 
   # Non-standard or unique mappings that break the cookie-cutter pattern
@@ -31,20 +31,16 @@ let
       };
     };
 
-    #    "homeassistant.home" = {
-    #      locations."/" = {
-    #        proxyPass = "http://${fleetSettings.sequoia.containers.homeassistant}:8123";
-    #        proxyWebsockets = true;
-    #        extraConfig = ''
-    #          proxy_set_header Upgrade $http_upgrade;
-    #          proxy_set_header Connection "upgrade";
-    #        '';
-    #      };
-    #    };
-
     "librechat.home" = {
       locations."/" = {
         proxyPass = "http://${toString fleetSettings.aspen.lan}:${toString fleetSettings.aspen.ports.librechat}";
+        proxyWebsockets = true;
+      };
+    };
+
+    "homeassistant.home" = {
+      locations."/" = {
+        proxyPass = "http://127.0.0.1:${toString fleetSettings.sequoia.ports.homeassistant}";
         proxyWebsockets = true;
       };
     };
