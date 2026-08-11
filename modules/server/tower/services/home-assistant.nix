@@ -4,20 +4,27 @@
     allow_anonymous true
   '';
   z2mConf = pkgs.writeText "configuration.yaml" ''
-    homeassistant: true
-    permit_join: false
-    mqtt:
-      base_topic: zigbee2mqtt
-      server: mqtt://mosquitto:${toString fleetSettings.sequoia.ports.mosquitto}
-    serial:
-      port: /dev/ttyACM0
-      adapter: zstack
-    frontend:
-      port: 8080
-      host: 0.0.0.0
-    advanced:
-      network_key: GENERATE
-  '';
+  version: 5
+  mqtt:
+    base_topic: zigbee2mqtt
+    server: mqtt://mosquitto:1883
+  serial:
+    port: /dev/ttyACM0
+    adapter: zstack
+  advanced:
+    log_level: info
+    channel: 11
+    network_key: GENERATE
+    pan_id: GENERATE
+    ext_pan_id: GENERATE
+    enable_external_js: false
+  frontend:
+    enabled: true
+    port: 8080
+  homeassistant:
+    enabled: true
+  onboarding: false
+'';
 in {
   virtualisation.arion = {
     backend = "podman-socket";

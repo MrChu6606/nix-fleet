@@ -84,6 +84,7 @@
       piper = 10200;
       wakeWord = 10400;
       glances = 61208;
+      prometheus = 9100;
     };
   };
 

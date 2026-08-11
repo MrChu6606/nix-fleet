@@ -1,7 +1,4 @@
-{ pkgs, ... }: let
-
-  DISPLAY = "HDMI-A-1";
-in {
+{ pkgs, ... }: {
   # Systemd services for controlling screen power
   systemd = {
     services = {
@@ -9,12 +6,14 @@ in {
         description = "Turn off dashboard screen";
         serviceConfig = {
           Type = "oneshot";
-          # Runs wlr-randr or fallback to kernel console blanking if no Wayland server is active
+          # Turns off the display using the sysfs backlight/graphics interface
           ExecStart = pkgs.writeShellScript "display-off" ''
-            if [ -n "$WAYLAND_DISPLAY" ] || [ -S "/run/user/1000/wayland-0" ]; then
-              WAYLAND_DISPLAY=wayland-0 XDG_RUNTIME_DIR=/run/user/1000 ${pkgs.wlr-randr}/bin/wlr-randr --output ${DISPLAY} --off
-            else
-              echo 1 > /sys/class/graphics/fb0/blank 2>/dev/null || true
+            # Try turning off via vc4 DRM (Raspberry Pi specific)
+            echo 4 > /sys/class/graphics/fb0/blank 2>/dev/null || true
+            
+            # Alternatively, turn off the backlight if it's a touchscreen
+            if [ -f /sys/class/backlight/rpi_backlight/bl_power ]; then
+              echo 1 > /sys/class/backlight/rpi_backlight/bl_power
             fi
           '';
         };
@@ -25,33 +24,12 @@ in {
         serviceConfig = {
           Type = "oneshot";
           ExecStart = pkgs.writeShellScript "display-on" ''
-            if [ -n "$WAYLAND_DISPLAY" ] || [ -S "/run/user/1000/wayland-0" ]; then
-              WAYLAND_DISPLAY=wayland-0 XDG_RUNTIME_DIR=/run/user/1000 ${pkgs.wlr-randr}/bin/wlr-randr --output ${DISPLAY} --on
-            else
-              echo 0 > /sys/class/graphics/fb0/blank 2>/dev/null || true
+            echo 0 > /sys/class/graphics/fb0/blank 2>/dev/null || true
+            
+            if [ -f /sys/class/backlight/rpi_backlight/bl_power ]; then
+              echo 0 > /sys/class/backlight/rpi_backlight/bl_power
             fi
           '';
-        };
-      };
-    };
-
-    # Schedule Timers for Bedtime / Wake-up
-    # Turn OFF at 10:30 PM (22:30)
-    timers = {
-      display-off = {
-        wantedBy = [ "timers.target" ];
-        timerConfig = {
-          OnCalendar = "*-*-* 22:30:00";
-          Persistent = true;
-        };
-      };
-
-      # Turn ON at 07:00 AM
-      display-on = {
-        wantedBy = [ "timers.target" ];
-        timerConfig = {
-          OnCalendar = "*-*-* 07:00:00";
-          Persistent = true;
         };
       };
     };

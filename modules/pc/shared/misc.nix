@@ -1,6 +1,6 @@
 { pkgs, ... }: {
   programs = {
-   dconf.enable = true;
+    dconf.enable = true;
   };
 
   # Sets kernel to zen kernel
