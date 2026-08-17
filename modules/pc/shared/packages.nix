@@ -12,6 +12,7 @@
     brightnessctl # brightness
     vesktop # discord
     tailspin # log highlighter
+    wiremix # audio output tui
   ];
 
   unstable = with pkgs.unstable; [

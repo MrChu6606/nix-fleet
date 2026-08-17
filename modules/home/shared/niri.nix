@@ -15,7 +15,7 @@
           tap = true;
           natural-scroll = true;
         };
-        focus-follows-mouse.max-scroll-amount = "0%";
+        focus-follows-mouse.max-scroll-amount = "10%";
 
         power-key-handling.enable = false;
       };
@@ -157,6 +157,8 @@
         };
 
         "XF86PowerOff".action.spawn = [ "noctalia-shell" "ipc" "call" "lockScreen" "lock" ];
+
+        # Mouse binds
 
         # Navigation & Focus
         "Mod+O" = {
