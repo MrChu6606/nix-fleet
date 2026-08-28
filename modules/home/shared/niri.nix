@@ -91,7 +91,7 @@
         };
         "Mod+Q" = {
           hotkey-overlay.title = "Open browser: Zen";
-          action.spawn = [ "zen" ];
+          action.spawn = [ "zen-twilight" ];
         };
         "Mod+E" = {
           hotkey-overlay.title = "Open file manager: Yazi";

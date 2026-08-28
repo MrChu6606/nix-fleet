@@ -224,6 +224,7 @@
           inputs.niri.homeModules.niri
           inputs.zen-browser.homeModules.twilight
         ];
+        extraSpecialArgs = { inherit nur; };
       };
 
       "nic@cedar" = {
@@ -234,6 +235,7 @@
           inputs.niri.homeModules.niri
           inputs.zen-browser.homeModules.twilight
         ];
+        extraSpecialArgs = { inherit nur; };
       };
     };
   };
