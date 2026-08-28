@@ -720,7 +720,7 @@
     },
     "wallpaper": {
         "automationEnabled": true,
-        "directory": "/home/nic/nix-fleet/Wallpapers",
+        "directory": "/home/nic/nix-fleet/assets/wallpapers",
         "enableMultiMonitorDirectories": false,
         "enabled": true,
         "favorites": [

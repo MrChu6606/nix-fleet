@@ -43,7 +43,7 @@ in
         search-by-image
         addy_io
         return-youtube-dislikes
-        betterttv
+        # betterttv # requires unfree software
         twitch-auto-points
       ];
 
@@ -57,12 +57,11 @@ in
         settings = [
           {
             name = "Basic Stuff";
-            menu = true;
             bookmarks = [
               {
                 name = "Nix Search";
                 url = "https://search.nixos.org";
-                keywork = "nix";
+                keyword = "nix";
               }
               {
                 name = "Gemini";
