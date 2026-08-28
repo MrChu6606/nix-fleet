@@ -98,28 +98,29 @@ in
       # Native Zen Spaces with custom icons
       spaces = {
 
+        # THESE SVGS ARE NOT WORKING
         "General" = {
           id = "6020ca97-2c4a-4e27-9d8a-df0a17391eab";
           position = 1000;
-          icon = "chrome://browser/skin/settings.svg";
+          icon = "../../../assets/icons/general-office-rising-star-svgrepo-com.svg";
         };
 
         "School" = {
           id = "d6b55af5-965d-4cd8-91c3-b9dda7ffa54e";
           position = 2000;
-          icon = "chrome://global/skin/icons/edit.svg";
+          icon = "../../../assets/icons/school-flag-svgrepo-com.svg";
         };
 
         "Server" = {
           id = "621a8938-ed42-489c-8628-01e9558881bc";
           position = 3000;
-          icon = "chrome://browser/skin/developer.svg";
+          icon = "../../../assets/icons/laptop-check-alt-svgrepo-com.svg";
         };
 
         "Reading" = {
           id = "c962d50f-ed1b-4807-9f44-cdfecebd5219";
           position = 4000;
-          icon = "chrome://browser/skin/bookmark.svg";
+          icon = "../../../assets/icons/book-svgrepo-com.svg";
         };
 
       };
