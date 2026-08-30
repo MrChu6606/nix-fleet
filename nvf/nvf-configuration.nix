@@ -162,8 +162,6 @@
       neogit.enable = true;
     };
 
-    minimap.codewindow.enable = false;
-
     dashboard.alpha.enable = true;
 
     notify.nvim-notify.enable = true;
