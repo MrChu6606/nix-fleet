@@ -15,6 +15,8 @@ pkgsInput.lib.nixosSystem {
 
   pkgs = import pkgsInput {
     inherit system overlays;
+    # does this work? no
+    # stdenv.hostPlatform.system = system;
     config = {
       inherit cudaSupport;
       allowUnfree = true;
