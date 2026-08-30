@@ -18,6 +18,11 @@ in
         "zen.workspaces.continue-where-left-off" = true;
         "zen.view.compact.hide-tabbar" = true;
         "zen.urlbar.behavior" = "float";
+
+        # Enable wayland transparency flags
+        "widget.transparent-windows" = true;
+        "zen.widget.linux.transparency" = true;
+        "browser.tabs.allow_transparent_browser" = true;
       };
 
       # Native Zen Theme Store Mods
@@ -128,10 +133,6 @@ in
       # Dynamic Noctalia imports
       userChrome = ''
         @import url("file://${config.xdg.cacheHome}/noctalia/zen-browser/zen-userChrome.css");
-      '';
-
-      userContent = ''
-        @import url("file://${config.xdg.cacheHome}/noctalia/zen-browser/zen-userContent.css");
       '';
     };
   };

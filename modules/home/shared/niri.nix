@@ -79,6 +79,10 @@
           default-column-width = { fixed = 1000; };
           default-window-height = { fixed = 650; };
         }
+        {
+          matches = [ {app-id = "zen-twilight"; } ];
+          opacity = 0.90;
+        }
       ];
 
       # --- Keybindings ---
