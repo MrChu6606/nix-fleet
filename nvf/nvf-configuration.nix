@@ -39,12 +39,12 @@
     };
 
     treesitter = {
-        enable = true;
-        context.enable = true;
-        autotagHtml = true;
-        indent.enable = true;
-        highlight.enable = true;
-        addDefaultGrammars = true;
+      enable = true;
+      context.enable = true;
+      autotagHtml = true;
+      indent.enable = true;
+      highlight.enable = true;
+      addDefaultGrammars = true;
     };
 
     statusline = {
@@ -88,9 +88,30 @@
         css.enable = true;
         sql.enable = true;
         bash.enable = true;
-        markdown.enable = true;
         yaml.enable = true;
         json.enable = true;
+
+        markdown = {
+          enable = true;
+          extensions.render-markdown-nvim = {
+            enable = true;
+            setupOpts = {
+              # Render dynamically on load
+              enabled = true;
+
+              # reveal raw syntax when cursor sits on the line
+              anti_conceal.enabled = true;
+
+              checkbox = {
+                enabled = true;
+              };
+              
+              heading = { enabled = true; };
+              code = { enabled = true; };
+              bullet = { enabled = true; };
+            };
+          };
+        };
     };
 
     autopairs.nvim-autopairs.enable = true; # Autobrackets
@@ -178,10 +199,10 @@
     };
 
     options = {
-      # 2-space indents
-      tabstop = 4;
-      softtabstop = 4;
-      shiftwidth = 4;
+      # Indents
+      tabstop = 2;
+      softtabstop = 2;
+      shiftwidth = 2;
       expandtab = true;
       autoindent = true;
       smartindent = true;
@@ -196,6 +217,9 @@
       undolevels = 10000;
       swapfile = false;
       backup = true;
+
+      conceallevel = 2;
+      concealcursor = "nc";
     };
 
     lazy.enable = false;

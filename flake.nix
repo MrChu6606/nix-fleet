@@ -14,7 +14,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # Official NixOS hardware module replaces raspi5-nix
+    nur = {
+      url = "github:nix-community/NUR";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
+
     nixos-hardware = {
       url = "github:NixOS/nixos-hardware/master";
     };
@@ -31,7 +35,7 @@
     };
 
     zen-browser = {
-      url = "github:youwen5/zen-browser-flake";
+      url = "github:0xc000022070/zen-browser-flake";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -68,6 +72,7 @@
     nixpkgs-unstable,
     nvf,
     home-manager,
+    nur,
     ...
   }@inputs: let
 
@@ -125,7 +130,6 @@
         ];
         extraSpecialArgs = { 
           inherit nvfFN;
-          zenPkg = inputs.zen-browser.packages."x86_64-linux".default;
         };
       };
 
@@ -147,7 +151,6 @@
         ];
         extraSpecialArgs = { 
           inherit nvfFN;
-          zenPkg = inputs.zen-browser.packages."x86_64-linux".default;
         };
       };
 
@@ -219,7 +222,9 @@
           ./modules/home/lotus
           ./modules/home/shared
           inputs.niri.homeModules.niri
+          inputs.zen-browser.homeModules.twilight
         ];
+        extraSpecialArgs = { inherit nur; };
       };
 
       "nic@cedar" = {
@@ -228,7 +233,9 @@
           ./modules/home/shared
           ./modules/home/cedar
           inputs.niri.homeModules.niri
+          inputs.zen-browser.homeModules.twilight
         ];
+        extraSpecialArgs = { inherit nur; };
       };
     };
   };

@@ -1,4 +1,4 @@
-{ pkgs, nvfFN, zenPkg, ... }: let
+{ pkgs, nvfFN, ... }: let
   stable = with pkgs; [
     rclone
     ripgrep
@@ -12,6 +12,7 @@
     brightnessctl # brightness
     vesktop # discord
     tailspin # log highlighter
+    wiremix # audio output tui
   ];
 
   unstable = with pkgs.unstable; [
@@ -21,7 +22,7 @@
   
   nvfPkg = nvfFN pkgs.unstable;
 in {
-  environment.systemPackages = stable ++ unstable ++ [ nvfPkg zenPkg ];
+  environment.systemPackages = stable ++ unstable ++ [ nvfPkg ];
 
   services.flatpak = {
     enable = true;

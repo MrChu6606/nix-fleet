@@ -1,11 +1,9 @@
 {
   pkgs,
   nvfFN,
-  zenPkg,
   ...
 }: let
   stable = with pkgs; [
-    qutebrowser
     mpv # terminal video player
     yt-dlp # yt vid downloader
     streamlink # way to watch twitch ad free sorta
@@ -39,5 +37,5 @@
   nvfPkg = nvfFN pkgs.unstable;
 
 in {
-  environment.systemPackages = stable ++ unstable ++ [ nvfPkg zenPkg ];
+  environment.systemPackages = stable ++ unstable ++ [ nvfPkg ];
 }
