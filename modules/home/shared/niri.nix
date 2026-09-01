@@ -34,6 +34,7 @@
         
           focus-ring = {
             width = 4;
+          # active.color = "#e4a068";
           };
         
         # border.off = true;
@@ -285,15 +286,26 @@
       };
     };
   };
-  xdg = {
-    configFile.niri-config = lib.mkDefault {
-      target = "niri/config.kdl";
-      source = pkgs.writeText "niri-config.kdl" ''
-        include "${config.home.homeDirectory}/.config/niri/monitors.kdl"
-        include "${config.home.homeDirectory}/.config/niri/noctalia.kdl"
 
-        ${config.programs.niri.finalConfig}
-      '';
-    };
+  xdg.configFile = {
+    "niri/full-config.kdl".text = ''
+      include "${config.home.homeDirectory}/.config/niri/config.kdl"
+      include "${config.home.homeDirectory}/.config/niri/noctalia.kdl"
+      include "${config.home.homeDirectory}/.config/niri/monitors.kdl"
+    '';
   };
+
+  home.sessionVariables.NIRI_CONFIG =
+    "${config.home.homeDirectory}/.config/niri/full-config.kdl";
+
+  systemd.user.sessionVariables.NIRI_CONFIG =
+  "${config.home.homeDirectory}/.config/niri/full-config.kdl";
+
+  # Create monitors.kdl for monique
+  home.activation.niriMonitorsFile = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    mkdir -p "${config.home.homeDirectory}/.config/niri"
+    if [ ! -e "${config.home.homeDirectory}/.config/niri/monitors.kdl" ]; then
+      $DRY_RUN_CMD touch "${config.home.homeDirectory}/.config/niri/monitors.kdl"
+    fi
+  '';
 } 

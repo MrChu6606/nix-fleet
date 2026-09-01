@@ -35,7 +35,7 @@ in
   };
 
   env = {
-    JAVA_HOME = lib.mkForce "${pkgs.jdk21}";
+    #JAVA_HOME = lib.mkForce "${pkgs.jdk21}";
     CHECKSTYLE_CONFIG = "${toString ./.}/checkstyle.xml";
     NIX_CFLAGS_COMPILE = "-Wno-error"; # Standard way to set compile flags in devenv
   };

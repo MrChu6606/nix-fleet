@@ -17,6 +17,7 @@
         "vim.leader" = "<space>";
         "workbench.colorTheme" = "Default Dark Modern";
         "direnv.status.show" = "warning";
+        "keyboard.dispatch" = "keyCode";
       };
     };
   };

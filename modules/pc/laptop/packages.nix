@@ -22,13 +22,10 @@
     clamav # idk what this is
     poppler-utils
     kdePackages.okular # pdf editor
-    flameshot # screen shot tool (i hate it)
-    grim # ss tool dependency
     imagemagick # actual magic
     qalculate-qt # calculator
     fd
     nmap
-    home-manager
   ];
 
   unstable = with pkgs.unstable; [
