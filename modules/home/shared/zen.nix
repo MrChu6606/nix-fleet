@@ -15,6 +15,10 @@ in
 
     profiles.default = {
       settings = {
+        "browser.startup.page" = 3; # 3 = Restore previous session
+        "browser.sessionstore.resume_from_crash" = true;
+
+        # Zen-specific workspace tab persistence
         "zen.workspaces.continue-where-left-off" = true;
         "zen.view.compact.hide-tabbar" = true;
         "zen.urlbar.behavior" = "float";
@@ -107,25 +111,25 @@ in
         "General" = {
           id = "6020ca97-2c4a-4e27-9d8a-df0a17391eab";
           position = 1000;
-          icon = "../../../assets/icons/general-office-rising-star-svgrepo-com.svg";
+          icon = "https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/star.svg";
         };
 
         "School" = {
           id = "d6b55af5-965d-4cd8-91c3-b9dda7ffa54e";
           position = 2000;
-          icon = "../../../assets/icons/school-flag-svgrepo-com.svg";
+          icon = "https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/graduation-cap.svg";
         };
 
         "Server" = {
           id = "621a8938-ed42-489c-8628-01e9558881bc";
           position = 3000;
-          icon = "../../../assets/icons/laptop-check-alt-svgrepo-com.svg";
+          icon = "https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/server.svg";
         };
 
         "Reading" = {
           id = "c962d50f-ed1b-4807-9f44-cdfecebd5219";
           position = 4000;
-          icon = "../../../assets/icons/book-svgrepo-com.svg";
+          icon = "https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/book-open.svg";
         };
 
       };
@@ -133,6 +137,12 @@ in
       # Dynamic Noctalia imports
       userChrome = ''
         @import url("file://${config.xdg.cacheHome}/noctalia/zen-browser/zen-userChrome.css");
+
+        /* Force sidebar icons to white */
+        .zen-workspace-icon,
+        [class*="workspace"] img {
+          filter: brightness(0) invert(1) !important;
+        }
       '';
     };
   };

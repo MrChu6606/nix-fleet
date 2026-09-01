@@ -13,6 +13,7 @@
     vesktop # discord
     tailspin # log highlighter
     wiremix # audio output tui
+    home-manager # dont delete this
   ];
 
   unstable = with pkgs.unstable; [

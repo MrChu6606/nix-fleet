@@ -22,3 +22,13 @@ vim.api.nvim_create_autocmd("FileType", {
     vim.opt_local.expandtab = true
   end,
 })
+
+-- Markdown → soft line wrap
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = {"markdown", "text"},
+  callback = function()
+    vim.opt_local.wrap = true;
+    vim.opt_local.linebreak = true;
+    vim.opt_local.breakindent = true;
+  end,
+})

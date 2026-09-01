@@ -1,5 +1,5 @@
 { pkgs, ... }: {
-  programs.vscode.profiles.default = {
+  programs.vscode = {
     enable = true;
     package = pkgs.vscode;
     
@@ -17,6 +17,7 @@
         "vim.leader" = "<space>";
         "workbench.colorTheme" = "Default Dark Modern";
         "direnv.status.show" = "warning";
+        "keyboard.dispatch" = "keyCode";
       };
     };
   };
