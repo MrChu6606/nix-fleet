@@ -96,6 +96,11 @@ in
               }
             ];
           }
+          {
+            name = "School";
+            url = "https://runestone.academy/ns/books/published/JMU_CS_345_F26_Riley/frontmatter.html";
+            keyword = "gitkit";
+          }
         ];
       };
 

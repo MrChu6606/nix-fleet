@@ -1,5 +1,5 @@
 { pkgs, ... }: {
-  programs.vscode.profiles.default = {
+  programs.vscode = {
     enable = true;
     package = pkgs.vscode;
     
