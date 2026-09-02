@@ -344,12 +344,6 @@
             {
                 "name": "eDP-1",
                 "widgets": [
-                    {
-                        "id": "Weather",
-                        "showBackground": true,
-                        "x": 1183,
-                        "y": 70
-                    }
                 ]
             },
             {
@@ -759,7 +753,7 @@
         "wallhavenCategories": "111",
         "wallhavenOrder": "desc",
         "wallhavenPurity": "100",
-        "wallhavenQuery": "avatar",
+        "wallhavenQuery": "totoro",
         "wallhavenRatios": "",
         "wallhavenResolutionHeight": "",
         "wallhavenResolutionMode": "atleast",

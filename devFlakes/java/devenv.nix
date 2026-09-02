@@ -1,4 +1,4 @@
-{ pkgs, lib, ... }:
+{ pkgs, ... }:
 
 let
   defaultCheckstyleXml = ''
@@ -48,7 +48,7 @@ in
     fi
 
     # Create checkstyle.xml if it doesn't exist
-    if [ ! -f checkstyle.xml ]; then
+      if [ ! -f checkstyle.xml ] && [ -z "$(find .vscode -maxdepth 2 -iname "*checkstyle*.xml" 2>/dev/null)" ]; then
       cat << 'EOF' > checkstyle.xml
 ${defaultCheckstyleXml}EOF
       echo "Created starter checkstyle.xml configuration."
