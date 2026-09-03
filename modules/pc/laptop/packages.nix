@@ -11,7 +11,6 @@
     imv
     exiftool # idk what this is
     evtest # or this
-    tree # filesystem viewer thing
     wireshark # network traffic monitor
     dig
     kanshi # todo list
